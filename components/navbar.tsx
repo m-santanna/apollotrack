@@ -6,10 +6,14 @@ const Navbar = () => {
     return (
         <header className="flex justify-between items-center p-4">
             <nav>
-                <Link href="/">Home</Link>
-                <Link href="/about">About</Link>
+                <Link href="/">
+                    <h1>ApolloTrack</h1>
+                </Link>
             </nav>
             <div className="flex items-center gap-4">
+                <Link href="/dashboard">
+                    <h1>Dashboard</h1>
+                </Link>
                 <Link href="/dashboard/training">
                     <Dumbbell />
                 </Link>
