@@ -1,10 +1,9 @@
 import Link from 'next/link'
-import React from 'react'
 import { Dumbbell, ShoppingBasket, Apple } from 'lucide-react'
 
 const Navbar = () => {
     return (
-        <header className="flex justify-between items-center p-4">
+        <header className="flex justify-between items-center p-4 h-[64px]">
             <nav>
                 <Link href="/">
                     <h1>ApolloTrack</h1>
