@@ -1,4 +1,4 @@
-import Hero from '@/components/ui/landingPageHero'
+import Hero from '@/components/landingPageHero'
 import LandingNavbar from '@/components/landing-navbar'
 
 export default function Home() {
