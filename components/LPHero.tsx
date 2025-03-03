@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { useEffect, useState, useCallback } from 'react'
-import { delay, motion } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { Button } from './ui/button'
 import { ArrowRight, Dumbbell, Apple, ShoppingBasket } from 'lucide-react'
 import { signOut, useSession } from '@/lib/auth-client'
@@ -18,7 +18,7 @@ import {
     AlertDialogAction,
 } from './ui/alert-dialog'
 
-export default function Hero() {
+export default function LPHero() {
     const { data: session, isPending } = useSession()
 
     // Waiting for session to load
@@ -35,13 +35,14 @@ export default function Hero() {
     // Common wrapper for both logged in and logged out states
     return (
         <div className="h-screen w-full bg-gradient-to-tl from-background to-secondary-foreground/20">
-            <div className="h-[calc(100vh-64px)] lg:h-full flex flex-col lg:flex-row lg:items-center justify-center lg:justify-between max-w-7xl mx-auto px-6 py-12 gap-12">
+            <div className="h-[calc(100vh-128px)] lg:h-[calc(100vh-64px)] flex flex-col lg:flex-row lg:items-center justify-center lg:justify-between max-w-7xl mx-auto px-6 py-12 gap-12">
                 <LandingPageMainText
                     hasUser={!!session}
                     username={session?.user?.name}
                 />
                 <LandingPageIcons />
             </div>
+            <LandingPageFooter />
         </div>
     )
 }
@@ -59,7 +60,7 @@ const LandingPageMainText = ({
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
-                className="flex flex-col gap-6 lg:w-[60%] h-fit"
+                className="flex flex-col gap-6 lg:w-[50%] h-fit"
             >
                 <h1 className="font-semibold text-center md:text-6xl text-4xl">
                     Welcome back, {username}!
@@ -82,7 +83,7 @@ const LandingPageMainText = ({
                                 size="xl"
                                 className="w-auto text-lg"
                             >
-                                Logout
+                                Sign Out
                             </Button>
                         </AlertDialogTrigger>
                         <AlertDialogContent>
@@ -246,5 +247,28 @@ const LandingPageIcons = () => {
                 </motion.div>
             </div>
         </motion.div>
+    )
+}
+
+const LandingPageFooter = () => {
+    return (
+        <div className="flex items-center justify-center gap-4 h-[64px]">
+            <p className="text-muted-foreground text-sm">
+                &copy; {new Date().getFullYear()} ApolloTrack. All rights
+                reserved.
+            </p>
+            <Link
+                href="/privacy"
+                className="text-muted-foreground text-sm hover:text-primary"
+            >
+                Privacy Policy
+            </Link>
+            <Link
+                href="/terms"
+                className="text-muted-foreground text-sm hover:text-primary"
+            >
+                Terms of Service
+            </Link>
+        </div>
     )
 }

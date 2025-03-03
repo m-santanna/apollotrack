@@ -1,9 +1,9 @@
-import Hero from '@/components/LPHero'
+import LPHero from '@/components/LPHero'
 
 export default function Home() {
     return (
         <div>
-            <Hero />
+            <LPHero />
         </div>
     )
 }
