@@ -5,14 +5,11 @@ const Navbar = () => {
     return (
         <header className="flex justify-between items-center p-4 h-[64px]">
             <nav>
-                <Link href="/">
+                <Link href="/dashboard">
                     <h1>ApolloTrack</h1>
                 </Link>
             </nav>
             <div className="flex items-center gap-4">
-                <Link href="/dashboard">
-                    <h1>Dashboard</h1>
-                </Link>
                 <Link href="/dashboard/training">
                     <Dumbbell />
                 </Link>

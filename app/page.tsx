@@ -1,10 +1,8 @@
-import Hero from '@/components/landingPageHero'
-import LandingNavbar from '@/components/landing-navbar'
+import Hero from '@/components/LPHero'
 
 export default function Home() {
     return (
         <div>
-            <LandingNavbar />
             <Hero />
         </div>
     )
