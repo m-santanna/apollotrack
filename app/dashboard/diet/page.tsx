@@ -1,7 +1,7 @@
 import React from 'react'
 
-const page = () => {
-    return <div>diet</div>
+const dietPage = () => {
+    return <div>dietPage</div>
 }
 
-export default page
+export default dietPage

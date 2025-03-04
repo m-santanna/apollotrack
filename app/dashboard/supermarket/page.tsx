@@ -1,7 +1,7 @@
 import React from 'react'
 
-const page = () => {
-    return <div>supermarket</div>
+const page = async () => {
+    return <div className="container mx-auto py-8">haiya</div>
 }
 
 export default page

@@ -3,21 +3,21 @@ import { Dumbbell, ShoppingBasket, Apple } from 'lucide-react'
 
 const Navbar = () => {
     return (
-        <header className="flex justify-between items-center p-4 h-[64px]">
+        <header className="sticky z-10 flex justify-between items-center px-6 py-4 h-[64px] border border-b-2">
             <nav>
                 <Link href="/dashboard">
-                    <h1>ApolloTrack</h1>
+                    <h1 className="text-3xl font-bold">ApolloTrack</h1>
                 </Link>
             </nav>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-6">
                 <Link href="/dashboard/training">
-                    <Dumbbell />
+                    <Dumbbell className="w-8 h-8" />
                 </Link>
                 <Link href="/dashboard/supermarket">
-                    <ShoppingBasket />
+                    <ShoppingBasket className="w-8 h-8" />
                 </Link>
                 <Link href="/dashboard/diet">
-                    <Apple />
+                    <Apple className="w-8 h-8" />
                 </Link>
             </div>
         </header>

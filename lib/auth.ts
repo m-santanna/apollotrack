@@ -1,7 +1,14 @@
 import { betterAuth } from 'better-auth'
 import { drizzleAdapter } from 'better-auth/adapters/drizzle'
 import { db } from '@/src/db'
-import { user, session, account, verification } from '@/src/db/schema'
+import {
+    user,
+    session,
+    account,
+    verification,
+    user_macros,
+    food_item,
+} from '@/src/db/schema'
 
 export const auth = betterAuth({
     database: drizzleAdapter(db, {
@@ -11,6 +18,8 @@ export const auth = betterAuth({
             session,
             account,
             verification,
+            user_macros,
+            food_item,
         },
     }),
     socialProviders: {
