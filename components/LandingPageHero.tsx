@@ -18,13 +18,13 @@ import {
     AlertDialogAction,
 } from './ui/alert-dialog'
 
-export default function LPHero() {
+export default function LandingPageHero() {
     const { data: session, isPending } = useSession()
 
     // Waiting for session to load
     if (isPending) {
         return (
-            <div className="h-screen w-screen flex items-center justify-center gap-4">
+            <div className="h-full w-full flex items-center justify-center gap-4">
                 <Apple className="w-12 h-12 animate-bounce" />
                 <Dumbbell className="w-12 h-12 animate-bounce" />
                 <ShoppingBasket className="w-12 h-12 animate-bounce" />
@@ -34,26 +34,17 @@ export default function LPHero() {
 
     // Common wrapper for both logged in and logged out states
     return (
-        <div className="h-screen w-full bg-gradient-to-tl from-background to-secondary-foreground/20">
+        <>
             <div className="h-[calc(100vh-128px)] lg:h-[calc(100vh-64px)] flex flex-col lg:flex-row lg:items-center justify-center lg:justify-between max-w-7xl mx-auto px-6 py-12 gap-12">
-                <LandingPageMainText
-                    hasUser={!!session}
-                    username={session?.user?.name}
-                />
+                <LandingPageMainText hasUser={!!session} username={session?.user?.name} />
                 <LandingPageIcons />
             </div>
             <LandingPageFooter />
-        </div>
+        </>
     )
 }
 
-const LandingPageMainText = ({
-    hasUser,
-    username,
-}: {
-    hasUser: boolean
-    username?: string
-}) => {
+const LandingPageMainText = ({ hasUser, username }: { hasUser: boolean; username?: string }) => {
     if (hasUser) {
         return (
             <motion.div
@@ -62,42 +53,28 @@ const LandingPageMainText = ({
                 transition={{ duration: 0.5 }}
                 className="flex flex-col gap-6 lg:w-[50%] h-fit"
             >
-                <h1 className="font-semibold text-center md:text-6xl text-4xl">
-                    Welcome back, {username}!
-                </h1>
+                <h1 className="font-semibold text-center md:text-6xl text-4xl">Welcome back, {username}!</h1>
                 <div className="flex justify-center items-center gap-4">
-                    <Link href="/dashboard">
-                        <Button
-                            variant="default"
-                            size="xl"
-                            className="w-full md:w-auto text-lg"
-                        >
+                    <Link href="/dashboard/welcome">
+                        <Button variant="default" size="xl" className="w-full md:w-auto text-lg">
                             Go to Dashboard
                             <ArrowRight className="ml-2" />
                         </Button>
                     </Link>
                     <AlertDialog>
                         <AlertDialogTrigger asChild>
-                            <Button
-                                variant="secondary"
-                                size="xl"
-                                className="w-auto text-lg"
-                            >
+                            <Button variant="secondary" size="xl" className="w-auto text-lg">
                                 Sign Out
                             </Button>
                         </AlertDialogTrigger>
                         <AlertDialogContent>
                             <AlertDialogHeader>
                                 <AlertDialogTitle>You sure?</AlertDialogTitle>
-                                <AlertDialogDescription>
-                                    Just asking.
-                                </AlertDialogDescription>
+                                <AlertDialogDescription>Just asking.</AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>
                                 <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                <AlertDialogAction onClick={() => signOut()}>
-                                    Continue
-                                </AlertDialogAction>
+                                <AlertDialogAction onClick={() => signOut()}>Continue</AlertDialogAction>
                             </AlertDialogFooter>
                         </AlertDialogContent>
                     </AlertDialog>
@@ -108,16 +85,10 @@ const LandingPageMainText = ({
 
     return (
         <div className="flex flex-col gap-6 lg:w-[60%] h-fit">
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-            >
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
                 <h1 className="font-semibold text-start md:text-6xl text-4xl">
-                    Train like a legend, eat like a champion! ApolloTrack makes
-                    fitness and nutrition{' '}
-                    <span className="text-amber-400">effortless</span>. And the
-                    best part? It's free!
+                    Train like a legend, eat like a champion! ApolloTrack makes fitness and nutrition{' '}
+                    <span className="text-amber-400">effortless</span>. And the best part? It's free!
                 </h1>
             </motion.div>
 
@@ -127,9 +98,8 @@ const LandingPageMainText = ({
                 transition={{ duration: 0.5, delay: 0.2 }}
                 className="text-muted-foreground text-lg md:text-xl"
             >
-                Track your workouts, plan your meals, and achieve your fitness
-                goals with our all-in-one platform. Join us, and see for
-                yourself how convenient our platform is.
+                Track your workouts, plan your meals, and achieve your fitness goals with our all-in-one platform. Join
+                us, and see for yourself how convenient our platform is.
             </motion.p>
 
             <motion.div
@@ -139,20 +109,12 @@ const LandingPageMainText = ({
                 className="flex flex-col md:flex-row gap-4"
             >
                 <Link href="/sign-in">
-                    <Button
-                        variant="default"
-                        size="xl"
-                        className="w-full md:w-auto text-lg"
-                    >
+                    <Button variant="default" size="xl" className="w-full md:w-auto text-lg">
                         Login <ArrowRight className="ml-2" />
                     </Button>
                 </Link>
-                <Link href="/dashboard">
-                    <Button
-                        variant="secondary"
-                        size="xl"
-                        className="w-full md:w-auto text-lg"
-                    >
+                <Link href="/dashboard/welcome">
+                    <Button variant="secondary" size="xl" className="w-full md:w-auto text-lg">
                         DEV DASHBOARD
                     </Button>
                 </Link>
@@ -164,24 +126,17 @@ const LandingPageMainText = ({
 const LandingPageIcons = () => {
     const [isLargeScreen, setIsLargeScreen] = useState(false)
 
-    // Optimized resize handler with useCallback
     const handleResize = useCallback(() => {
         setIsLargeScreen(window.innerWidth >= 1024)
     }, [])
 
     useEffect(() => {
-        // Initial check
         handleResize()
-
-        // Use matchMedia for better performance
         const mediaQuery = window.matchMedia('(min-width: 1024px)')
         const handleMediaChange = (e: MediaQueryListEvent) => {
             setIsLargeScreen(e.matches)
         }
-
-        // Modern approach using addEventListener
         mediaQuery.addEventListener('change', handleMediaChange)
-
         return () => {
             mediaQuery.removeEventListener('change', handleMediaChange)
         }
@@ -254,19 +209,12 @@ const LandingPageFooter = () => {
     return (
         <div className="flex items-center justify-center gap-4 h-[64px]">
             <p className="text-muted-foreground text-sm">
-                &copy; {new Date().getFullYear()} ApolloTrack. All rights
-                reserved.
+                &copy; {new Date().getFullYear()} ApolloTrack. All rights reserved.
             </p>
-            <Link
-                href="/privacy"
-                className="text-muted-foreground text-sm hover:text-primary"
-            >
+            <Link href="/privacy" className="text-muted-foreground text-sm hover:text-primary">
                 Privacy Policy
             </Link>
-            <Link
-                href="/terms"
-                className="text-muted-foreground text-sm hover:text-primary"
-            >
+            <Link href="/terms" className="text-muted-foreground text-sm hover:text-primary">
                 Terms of Service
             </Link>
         </div>

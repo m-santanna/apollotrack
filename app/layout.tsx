@@ -15,8 +15,7 @@ const cinzel = Cinzel({
 
 export const metadata: Metadata = {
     title: 'ApolloTrack',
-    description:
-        'Train like a legend, eat like a champion! ApolloTrack makes fitness and nutrition effortless.',
+    description: 'Train like a legend, eat like a champion! ApolloTrack makes fitness and nutrition effortless.',
 }
 
 export default function RootLayout({
@@ -27,7 +26,9 @@ export default function RootLayout({
     return (
         <html lang="en">
             <body className={cn(exo2.variable, cinzel.variable, 'antialiased')}>
-                {children}
+                <div className="min-h-screen bg-gradient-to-tl from-background to-secondary-foreground/20">
+                    {children}
+                </div>
             </body>
         </html>
     )

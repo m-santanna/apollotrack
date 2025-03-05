@@ -1,9 +1,9 @@
-import LPHero from '@/components/LPHero'
+import LandingPageHero from '@/components/LandingPageHero'
 
 export default function Home() {
     return (
-        <div>
-            <LPHero />
+        <div className="h-screen w-full">
+            <LandingPageHero />
         </div>
     )
 }

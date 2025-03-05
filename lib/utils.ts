@@ -10,38 +10,29 @@ export function calculateCalories(
     weight: number,
     height: number,
     age: number,
-    activityLevel: 0 | 1 | 2 | 3 | 4
+    activityLevel: 0 | 1 | 2 | 3 | 4,
 ) {
     let multFactor = [1.2, 1.375, 1.55, 1.725, 1.9]
     let BMR
-    let TDEE
+    // Calculate BMR based on gender using Mifflin-St Jeor equation
     if (gender === 'male') {
         BMR = 66.47 + weight * 13.75 + height * 5.003 - age * 6.755
     } else {
         BMR = 655.1 + weight * 9.563 + height * 1.85 - age * 4.676
     }
-    if (gender === 'male') {
-        TDEE = BMR * multFactor[activityLevel]
-    } else {
-        TDEE = BMR * multFactor[activityLevel]
-    }
+    // No need to check gender again since TDEE calculation is the same
+    const TDEE = BMR * multFactor[activityLevel]
     return TDEE
 }
 
-export function calculateMacros(gender: string, weight: number, TDEE: number) {
-    let protein = 0
-    let carbs = 0
-    let fat = 0
-
-    if (gender === 'male') {
-        protein = weight * 1.6
-        carbs = weight * 2.5
-        fat = (TDEE - protein * 4 - carbs * 4) / 9
-    } else {
-        protein = weight * 1.4
-        carbs = weight * 2.3
-        fat = (TDEE - protein * 4 - carbs * 4) / 9
-    }
+export function calculateMacros(TDEE: number) {
+    // Convert percentages to grams using macronutrient calorie content
+    // Protein: 4 calories per gram
+    // Carbs: 4 calories per gram
+    // Fat: 9 calories per gram
+    const protein = (TDEE * 0.25) / 4 // 25% of calories from protein
+    const carbs = (TDEE * 0.5) / 4 // 50% of calories from carbs
+    const fat = (TDEE * 0.25) / 9 // 25% of calories from fat
 
     return { protein, carbs, fat }
 }

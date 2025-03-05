@@ -1,13 +1,7 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
-import {
-    Card,
-    CardContent,
-    CardHeader,
-    CardTitle,
-    CardDescription,
-} from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { signIn } from '@/lib/auth-client'
 import { cn } from '@/lib/utils'
 import Image from 'next/image'
@@ -27,7 +21,7 @@ export default function SignIn() {
                         className={cn(
                             'w-full gap-4 flex items-center',
                             'justify-center flex-row',
-                            'text-md md:text-lg'
+                            'text-md md:text-lg',
                         )}
                     >
                         <Button
@@ -36,16 +30,11 @@ export default function SignIn() {
                             onClick={async () => {
                                 await signIn.social({
                                     provider: 'google',
-                                    callbackURL: '/dashboard',
+                                    callbackURL: '/dashboard/welcome',
                                 })
                             }}
                         >
-                            <Image
-                                src="/google.png"
-                                alt="Google"
-                                width={32}
-                                height={32}
-                            />
+                            <Image src="/google.png" alt="Google" width={32} height={32} />
                         </Button>
                         <Button
                             variant="secondary"
@@ -53,16 +42,11 @@ export default function SignIn() {
                             onClick={async () => {
                                 await signIn.social({
                                     provider: 'github',
-                                    callbackURL: '/dashboard',
+                                    callbackURL: '/dashboard/welcome',
                                 })
                             }}
                         >
-                            <Image
-                                src="/github.png"
-                                alt="GitHub"
-                                width={32}
-                                height={32}
-                            />
+                            <Image src="/github.png" alt="GitHub" width={32} height={32} />
                         </Button>
                         <Button
                             variant="secondary"
@@ -70,16 +54,11 @@ export default function SignIn() {
                             onClick={async () => {
                                 await signIn.social({
                                     provider: 'discord',
-                                    callbackURL: '/dashboard',
+                                    callbackURL: '/dashboard/welcome',
                                 })
                             }}
                         >
-                            <Image
-                                src="/discord.png"
-                                alt="Discord"
-                                width={32}
-                                height={32}
-                            />
+                            <Image src="/discord.png" alt="Discord" width={32} height={32} />
                         </Button>
                     </div>
                 </div>
