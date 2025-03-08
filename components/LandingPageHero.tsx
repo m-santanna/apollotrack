@@ -55,7 +55,7 @@ const LandingPageMainText = ({ hasUser, username }: { hasUser: boolean; username
             >
                 <h1 className="font-semibold text-center md:text-6xl text-4xl">Welcome back, {username}!</h1>
                 <div className="flex justify-center items-center gap-4">
-                    <Link href="/dashboard/welcome">
+                    <Link href="/dashboard">
                         <Button variant="default" size="xl" className="w-full md:w-auto text-lg">
                             Go to Dashboard
                             <ArrowRight className="ml-2" />
@@ -113,7 +113,7 @@ const LandingPageMainText = ({ hasUser, username }: { hasUser: boolean; username
                         Login <ArrowRight className="ml-2" />
                     </Button>
                 </Link>
-                <Link href="/dashboard/welcome">
+                <Link href="/dashboard">
                     <Button variant="secondary" size="xl" className="w-full md:w-auto text-lg">
                         DEV DASHBOARD
                     </Button>

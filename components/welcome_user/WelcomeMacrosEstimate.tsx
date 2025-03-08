@@ -40,7 +40,7 @@ const WelcomeMacrosEstimate = () => {
                 age: data.age,
                 activityLevel: data.activityLevel as 0 | 1 | 2 | 3 | 4,
             })
-            router.push('/dashboard')
+            router.push('/dashboard/welcome/diet')
         } catch (error) {
             console.error('Error saving macros:', error)
         }

@@ -30,7 +30,7 @@ export default function SignIn() {
                             onClick={async () => {
                                 await signIn.social({
                                     provider: 'google',
-                                    callbackURL: '/dashboard/welcome',
+                                    callbackURL: '/dashboard',
                                 })
                             }}
                         >
@@ -42,7 +42,7 @@ export default function SignIn() {
                             onClick={async () => {
                                 await signIn.social({
                                     provider: 'github',
-                                    callbackURL: '/dashboard/welcome',
+                                    callbackURL: '/dashboard',
                                 })
                             }}
                         >
@@ -54,7 +54,7 @@ export default function SignIn() {
                             onClick={async () => {
                                 await signIn.social({
                                     provider: 'discord',
-                                    callbackURL: '/dashboard/welcome',
+                                    callbackURL: '/dashboard',
                                 })
                             }}
                         >

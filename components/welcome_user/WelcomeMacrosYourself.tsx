@@ -10,6 +10,7 @@ import { Input } from '../ui/input'
 import { motion } from 'framer-motion'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
+import { handleInputNumberChange } from '@/lib/utils'
 
 const WelcomeMacrosYourself = () => {
     const router = useRouter()
@@ -36,20 +37,7 @@ const WelcomeMacrosYourself = () => {
         } catch (error) {
             console.error(error)
         }
-        router.push('/dashboard')
-    }
-
-    // Function to handle number input changes
-    const handleNumberChange = (e: React.ChangeEvent<HTMLInputElement>, onChange: (value: number) => void) => {
-        if (e.target.value === '' || e.target.value === '-') {
-            e.target.value = ''
-            onChange(0)
-            return
-        }
-        if (e.target.value.length > 1 && e.target.value.startsWith('0') && !e.target.value.startsWith('0.')) {
-            e.target.value = e.target.value.replace(/^0+/, '')
-        }
-        onChange(Number(e.target.value))
+        router.push('/dashboard/welcome/diet')
     }
 
     return (
@@ -96,7 +84,7 @@ const WelcomeMacrosYourself = () => {
                                             className="text-muted"
                                             type="number"
                                             {...field}
-                                            onChange={(e) => handleNumberChange(e, field.onChange)}
+                                            onChange={(e) => handleInputNumberChange(e, field.onChange)}
                                         />
                                     </FormControl>
                                     <FormMessage />
@@ -115,7 +103,7 @@ const WelcomeMacrosYourself = () => {
                                             className="text-muted"
                                             type="number"
                                             {...field}
-                                            onChange={(e) => handleNumberChange(e, field.onChange)}
+                                            onChange={(e) => handleInputNumberChange(e, field.onChange)}
                                         />
                                     </FormControl>
                                     <FormMessage />
@@ -134,7 +122,7 @@ const WelcomeMacrosYourself = () => {
                                             className="text-muted"
                                             type="number"
                                             {...field}
-                                            onChange={(e) => handleNumberChange(e, field.onChange)}
+                                            onChange={(e) => handleInputNumberChange(e, field.onChange)}
                                         />
                                     </FormControl>
                                     <FormMessage />
@@ -153,7 +141,7 @@ const WelcomeMacrosYourself = () => {
                                             className="text-muted"
                                             type="number"
                                             {...field}
-                                            onChange={(e) => handleNumberChange(e, field.onChange)}
+                                            onChange={(e) => handleInputNumberChange(e, field.onChange)}
                                         />
                                     </FormControl>
                                     <FormMessage />
