@@ -2,8 +2,9 @@ import { eq } from 'drizzle-orm'
 import { db } from '@/src/db'
 import { getCurrentSessionServer } from '@/lib/actions'
 import { food_item, user_macros } from '@/src/db/schema'
-import WelcomeUser from '@/components/welcome_user/WelcomeUser'
-import WelcomeDiet from '@/components/welcome_user/WelcomeDiet'
+import WelcomeComponent from '@/components/welcome_user/WelcomeComponent'
+import AddItems from '@/components/AddItems'
+import AddWorkout from '@/components/AddWorkout'
 
 const DashboardPage = async () => {
     const user = (await getCurrentSessionServer()).user
@@ -13,7 +14,12 @@ const DashboardPage = async () => {
     if (userMacros.length === 0) {
         return (
             <div className="flex justify-center items-center h-screen w-full">
-                <WelcomeUser />
+                <WelcomeComponent
+                    mainText="Welcome to ApolloTrack!"
+                    secondaryText="First of all, we need to get some information about you."
+                    mainButtonText="Get Started"
+                    mainLink="/dashboard/welcome/macros"
+                />
             </div>
         )
     }
@@ -23,10 +29,20 @@ const DashboardPage = async () => {
     if (foodItems.length === 0) {
         return (
             <div className="flex justify-center items-center h-screen w-full">
-                <WelcomeDiet firstTime={false} />
+                <AddItems firstTime={false} />
             </div>
         )
     }
+
+    //const workouts = await db.select().from(workouts).where(eq(workout_group.userId, user.id))
+    // The welcome process redirects to the workout page, so if the user has no workout groups, it means the user deleted his workouts
+    //if (workouts.length === 0) {
+    //    return (
+    //        <div className="flex justify-center items-center h-screen w-full">
+    //            <AddWorkout />
+    //        </div>
+    //    )
+    //}
 }
 
 export default DashboardPage

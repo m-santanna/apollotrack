@@ -1,17 +1,18 @@
 'use client'
+
 import { motion, AnimatePresence } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import { addFoodItems } from '@/lib/actions'
 import { useState } from 'react'
-import { Input } from '../ui/input'
-import { Label } from '../ui/label'
+import { Input } from './ui/input'
+import { Label } from './ui/label'
 import { useFormStatus } from 'react-dom'
 import { useRouter } from 'next/navigation'
 
 const FIELD_CONFIG = [
     [
         { name: 'name', label: 'Name', type: 'text' },
-        { name: 'calories', label: 'Calories', type: 'number' },
+        { name: 'calories', label: 'Calories (*)', type: 'number' },
     ],
     [
         { name: 'protein', label: 'Protein (*)', type: 'number', step: 0.01 },
@@ -96,13 +97,14 @@ const FormButtons = ({
     )
 }
 
-const WelcomeDiet = ({ firstTime }: { firstTime: boolean }) => {
+const AddItems = ({ firstTime }: { firstTime: boolean }) => {
     const [numberOfItems, setNumberOfItems] = useState(1)
     const router = useRouter()
 
     const handleSubmit = async (formData: FormData) => {
         await addFoodItems(formData)
-        router.push('/dashboard')
+        if (firstTime) router.push('/dashboard/welcome/training')
+        else router.push('/dashboard')
     }
 
     const formInputs = () => {
@@ -128,25 +130,21 @@ const WelcomeDiet = ({ firstTime }: { firstTime: boolean }) => {
         return inputs
     }
 
-    if (firstTime) {
-        return (
-            <motion.div
-                className="max-h-[80vh] overflow-scroll rounded-lg"
-                initial={{ opacity: 0, y: 100 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-            >
-                <form action={handleSubmit}>
-                    <div className="flex flex-col gap-4 p-4 bg-accent-foreground">
-                        <AnimatePresence>{formInputs()}</AnimatePresence>
-                        <FormButtons numberOfItems={numberOfItems} setNumberOfItems={setNumberOfItems} />
-                    </div>
-                </form>
-            </motion.div>
-        )
-    }
-
-    return <div>it looks like you have already been here, let's get you started!</div>
+    return (
+        <motion.div
+            className="max-h-[80vh] overflow-scroll rounded-lg"
+            initial={{ opacity: 0, y: 100 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+        >
+            <form action={handleSubmit}>
+                <div className="flex flex-col gap-4 p-4 bg-accent-foreground">
+                    <AnimatePresence>{formInputs()}</AnimatePresence>
+                    <FormButtons numberOfItems={numberOfItems} setNumberOfItems={setNumberOfItems} />
+                </div>
+            </form>
+        </motion.div>
+    )
 }
 
-export default WelcomeDiet
+export default AddItems
