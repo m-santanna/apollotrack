@@ -15,6 +15,13 @@
       "when": 1741049761249,
       "tag": "0001_ancient_yellow_claw",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1741797255107,
+      "tag": "0002_glossy_master_chief",
+      "breakpoints": true
     }
   ]
 }

@@ -110,8 +110,7 @@ export const exerciseGroup = pgTable('exercise_group', {
         .notNull()
         .references(() => user.id, { onDelete: 'cascade' }),
     groupName: text('group_name').notNull(),
-    exerciseId: text('execises_ids')
-        .array()
+    exerciseId: text('execise_id')
         .notNull()
         .references(() => exercise.id, { onDelete: 'cascade' }),
 })
