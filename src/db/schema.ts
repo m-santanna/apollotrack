@@ -91,3 +91,44 @@ export const food_item = pgTable('food_item', {
     checked: boolean('checked').notNull().default(false),
     category: text('category').notNull().default('Other'),
 })
+
+// Exercise
+export const exercise = pgTable('exercise', {
+    id: text('id')
+        .primaryKey()
+        .default(sql`gen_random_uuid()`),
+    name: text('name').notNull(),
+    mainMuscle: text('main_muscle').notNull(),
+})
+
+// The exercise group table
+export const exerciseGroup = pgTable('exercise_group', {
+    id: text('id')
+        .primaryKey()
+        .default(sql`gen_random_uuid()`),
+    userId: text('user_id')
+        .notNull()
+        .references(() => user.id, { onDelete: 'cascade' }),
+    groupName: text('group_name').notNull(),
+    exerciseId: text('execises_ids')
+        .array()
+        .notNull()
+        .references(() => exercise.id, { onDelete: 'cascade' }),
+})
+
+// Workout table
+export const workout = pgTable('workout', {
+    id: text('id')
+        .primaryKey()
+        .default(sql`gen_random_uuid()`),
+    userId: text('user_id')
+        .notNull()
+        .references(() => user.id, { onDelete: 'cascade' }),
+    exerciseId: text('exercise_id')
+        .notNull()
+        .references(() => exercise.id, { onDelete: 'cascade' }),
+    set_number: integer('set_number').notNull(),
+    reps: integer('reps').notNull(),
+    weight: real('weight').notNull(),
+    date: timestamp('date').notNull(),
+})
