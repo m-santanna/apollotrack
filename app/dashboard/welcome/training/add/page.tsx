@@ -1,9 +1,12 @@
-import AddWorkout from '@/components/AddWorkout'
+import CreateExercises from '@/components/CreateExercises'
+import { db } from '@/src/db'
+import { exercise } from '@/src/db/schema'
 
-const page = () => {
+const page = async () => {
+    const exercises = await db.select().from(exercise)
     return (
         <div className="flex justify-center items-center h-screen w-full">
-            <AddWorkout />
+            <CreateExercises exercises={exercises} />
         </div>
     )
 }

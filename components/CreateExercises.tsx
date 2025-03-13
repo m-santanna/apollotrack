@@ -2,58 +2,18 @@
 
 import { motion, AnimatePresence } from 'framer-motion'
 import { Button } from '@/components/ui/button'
-import { addFoodItems } from '@/lib/actions'
+import { createExerciseGroups } from '@/lib/actions'
 import { useState } from 'react'
 import { Input } from './ui/input'
 import { Label } from './ui/label'
 import { useFormStatus } from 'react-dom'
 import { useRouter } from 'next/navigation'
 
-const FIELD_CONFIG = [
-    [
-        { name: 'name', label: 'Name', type: 'text' },
-        { name: 'calories', label: 'Calories (*)', type: 'number' },
-    ],
-    [
-        { name: 'protein', label: 'Protein (*)', type: 'number', step: 0.01 },
-        { name: 'carbs', label: 'Carbs (*)', type: 'number', step: 0.01 },
-    ],
-    [
-        { name: 'fat', label: 'Fat (*)', type: 'number', step: 0.01 },
-        { name: 'total_grams', label: 'Total Grams', type: 'number' },
-    ],
-    [
-        { name: 'price', label: 'Price', type: 'number', step: 0.01 },
-        { name: 'category', label: 'Category', type: 'text' },
-    ],
-]
-
-const FormField = ({ label, name, type, step }: { label: string; name: string; type: string; step: number }) => (
-    <div className="flex flex-col gap-1">
-        <Label className="text-accent">{label}</Label>
-        <Input required className="text-accent" type={type} name={`${name}`} step={step} />
-    </div>
-)
-
-const FieldRow = ({
-    fields,
-    index,
-}: {
-    fields: { name: string; label: string; type: string; step?: number }[]
-    index: number
-}) => (
-    <div className="grid grid-cols-2 gap-2">
-        {fields.map((field) => (
-            <FormField
-                key={`${field.name}_${index}`}
-                label={field.label}
-                name={field.name}
-                type={field.type}
-                step={field.step ?? 1}
-            />
-        ))}
-    </div>
-)
+type Exercise = {
+    id: string
+    name: string
+    mainMuscle: string
+}
 
 const SubmitButton = () => {
     const { pending } = useFormStatus()
@@ -97,7 +57,7 @@ const FormButtons = ({
     )
 }
 
-const formInputs = (numberOfItems: number) => {
+const formInputs = (numberOfItems: number, exercises: { id: string; name: string; mainMuscle: string }[]) => {
     const inputs = []
     for (let i = 0; i < numberOfItems; i++) {
         inputs.push(
@@ -110,24 +70,20 @@ const formInputs = (numberOfItems: number) => {
                 key={i}
             >
                 <span className="text-accent">{'Item #' + (i + 1)}</span>
-                {FIELD_CONFIG.map((fieldRow, rowIndex) => (
-                    <FieldRow key={`row_${i}_${rowIndex}`} fields={fieldRow} index={i} />
-                ))}
-                <p className="text-muted-foreground text-sm">* Values per 100g of the product</p>
+                <Label htmlFor={'exercise' + i}>Exercise</Label>
             </motion.div>,
         )
     }
     return inputs
 }
 
-const AddItems = ({ firstTime }: { firstTime: boolean }) => {
+const CreateExercises = ({ exercises }: { exercises: Exercise[] }) => {
     const [numberOfItems, setNumberOfItems] = useState(1)
     const router = useRouter()
 
     const handleSubmit = async (formData: FormData) => {
-        await addFoodItems(formData)
-        if (firstTime) router.push('/dashboard/welcome/training')
-        else router.push('/dashboard')
+        await createExerciseGroups(formData)
+        router.push('/dashboard')
     }
 
     return (
@@ -139,7 +95,7 @@ const AddItems = ({ firstTime }: { firstTime: boolean }) => {
         >
             <form action={handleSubmit}>
                 <div className="flex flex-col gap-4 p-4 bg-accent-foreground">
-                    <AnimatePresence>{formInputs(numberOfItems)}</AnimatePresence>
+                    <AnimatePresence>{formInputs(numberOfItems, exercises)}</AnimatePresence>
                     <FormButtons numberOfItems={numberOfItems} setNumberOfItems={setNumberOfItems} />
                 </div>
             </form>
@@ -147,4 +103,4 @@ const AddItems = ({ firstTime }: { firstTime: boolean }) => {
     )
 }
 
-export default AddItems
+export default CreateExercises

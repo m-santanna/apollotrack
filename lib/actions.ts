@@ -120,3 +120,12 @@ export async function addFoodItems(formData: FormData) {
 
     revalidatePath('/dashboard')
 }
+
+export async function createExerciseGroups(formData: FormData) {
+    const session = await getCurrentSessionServer()
+    const userId = session.user.id
+
+    //TODO
+
+    revalidatePath('/dashboard')
+}

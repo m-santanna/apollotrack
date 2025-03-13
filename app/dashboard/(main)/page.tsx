@@ -4,7 +4,7 @@ import { getCurrentSessionServer } from '@/lib/actions'
 import { food_item, user_macros } from '@/src/db/schema'
 import WelcomeComponent from '@/components/welcome_user/WelcomeComponent'
 import AddItems from '@/components/AddItems'
-import AddWorkout from '@/components/AddWorkout'
+import CreateExercises from '@/components/CreateExercises'
 
 const DashboardPage = async () => {
     const user = (await getCurrentSessionServer()).user
@@ -39,7 +39,7 @@ const DashboardPage = async () => {
     //if (workouts.length === 0) {
     //    return (
     //        <div className="flex justify-center items-center h-screen w-full">
-    //            <AddWorkout />
+    //            <CreateExercises />
     //        </div>
     //    )
     //}
