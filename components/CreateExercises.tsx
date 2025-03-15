@@ -8,6 +8,15 @@ import { Input } from './ui/input'
 import { Label } from './ui/label'
 import { useFormStatus } from 'react-dom'
 import { useRouter } from 'next/navigation'
+import {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectLabel,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select'
 
 type Exercise = {
     id: string
@@ -26,10 +35,10 @@ const SubmitButton = () => {
 
 const FormButtons = ({
     numberOfItems,
-    setNumberOfItems,
+    setNumberOfExercises,
 }: {
     numberOfItems: number
-    setNumberOfItems: React.Dispatch<React.SetStateAction<number>>
+    setNumberOfExercises: React.Dispatch<React.SetStateAction<number>>
 }) => {
     const { pending } = useFormStatus()
     return (
@@ -38,7 +47,7 @@ const FormButtons = ({
                 <Button
                     variant="outline"
                     type="button"
-                    onClick={() => setNumberOfItems(numberOfItems + 1)}
+                    onClick={() => setNumberOfExercises(numberOfItems + 1)}
                     disabled={pending}
                 >
                     Add Item
@@ -46,13 +55,49 @@ const FormButtons = ({
                 <Button
                     variant="outline"
                     type="button"
-                    onClick={() => setNumberOfItems(numberOfItems - 1)}
+                    onClick={() => setNumberOfExercises(numberOfItems - 1)}
                     disabled={numberOfItems === 1 || pending}
                 >
                     Remove Item
                 </Button>
             </div>
             <SubmitButton />
+        </div>
+    )
+}
+
+const FilterButtons = ({
+    exercises,
+    setFilteredExercises,
+}: {
+    exercises: { id: string; name: string; mainMuscle: string }[]
+    setFilteredExercises: React.Dispatch<React.SetStateAction<{ id: string; name: string; mainMuscle: string }[]>>
+}) => {
+    const setOfMuscleGroup = new Set(exercises.map((exercise) => exercise.mainMuscle))
+    const arrayOfMuscleGroup = Array.from(setOfMuscleGroup)
+    return (
+        <div className="flex gap-2">
+            <Select
+                onValueChange={(value) => {
+                    if (value === 'All') {
+                        setFilteredExercises(exercises)
+                    } else {
+                        setFilteredExercises(exercises.filter((exercise) => exercise.mainMuscle === value))
+                    }
+                }}
+            >
+                <SelectTrigger>
+                    <SelectValue placeholder="Filtrar por:" />
+                </SelectTrigger>
+                <SelectContent className="w-56">
+                    <SelectItem value="All">All</SelectItem>
+                    {arrayOfMuscleGroup.map((muscle) => (
+                        <SelectItem key={muscle} value={muscle}>
+                            {muscle}
+                        </SelectItem>
+                    ))}
+                </SelectContent>
+            </Select>
         </div>
     )
 }
@@ -69,8 +114,14 @@ const formInputs = (numberOfItems: number, exercises: { id: string; name: string
                 className="flex flex-col gap-4"
                 key={i}
             >
-                <span className="text-accent">{'Item #' + (i + 1)}</span>
-                <Label htmlFor={'exercise' + i}>Exercise</Label>
+                {exercises.map((exercise) => (
+                    <div key={exercise.id} className="flex items-center gap-2">
+                        <Input type="checkbox" name={`exercise-${i}`} value={exercise.id} />
+                        <Label className="text-accent" htmlFor={`exercise-${i}`}>
+                            {exercise.name}
+                        </Label>
+                    </div>
+                ))}
             </motion.div>,
         )
     }
@@ -78,12 +129,14 @@ const formInputs = (numberOfItems: number, exercises: { id: string; name: string
 }
 
 const CreateExercises = ({ exercises }: { exercises: Exercise[] }) => {
-    const [numberOfItems, setNumberOfItems] = useState(1)
+    const [numberOfExercises, setNumberOfExercises] = useState(1)
+    const [filteredExercises, setFilteredExercises] = useState(exercises)
     const router = useRouter()
 
     const handleSubmit = async (formData: FormData) => {
-        await createExerciseGroups(formData)
-        router.push('/dashboard')
+        console.log('Form data:', formData)
+        //await createExerciseGroups(formData)
+        //router.push('/dashboard')
     }
 
     return (
@@ -93,10 +146,11 @@ const CreateExercises = ({ exercises }: { exercises: Exercise[] }) => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
         >
+            <FilterButtons exercises={exercises} setFilteredExercises={setFilteredExercises} />
             <form action={handleSubmit}>
                 <div className="flex flex-col gap-4 p-4 bg-accent-foreground">
-                    <AnimatePresence>{formInputs(numberOfItems, exercises)}</AnimatePresence>
-                    <FormButtons numberOfItems={numberOfItems} setNumberOfItems={setNumberOfItems} />
+                    <AnimatePresence>{formInputs(numberOfExercises, filteredExercises)}</AnimatePresence>
+                    <FormButtons numberOfItems={numberOfExercises} setNumberOfExercises={setNumberOfExercises} />
                 </div>
             </form>
         </motion.div>
