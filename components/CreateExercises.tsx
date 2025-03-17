@@ -4,7 +4,6 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import { createExerciseGroups } from '@/lib/actions'
 import { useState } from 'react'
-import { Input } from './ui/input'
 import { Label } from './ui/label'
 import { useFormStatus } from 'react-dom'
 import { useRouter } from 'next/navigation'
@@ -17,6 +16,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select'
+import { Checkbox } from '@/components/ui/checkbox'
 
 type Exercise = {
     id: string
@@ -42,7 +42,7 @@ const FormButtons = ({
 }) => {
     const { pending } = useFormStatus()
     return (
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 bg-accent-foreground">
             <div className="w-full grid grid-cols-2 gap-2">
                 <Button
                     variant="outline"
@@ -66,7 +66,7 @@ const FormButtons = ({
     )
 }
 
-const FilterButtons = ({
+const FilterButtom = ({
     exercises,
     setFilteredExercises,
 }: {
@@ -76,21 +76,17 @@ const FilterButtons = ({
     const setOfMuscleGroup = new Set(exercises.map((exercise) => exercise.mainMuscle))
     const arrayOfMuscleGroup = Array.from(setOfMuscleGroup)
     return (
-        <div className="flex gap-2">
+        <div className="flex gap-2 mb-2">
             <Select
                 onValueChange={(value) => {
-                    if (value === 'All') {
-                        setFilteredExercises(exercises)
-                    } else {
-                        setFilteredExercises(exercises.filter((exercise) => exercise.mainMuscle === value))
-                    }
+                    setFilteredExercises(exercises.filter((exercise) => exercise.mainMuscle === value))
                 }}
+                defaultValue="Upper Chest"
             >
-                <SelectTrigger>
+                <SelectTrigger className="bg-accent-foreground text-accent">
                     <SelectValue placeholder="Filtrar por:" />
                 </SelectTrigger>
                 <SelectContent className="w-56">
-                    <SelectItem value="All">All</SelectItem>
                     {arrayOfMuscleGroup.map((muscle) => (
                         <SelectItem key={muscle} value={muscle}>
                             {muscle}
@@ -116,7 +112,7 @@ const formInputs = (numberOfItems: number, exercises: { id: string; name: string
             >
                 {exercises.map((exercise) => (
                     <div key={exercise.id} className="flex items-center gap-2">
-                        <Input type="checkbox" name={`exercise-${i}`} value={exercise.id} />
+                        <Checkbox id={exercise.id} name={`exercise-${i}`} value={exercise.id} />
                         <Label className="text-accent" htmlFor={`exercise-${i}`}>
                             {exercise.name}
                         </Label>
@@ -130,7 +126,9 @@ const formInputs = (numberOfItems: number, exercises: { id: string; name: string
 
 const CreateExercises = ({ exercises }: { exercises: Exercise[] }) => {
     const [numberOfExercises, setNumberOfExercises] = useState(1)
-    const [filteredExercises, setFilteredExercises] = useState(exercises)
+    const [filteredExercises, setFilteredExercises] = useState(
+        exercises.filter((exercise) => exercise.mainMuscle === 'Upper Chest'),
+    )
     const router = useRouter()
 
     const handleSubmit = async (formData: FormData) => {
@@ -140,19 +138,16 @@ const CreateExercises = ({ exercises }: { exercises: Exercise[] }) => {
     }
 
     return (
-        <motion.div
-            className="max-h-[80vh] overflow-scroll rounded-lg"
-            initial={{ opacity: 0, y: 100 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-        >
-            <FilterButtons exercises={exercises} setFilteredExercises={setFilteredExercises} />
-            <form action={handleSubmit}>
-                <div className="flex flex-col gap-4 p-4 bg-accent-foreground">
-                    <AnimatePresence>{formInputs(numberOfExercises, filteredExercises)}</AnimatePresence>
-                    <FormButtons numberOfItems={numberOfExercises} setNumberOfExercises={setNumberOfExercises} />
-                </div>
-            </form>
+        <motion.div initial={{ opacity: 0, y: 100 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+            <FilterButtom exercises={exercises} setFilteredExercises={setFilteredExercises} />
+            <div className="max-h-[70vh] overflow-scroll rounded-lg">
+                <form action={handleSubmit}>
+                    <div className="flex flex-col gap-4 p-4 bg-accent-foreground rounded-lg">
+                        <AnimatePresence>{formInputs(numberOfExercises, filteredExercises)}</AnimatePresence>
+                        <FormButtons numberOfItems={numberOfExercises} setNumberOfExercises={setNumberOfExercises} />
+                    </div>
+                </form>
+            </div>
         </motion.div>
     )
 }
