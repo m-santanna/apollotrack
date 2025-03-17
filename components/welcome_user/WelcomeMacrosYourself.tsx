@@ -37,7 +37,7 @@ const WelcomeMacrosYourself = () => {
         } catch (error) {
             console.error(error)
         }
-        router.push('/dashboard/welcome/diet')
+        router.push('/dashboard')
     }
 
     return (

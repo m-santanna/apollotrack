@@ -126,8 +126,7 @@ const AddItems = ({ firstTime }: { firstTime: boolean }) => {
 
     const handleSubmit = async (formData: FormData) => {
         await addFoodItems(formData)
-        if (firstTime) router.push('/dashboard/welcome/training')
-        else router.push('/dashboard')
+        router.push('/dashboard')
     }
 
     return (
