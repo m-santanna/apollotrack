@@ -72,6 +72,7 @@ export const user_macros = pgTable('user_macros', {
     daily_carbs: integer('daily_carbs').notNull(),
     daily_fat: integer('daily_fat').notNull(),
 })
+export type UserMacros = typeof user_macros.$inferSelect
 
 // Food item table
 export const food_item = pgTable('food_item', {
@@ -91,6 +92,7 @@ export const food_item = pgTable('food_item', {
     checked: boolean('checked').notNull().default(false),
     category: text('category').notNull().default('Other'),
 })
+export type FoodItem = typeof food_item.$inferSelect
 
 // Exercise
 export const exercise = pgTable('exercise', {
@@ -114,6 +116,7 @@ export const exerciseGroup = pgTable('exercise_group', {
         .notNull()
         .references(() => exercise.id, { onDelete: 'cascade' }),
 })
+export type ExerciseGroup = typeof exerciseGroup.$inferSelect
 
 // Workout table
 export const workout = pgTable('workout', {

@@ -14,27 +14,11 @@ const DashboardPage = async () => {
 
     return (
         <div className="h-screen w-screen flex flex-col items-center gap-4 p-10 md:p-20">
-            {userMacros.length == 0 ? (
-                <DashboardBlock type="macros" firstTime={true} />
-            ) : (
-                <DashboardBlock type="macros" firstTime={false} />
-            )}
+            <DashboardBlock type="macros" databaseData={userMacros} />
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
-                {foodItems.length == 0 ? (
-                    <DashboardBlock type="diet" firstTime={true} />
-                ) : (
-                    <DashboardBlock type="diet" firstTime={false} />
-                )}
-                {exercise_group.length == 0 ? (
-                    <DashboardBlock type="training" firstTime={true} />
-                ) : (
-                    <DashboardBlock type="training" firstTime={false} />
-                )}
-                {uncheckedFoodItems.length > 0 ? (
-                    <DashboardBlock type="supermarket" firstTime={false} />
-                ) : (
-                    <DashboardBlock type="supermarket" firstTime={true} />
-                )}
+                <DashboardBlock type="diet" databaseData={foodItems} />
+                <DashboardBlock type="training" databaseData={exercise_group} />
+                <DashboardBlock type="supermarket" databaseData={uncheckedFoodItems} />
             </div>
         </div>
     )

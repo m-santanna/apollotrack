@@ -1,13 +1,15 @@
 import Link from 'next/link'
 import React from 'react'
 import MacrosDisplay from './MacrosDisplay'
+import { UserMacros, FoodItem, ExerciseGroup } from '@/src/db/schema'
 
 interface DashboardBlockProps {
-    firstTime: boolean
     type: 'diet' | 'macros' | 'supermarket' | 'training'
+    databaseData: FoodItem[] | UserMacros[] | ExerciseGroup[]
 }
 
-const DashboardMacros = ({ firstTime, type }: DashboardBlockProps) => {
+const DashboardMacros = ({ databaseData, type }: DashboardBlockProps) => {
+    const firstTime = databaseData.length === 0
     if (firstTime) {
         return (
             <Link
