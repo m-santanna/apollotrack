@@ -4,7 +4,7 @@ const page = () => {
     return (
         <div className="flex justify-center items-center h-screen w-full">
             <WelcomeComponent
-                mainText="Let's see your macros!"
+                mainText="Let's set up your macros!"
                 secondaryText="You can either set your macros yourself or let us estimate them for you."
                 mainLink="/dashboard/welcome/macros/estimate"
                 mainButtonText="Estimate it for me"

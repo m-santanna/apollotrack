@@ -5,7 +5,8 @@ const page = () => {
         <div className="flex justify-center items-center h-screen w-full">
             <WelcomeComponent
                 mainText="Food!"
-                secondaryText="If you provide us with what you eat, we will do the math for you."
+                secondaryText="In this section, you'll be adding the things you usually eat on a daily basis,
+                with their respective macros."
                 mainButtonText="Let's do it!"
                 mainLink="/dashboard/welcome/diet/add"
             />

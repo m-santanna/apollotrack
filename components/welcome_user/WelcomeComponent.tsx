@@ -3,6 +3,8 @@
 import Link from 'next/link'
 import { Button } from '../ui/button'
 import { motion } from 'framer-motion'
+import { useRouter } from 'next/navigation'
+import { ChevronLeft } from 'lucide-react'
 
 const WelcomeComponent = ({
     mainText,
@@ -19,21 +21,29 @@ const WelcomeComponent = ({
     mainLink: string
     secondaryLink?: string
 }) => {
+    const router = useRouter()
     return (
         <motion.div
-            className="flex flex-col justify-center items-center gap-2 border rounded-xl p-8 bg-foreground"
+            className="w-[80vw] sm:w-auto max-w-[80vw] flex flex-col justify-center items-center gap-4 border rounded-xl py-8 px-4 bg-foreground"
             initial={{ opacity: 0, y: 100 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
         >
-            <motion.h1
+            <motion.div
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.6 }}
-                className="text-2xl md:text-4xl font-bold text-accent"
+                className="flex justify-between items-center w-full"
             >
-                {mainText}
-            </motion.h1>
+                <button
+                    className="bg-foreground rounded-2xl hover:cursor-pointer hover:scale-150 transition-all duration-200"
+                    onClick={() => router.back()}
+                >
+                    <ChevronLeft size={32} className="text-accent" />
+                </button>
+                <h1 className="text-3xl md:text-4xl font-bold text-accent text-center">{mainText}</h1>
+                <div className="w-8" />
+            </motion.div>
             <motion.p
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
