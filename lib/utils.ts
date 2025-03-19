@@ -29,9 +29,9 @@ export function calculateCalories(
     let BMR
     // Calculate BMR based on gender using Mifflin-St Jeor equation
     if (gender === 'male') {
-        BMR = 66.47 + weight * 13.75 + height * 5.003 - age * 6.755
+        BMR = 10 * weight + 6.25 * height - 5 * age + 5
     } else {
-        BMR = 655.1 + weight * 9.563 + height * 1.85 - age * 4.676
+        BMR = 10 * weight + 6.25 * height - 5 * age - 161
     }
     // No need to check gender again since TDEE calculation is the same
     const TDEE = BMR * multFactor[activityLevel]
