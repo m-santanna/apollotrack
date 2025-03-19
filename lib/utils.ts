@@ -38,14 +38,15 @@ export function calculateCalories(
     return TDEE
 }
 
-export function calculateMacros(TDEE: number) {
+export function calculateMacros(TDEE: number, weight: number) {
     // Convert percentages to grams using macronutrient calorie content
     // Protein: 4 calories per gram
     // Carbs: 4 calories per gram
     // Fat: 9 calories per gram
-    const protein = (TDEE * 0.25) / 4 // 25% of calories from protein
-    const carbs = (TDEE * 0.5) / 4 // 50% of calories from carbs
-    const fat = (TDEE * 0.25) / 9 // 25% of calories from fat
+    const weightInLbs = 2.2 * weight
+    const protein = weightInLbs // 1g protein per lb of body weight
+    const fat = (TDEE * 0.2) / 9 // 20% of calories from fat
+    const carbs = (TDEE - fat * 9 - protein * 4) / 4 // Remaining calories from carbs
 
     return { protein, carbs, fat }
 }

@@ -35,7 +35,7 @@ export async function saveUserMacrosEstimate(formData: {
 
     // Calculate calories and macros
     const calories = Math.round(calculateCalories(gender, weight, height, age, activityLevel))
-    const { protein, carbs, fat } = calculateMacros(calories)
+    const { protein, carbs, fat } = calculateMacros(calories, weight)
 
     // Check if user already has macros saved
     const existingMacros = await db.select().from(user_macros).where(eq(user_macros.userId, userId))
