@@ -22,10 +22,11 @@ const DashboardMacros = ({ databaseData, type }: DashboardBlockProps) => {
             </Link>
         )
     } else if (type === 'macros') {
+        const { daily_protein, daily_carbs, daily_fat, daily_calories } = databaseData[0] as UserMacros
         return (
             <div className="rounded-lg bg-foreground/10 border border-accent w-full p-4 flex flex-col gap-4">
-                <h1 className="text-3xl font-bold text-center">Your Macros</h1>
-                <MacrosDisplay calories={2000} protein={150} carbs={250} fat={70} />
+                <h1 className="text-3xl font-bold text-center">Your Maintenance Macros</h1>
+                <MacrosDisplay calories={daily_calories} protein={daily_protein} fat={daily_fat} carbs={daily_carbs} />
             </div>
         )
     } else
