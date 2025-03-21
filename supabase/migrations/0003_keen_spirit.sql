@@ -1,0 +1,1 @@
+ALTER TABLE "user_macros" ADD COLUMN "diet_goal" text DEFAULT 'Maintenance' NOT NULL;

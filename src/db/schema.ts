@@ -71,6 +71,7 @@ export const user_macros = pgTable('user_macros', {
     daily_protein: integer('daily_protein').notNull(),
     daily_carbs: integer('daily_carbs').notNull(),
     daily_fat: integer('daily_fat').notNull(),
+    diet_goal: text('diet_goal').notNull().default('Maintenance'),
 })
 export type UserMacros = typeof user_macros.$inferSelect
 
