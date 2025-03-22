@@ -36,7 +36,7 @@ const WelcomeComponent = ({
                 className="flex justify-between items-center w-full"
             >
                 <button
-                    className="bg-foreground rounded-2xl hover:cursor-pointer hover:scale-150 transition-all duration-200"
+                    className="bg-foreground rounded-2xl hover:cursor-pointer hover:scale-120 transition-all duration-200"
                     onClick={() => router.back()}
                 >
                     <ChevronLeft size={32} className="text-accent" />

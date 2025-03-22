@@ -5,7 +5,11 @@ import { yourselfMacrosFormSchema, YourselfMacrosFormValues } from '@/lib/macros
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { Button } from '../ui/button'
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form'
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, FormDescription } from '../ui/form'
+import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
+import { Check, ChevronsUpDown } from 'lucide-react'
+import { cn } from '@/lib/utils'
+import { dietGoalArray } from '@/lib/macros-utils'
 import { Input } from '../ui/input'
 import { motion } from 'framer-motion'
 import { useRouter } from 'next/navigation'
@@ -15,6 +19,7 @@ import { handleInputNumberChange } from '@/lib/utils'
 const WelcomeMacrosYourself = () => {
     const router = useRouter()
     const [isSubmitting, setIsSubmitting] = useState(false)
+    const [dietGoalPopoverOpen, setDietGoalPopoverOpen] = useState(false)
     const form = useForm<YourselfMacrosFormValues>({
         resolver: zodResolver(yourselfMacrosFormSchema),
         defaultValues: {
@@ -22,6 +27,7 @@ const WelcomeMacrosYourself = () => {
             protein: 150,
             carbs: 200,
             fat: 50,
+            dietGoal: 'Maintenance',
         },
     })
 
@@ -33,6 +39,7 @@ const WelcomeMacrosYourself = () => {
                 protein: data.protein,
                 carbs: data.carbs,
                 fat: data.fat,
+                dietGoal: data.dietGoal,
             })
         } catch (error) {
             console.error(error)
@@ -144,6 +151,60 @@ const WelcomeMacrosYourself = () => {
                                             onChange={(e) => handleInputNumberChange(e, field.onChange)}
                                         />
                                     </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+
+                        <FormField
+                            control={form.control}
+                            name="dietGoal"
+                            render={({ field }) => (
+                                <FormItem className="col-span-2">
+                                    <FormLabel className="text-accent">Diet Goal</FormLabel>
+                                    <Popover open={dietGoalPopoverOpen} onOpenChange={setDietGoalPopoverOpen}>
+                                        <PopoverTrigger asChild>
+                                            <FormControl>
+                                                <Button
+                                                    variant="outline"
+                                                    role="combobox"
+                                                    className="w-full justify-between bg-foreground text-muted"
+                                                >
+                                                    {dietGoalArray.find((goal) => goal.value === field.value)?.label ||
+                                                        'Select diet goal'}
+                                                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                                                </Button>
+                                            </FormControl>
+                                        </PopoverTrigger>
+                                        <PopoverContent className="w-full p-0">
+                                            <div className="grid grid-cols-1 gap-1 p-1">
+                                                {dietGoalArray.map((goal) => (
+                                                    <Button
+                                                        key={goal.value}
+                                                        variant="ghost"
+                                                        className="justify-start"
+                                                        onClick={() => {
+                                                            form.setValue('dietGoal', goal.value)
+                                                            setDietGoalPopoverOpen(false)
+                                                        }}
+                                                    >
+                                                        <Check
+                                                            className={cn(
+                                                                'mr-2 h-4 w-4',
+                                                                goal.value === field.value
+                                                                    ? 'opacity-100'
+                                                                    : 'opacity-0',
+                                                            )}
+                                                        />
+                                                        {goal.label}
+                                                    </Button>
+                                                ))}
+                                            </div>
+                                        </PopoverContent>
+                                    </Popover>
+                                    <FormDescription>
+                                        What are you doing (or want to do) with your diet.
+                                    </FormDescription>
                                     <FormMessage />
                                 </FormItem>
                             )}

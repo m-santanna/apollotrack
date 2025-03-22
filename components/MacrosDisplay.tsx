@@ -1,4 +1,7 @@
+'use client'
+
 import { Card } from './ui/card'
+import { motion } from 'framer-motion'
 
 const MacrosDisplay = ({
     calories,
@@ -12,7 +15,12 @@ const MacrosDisplay = ({
     fat: number
 }) => {
     return (
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.5 }}
+            className="grid grid-cols-2 md:grid-cols-4 gap-4"
+        >
             <Card className="p-4 bg-background/60">
                 <div className="text-muted-foreground text-sm">Calories</div>
                 <div className="text-2xl font-bold text-foreground">{calories}</div>
@@ -32,7 +40,7 @@ const MacrosDisplay = ({
                 <div className="text-muted-foreground text-sm">Fat</div>
                 <div className="text-2xl font-bold text-foreground">{fat}g</div>
             </Card>
-        </div>
+        </motion.div>
     )
 }
 

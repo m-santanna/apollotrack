@@ -5,7 +5,7 @@ import { auth } from '@/lib/auth'
 import { revalidatePath } from 'next/cache'
 import { headers } from 'next/headers'
 import { user_macros, food_item } from '@/src/db/schema'
-import { calculateCalories, calculateMacros } from '@/lib/utils'
+import { calculateCalories, calculateMacros } from '@/lib/macros-utils'
 import { eq } from 'drizzle-orm'
 import { redirect } from 'next/navigation'
 
@@ -27,15 +27,16 @@ export async function saveUserMacrosEstimate(formData: {
     height: number
     age: number
     activityLevel: 0 | 1 | 2 | 3 | 4
+    dietGoal: string
 }) {
     const session = await getCurrentSessionServer()
     const userId = session.user.id
 
-    const { gender, weight, height, age, activityLevel } = formData
+    const { gender, weight, height, age, activityLevel, dietGoal } = formData
 
     // Calculate calories and macros
-    const calories = Math.round(calculateCalories(gender, weight, height, age, activityLevel))
-    const { protein, carbs, fat } = calculateMacros(calories, weight)
+    const calories = Math.round(calculateCalories(gender, weight, height, age, activityLevel, dietGoal))
+    const { protein, carbs, fat } = calculateMacros(calories, weight, dietGoal)
 
     // Check if user already has macros saved
     const existingMacros = await db.select().from(user_macros).where(eq(user_macros.userId, userId))
@@ -49,6 +50,7 @@ export async function saveUserMacrosEstimate(formData: {
                 daily_protein: Math.round(protein),
                 daily_carbs: Math.round(carbs),
                 daily_fat: Math.round(fat),
+                diet_goal: dietGoal,
             })
             .where(eq(user_macros.userId, userId))
     } else {
@@ -59,6 +61,7 @@ export async function saveUserMacrosEstimate(formData: {
             daily_protein: Math.round(protein),
             daily_carbs: Math.round(carbs),
             daily_fat: Math.round(fat),
+            diet_goal: dietGoal,
         })
     }
 
@@ -71,19 +74,39 @@ export async function saveUserMacrosYourself(formData: {
     protein: number
     carbs: number
     fat: number
+    dietGoal: string
 }) {
     const session = await getCurrentSessionServer()
     const userId = session.user.id
 
-    const { calories, protein, carbs, fat } = formData
+    const { calories, protein, carbs, fat, dietGoal } = formData
 
-    await db.insert(user_macros).values({
-        userId,
-        daily_calories: calories,
-        daily_protein: protein,
-        daily_carbs: carbs,
-        daily_fat: fat,
-    })
+    // Check if user already has macros saved
+    const existingMacros = await db.select().from(user_macros).where(eq(user_macros.userId, userId))
+
+    if (existingMacros.length > 0) {
+        // Update existing macros
+        await db
+            .update(user_macros)
+            .set({
+                daily_calories: Math.round(calories),
+                daily_protein: Math.round(protein),
+                daily_carbs: Math.round(carbs),
+                daily_fat: Math.round(fat),
+                diet_goal: dietGoal,
+            })
+            .where(eq(user_macros.userId, userId))
+    } else {
+        // Insert new macros
+        await db.insert(user_macros).values({
+            userId,
+            daily_calories: Math.round(calories),
+            daily_protein: Math.round(protein),
+            daily_carbs: Math.round(carbs),
+            daily_fat: Math.round(fat),
+            diet_goal: dietGoal,
+        })
+    }
 
     revalidatePath('/dashboard')
     return { success: true }
