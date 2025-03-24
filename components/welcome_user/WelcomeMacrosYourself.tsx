@@ -15,6 +15,7 @@ import { motion } from 'framer-motion'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { handleInputNumberChange } from '@/lib/utils'
+import { ChevronLeft } from 'lucide-react'
 
 const WelcomeMacrosYourself = () => {
     const router = useRouter()
@@ -59,9 +60,16 @@ const WelcomeMacrosYourself = () => {
                     initial={{ opacity: 0, y: -20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, delay: 0.6 }}
-                    className="text-2xl font-bold text-accent"
+                    className="text-2xl flex font-bold text-accent"
                 >
-                    Set Your Macros
+                    <button
+                        className="rounded-2xl hover:cursor-pointer hover:scale-120 transition-all duration-200"
+                        onClick={() => router.back()}
+                    >
+                        <ChevronLeft size={32} className="text-accent" />
+                    </button>
+                    <p className="text-2xl md:text-3xl font-bold text-accent text-center">Set your macros</p>
+                    <div className="w-8" />
                 </motion.h2>
                 <motion.p
                     initial={{ opacity: 0, y: -20 }}

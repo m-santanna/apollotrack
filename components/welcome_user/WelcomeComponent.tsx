@@ -36,12 +36,12 @@ const WelcomeComponent = ({
                 className="flex justify-between items-center w-full"
             >
                 <button
-                    className="bg-foreground rounded-2xl hover:cursor-pointer hover:scale-120 transition-all duration-200"
+                    className="rounded-2xl hover:cursor-pointer hover:scale-120 transition-all duration-200"
                     onClick={() => router.back()}
                 >
                     <ChevronLeft size={32} className="text-accent" />
                 </button>
-                <h1 className="text-3xl md:text-4xl font-bold text-accent text-center">{mainText}</h1>
+                <h1 className="text-2xl md:text-3xl font-bold text-accent text-center">{mainText}</h1>
                 <div className="w-8" />
             </motion.div>
             <motion.p

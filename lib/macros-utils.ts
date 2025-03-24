@@ -48,9 +48,11 @@ export const activityLevels = [
 ]
 
 export const dietGoalArray = [
-    { value: 'Cut', label: 'Cutting' },
-    { value: 'Bulk', label: 'Bulking' },
-    { value: 'Maintenance', label: 'Maintaining' },
+    { value: 'Hard Cut', label: 'Hard Cut' },
+    { value: 'Cut', label: 'Cut' },
+    { value: 'Maintenance', label: 'Maintain Weight' },
+    { value: 'Bulk', label: 'Bulk' },
+    { value: 'Hard Bulk', label: 'Hard Bulk' },
 ]
 
 export function calculateCalories(
@@ -71,9 +73,15 @@ export function calculateCalories(
     }
     // No need to check gender again since TDEE calculation is the same
     const TDEE = BMR * multFactor[activityLevel]
-    if (dietGoal === 'Cut') {
+    if (dietGoal === 'Hard Cut') {
+        // For hard cutting, subtract 500 calories
+        return TDEE - 500
+    } else if (dietGoal === 'Cut') {
         // For cutting, subtract 300 calories
         return TDEE - 300
+    } else if (dietGoal === 'Hard Bulk') {
+        // For hard bulking, add 500 calories
+        return TDEE + 500
     } else if (dietGoal === 'Bulk') {
         // For bulking, add 300 calories
         return TDEE + 300
@@ -94,12 +102,12 @@ export function calculateMacros(TDEE: number, weight: number, dietGoal: string) 
         protein = weightInLbs // 1g protein per lb of body weight
         fat = (TDEE * 0.25) / 9 // 25% of calories from fat
         carbs = (TDEE - fat * 9 - protein * 4) / 4 // Remaining calories from carbs
-    } else if (dietGoal === 'Cut') {
+    } else if (dietGoal === 'Cut' || dietGoal === 'Hard Cut') {
         protein = weightInLbs * 1.6 // 1.6g protein per lb of body weight
         fat = (TDEE * 0.25) / 9 // 25% of calories from fat
         carbs = (TDEE - fat * 9 - protein * 4) / 4 // Remaining calories from carbs
     } else {
-        protein = weightInLbs * 1 // 1.2g protein per lb of body weight
+        protein = weightInLbs * 1 // 1g protein per lb of body weight
         fat = (TDEE * 0.3) / 9 // 30% of calories from fat
         carbs = (TDEE - fat * 9 - protein * 4) / 4 // Remaining calories from carbs
     }

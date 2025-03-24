@@ -13,6 +13,7 @@ import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { EstimateMacrosFormValues, estimateMacrosFormSchema, activityLevels, dietGoalArray } from '@/lib/macros-utils'
 import { motion } from 'framer-motion'
+import { ChevronLeft } from 'lucide-react'
 
 const WelcomeMacrosEstimate = () => {
     const router = useRouter()
@@ -69,16 +70,21 @@ const WelcomeMacrosEstimate = () => {
             transition={{ duration: 0.5 }}
             className="space-y-6 p-6 bg-foreground rounded-lg border border-border shadow-sm max-w-2xl mx-auto"
         >
-            <div>
-                <motion.h2
-                    initial={{ opacity: 0, y: -20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.6 }}
-                    className="text-2xl font-bold text-accent"
+            <motion.h2
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.6 }}
+                className="flex justify-between items-center font-bold text-accent"
+            >
+                <button
+                    className="rounded-2xl hover:cursor-pointer hover:scale-120 transition-all duration-200"
+                    onClick={() => router.back()}
                 >
-                    Let's estimate your macros
-                </motion.h2>
-            </div>
+                    <ChevronLeft size={32} className="text-accent" />
+                </button>
+                <p className="text-2xl md:text-3xl font-bold text-accent text-center">Let's estimate your macros</p>
+                <div className="w-8" />
+            </motion.h2>
 
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
