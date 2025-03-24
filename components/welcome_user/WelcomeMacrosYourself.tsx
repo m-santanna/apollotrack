@@ -53,7 +53,7 @@ const WelcomeMacrosYourself = () => {
             initial={{ opacity: 0, y: 100 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="space-y-6 p-6 bg-foreground rounded-lg border shadow-sm max-w-2xl mx-auto"
+            className="w-[80vw] sm:w-auto max-w-[80vw] flex flex-col gap-4 py-8 px-4 bg-foreground rounded-xl"
         >
             <div>
                 <motion.h2

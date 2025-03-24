@@ -1,4 +1,5 @@
 'use client'
+
 import Link from 'next/link'
 import { Button } from '../ui/button'
 import MacrosDisplay from '@/components/MacrosDisplay'
@@ -24,7 +25,7 @@ const MacrosDashboard = ({
             initial={{ opacity: 0, y: 100 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="rounded-lg bg-foreground/10 border border-accent w-full p-4 flex flex-col gap-4"
+            className="rounded-xl bg-foreground/10 border border-accent w-full p-4 flex flex-col gap-4"
         >
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -37,7 +38,7 @@ const MacrosDashboard = ({
                 <Button
                     asChild
                     variant="outline"
-                    className="rounded-lg hover:cursor-pointer hover:scale-120 transition-all duration-200"
+                    className="rounded-lg hover:cursor-pointer hover:scale-110 transition-all duration-200"
                 >
                     <Link href={`/dashboard/welcome/${type}`}>Edit</Link>
                 </Button>

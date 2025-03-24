@@ -24,7 +24,7 @@ const WelcomeComponent = ({
     const router = useRouter()
     return (
         <motion.div
-            className="w-[80vw] sm:w-auto max-w-[80vw] flex flex-col justify-center items-center gap-4 border rounded-xl py-8 px-4 bg-foreground"
+            className="w-[80vw] sm:w-auto max-w-[80vw] flex flex-col justify-center items-center gap-4 rounded-xl py-8 px-4 bg-foreground"
             initial={{ opacity: 0, y: 100 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
