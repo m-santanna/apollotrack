@@ -29,6 +29,13 @@
       "when": 1742600806028,
       "tag": "0003_keen_spirit",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1742921297115,
+      "tag": "0004_square_wraith",
+      "breakpoints": true
     }
   ]
 }
