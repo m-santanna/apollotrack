@@ -89,6 +89,22 @@ export const food_product = pgTable('food_product', {
 })
 export type FoodProduct = typeof food_product.$inferSelect
 
+export const user_food = pgTable('user_food', {
+    id: text('id')
+        .primaryKey()
+        .default(sql`gen_random_uuid()`),
+    userId: text('user_id')
+        .notNull()
+        .references(() => user.id, { onDelete: 'cascade' }),
+    foodId: text('food_id')
+        .notNull()
+        .references(() => food_product.id, { onDelete: 'cascade' }),
+    checked: boolean('checked').notNull().default(false),
+    price: real('price').default(-1),
+    total_grams: real('total_grams').default(-1),
+})
+export type UserFood = typeof user_food.$inferSelect
+
 // Exercise
 export const exercise = pgTable('exercise', {
     id: text('id')

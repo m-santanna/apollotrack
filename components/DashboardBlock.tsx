@@ -1,14 +1,11 @@
-import Link from 'next/link'
 import React from 'react'
-import MacrosDisplay from './MacrosDisplay'
-import { UserMacros, FoodItem, ExerciseGroup } from '@/src/db/schema'
-import { Button } from './ui/button'
+import { UserMacros, ExerciseGroup, UserFood } from '@/src/db/schema'
 import NoData from './dashboard/NoData'
 import MacrosDashboard from './dashboard/MacrosDashboard'
 
 interface DashboardBlockProps {
     type: 'diet' | 'macros' | 'supermarket' | 'training'
-    databaseData: FoodItem[] | UserMacros[] | ExerciseGroup[]
+    databaseData: UserFood[] | UserMacros[] | ExerciseGroup[]
 }
 
 const DashboardMacros = ({ databaseData, type }: DashboardBlockProps) => {
@@ -27,12 +24,7 @@ const DashboardMacros = ({ databaseData, type }: DashboardBlockProps) => {
                 type={type}
             />
         )
-    } else
-        return (
-            <div className="rounded-lg bg-foreground/10 border border-accent w-full h-full p-4">
-                <h1>{type} Dashboard</h1>
-            </div>
-        )
+    } else return <NoData type={type} />
 }
 
 export default DashboardMacros

@@ -1,41 +1,48 @@
 {
-    "version": "7",
-    "dialect": "postgresql",
-    "entries": [
-        {
-            "idx": 0,
-            "version": "7",
-            "when": 1740878743908,
-            "tag": "0000_gifted_black_queen",
-            "breakpoints": true
-        },
-        {
-            "idx": 1,
-            "version": "7",
-            "when": 1741049761249,
-            "tag": "0001_ancient_yellow_claw",
-            "breakpoints": true
-        },
-        {
-            "idx": 2,
-            "version": "7",
-            "when": 1741797255107,
-            "tag": "0002_glossy_master_chief",
-            "breakpoints": true
-        },
-        {
-            "idx": 3,
-            "version": "7",
-            "when": 1742600806028,
-            "tag": "0003_keen_spirit",
-            "breakpoints": true
-        },
-        {
-            "idx": 4,
-            "version": "7",
-            "when": 1742930558752,
-            "tag": "0004_parallel_silver_sable",
-            "breakpoints": true
-        }
-    ]
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1740878743908,
+      "tag": "0000_gifted_black_queen",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1741049761249,
+      "tag": "0001_ancient_yellow_claw",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1741797255107,
+      "tag": "0002_glossy_master_chief",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1742600806028,
+      "tag": "0003_keen_spirit",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1742930558752,
+      "tag": "0004_parallel_silver_sable",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1742933045979,
+      "tag": "0005_steep_black_queen",
+      "breakpoints": true
+    }
+  ]
 }
