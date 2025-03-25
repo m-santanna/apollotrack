@@ -75,25 +75,19 @@ export const user_macros = pgTable('user_macros', {
 })
 export type UserMacros = typeof user_macros.$inferSelect
 
-// Food item table
-export const food_item = pgTable('food_item', {
+// Food product table
+export const food_product = pgTable('food_product', {
     id: text('id')
         .primaryKey()
         .default(sql`gen_random_uuid()`),
-    userId: text('user_id')
-        .notNull()
-        .references(() => user.id, { onDelete: 'cascade' }),
     name: text('name').notNull(),
-    calories: integer('calories'),
+    calories: real('calories'),
     protein: real('protein'),
     carbs: real('carbs'),
     fat: real('fat'),
-    total_grams: real('total_grams'),
-    price: real('price'),
-    checked: boolean('checked').notNull().default(false),
     category: text('category').notNull().default('Other'),
 })
-export type FoodItem = typeof food_item.$inferSelect
+export type FoodProduct = typeof food_product.$inferSelect
 
 // Exercise
 export const exercise = pgTable('exercise', {
