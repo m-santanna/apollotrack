@@ -7,6 +7,8 @@ import {
   Scripts,
 } from '@tanstack/react-router'
 import appCss from '@/app/globals.css?url'
+import Providers from '@/components/providers'
+import { NotFound } from '@/components/not-found'
 
 export const Route = createRootRoute({
   head: () => ({
@@ -26,10 +28,11 @@ export const Route = createRootRoute({
       {
         rel: 'stylesheet',
         href: appCss,
-      }
+      },
     ],
   }),
   component: RootComponent,
+  notFoundComponent: NotFound,
 })
 
 function RootComponent() {
@@ -47,7 +50,7 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
         <HeadContent />
       </head>
       <body>
-        {children}
+        <Providers>{children}</Providers>
         <Scripts />
       </body>
     </html>
