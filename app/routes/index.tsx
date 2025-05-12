@@ -1,15 +1,29 @@
 // app/routes/index.tsx
-import ThemeButton from '@/components/theme-button'
+import MacrosDisplay from '@/components/macros-display'
+import Navbar from '@/components/navbar'
+import Spinner from '@/components/ui/spinner'
+import { useLoadingHook } from '@/hooks/useLoadingEffect'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/')({
-  component: Home,
+    component: Home,
 })
 
 function Home() {
-  return (
-    <div className="flex h-screen w-screen items-center justify-center">
-      <ThemeButton />
-    </div>
-  )
+    const [loaded] = useLoadingHook()
+    if (!loaded) {
+        return (
+            <div className="flex h-screen w-screen items-center justify-center">
+                <Spinner childSize="w-6 h-6" outerSize="h-10 w-10" />
+            </div>
+        )
+    }
+    return (
+        <div className="h-screen w-screen">
+            <Navbar />
+            <div className="flex flex-col items-center">
+                <MacrosDisplay />
+            </div>
+        </div>
+    )
 }
