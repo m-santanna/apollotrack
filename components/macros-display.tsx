@@ -20,7 +20,7 @@ export default function MacrosDisplay() {
         macros.carbs == 0
     ) {
         return (
-            <div className="relative flex flex-col justify-center items-center gap-4 border rounded-2xl w-3/4 md:w-1/2 p-4 mt-8">
+            <div className="relative flex flex-col justify-center items-center gap-4 border rounded-2xl w-3/4 md:w-1/2 p-4 mt-8 animate-in slide-in-from-left duration-300">
                 <h1 className="text-xl md:text-4xl">
                     Looks like you are new here!
                 </h1>
@@ -33,7 +33,7 @@ export default function MacrosDisplay() {
         )
     }
     return (
-        <div className="relative flex flex-col gap-4 border rounded-2xl w-3/4 md:w-1/2 p-4 mt-8">
+        <div className="relative flex flex-col gap-4 border rounded-2xl w-3/4 md:w-1/2 p-4 mt-8 animate-in slide-in-from-left duration-300">
             <Button
                 onClick={() => setEditMacrosDialog(true)}
                 variant={'secondary'}
