@@ -1,7 +1,6 @@
 import {
     Dialog,
     DialogContent,
-    DialogDescription,
     DialogFooter,
     DialogHeader,
     DialogTitle,
@@ -12,7 +11,6 @@ import {
     macrosEditDialogAtom,
 } from '@/lib/atoms'
 import { useAtom, useSetAtom } from 'jotai/react'
-import { Input } from './ui/input'
 import { Button } from './ui/button'
 
 export default function MacrosEditDialog() {
