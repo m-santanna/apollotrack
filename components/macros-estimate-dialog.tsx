@@ -5,23 +5,21 @@ import {
     DialogFooter,
     DialogHeader,
     DialogTitle,
-    DialogTrigger,
 } from '@/components/ui/dialog'
-import { macrosDialogAtom } from '@/lib/atoms'
+import { macrosDialogEstimateAtom } from '@/lib/atoms'
 import { useAtom } from 'jotai/react'
 import { Input } from './ui/input'
 import { Button } from './ui/button'
 
-export default function MacrosDialog() {
-    const [dialogOpen, setDialogOpen] = useAtom(macrosDialogAtom)
+export default function MacrosEstimateDialog() {
+    const [dialogOpen, setDialogOpen] = useAtom(macrosDialogEstimateAtom)
     return (
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
-                    <DialogTitle>Edit profile</DialogTitle>
+                    <DialogTitle>Macros estimation</DialogTitle>
                     <DialogDescription>
-                        Make changes to your profile here. Click save when
-                        you're done.
+                        We will do our best to calculate your needed macros
                     </DialogDescription>
                 </DialogHeader>
                 <div className="grid gap-4 py-4">

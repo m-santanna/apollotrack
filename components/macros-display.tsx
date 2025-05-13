@@ -1,11 +1,19 @@
-import { caloricVarianceAtom, macrosAtom, macrosDialogAtom } from '@/lib/atoms'
+import {
+    caloricVarianceAtom,
+    macrosAtom,
+    macrosDialogYourselfAtom,
+    macrosDialogEstimateAtom,
+    macrosEditDialogAtom,
+} from '@/lib/atoms'
 import { useAtomValue, useSetAtom } from 'jotai/react'
 import { Button } from './ui/button'
 import { Pencil } from 'lucide-react'
 
 export default function MacrosDisplay() {
     const caloricVariance = useAtomValue(caloricVarianceAtom)
-    const setEditMacrosDialog = useSetAtom(macrosDialogAtom)
+    const setMacrosYourselfDialog = useSetAtom(macrosDialogYourselfAtom)
+    const setMacrosEstimateDialog = useSetAtom(macrosDialogEstimateAtom)
+    const setEditMacrosDialog = useSetAtom(macrosEditDialogAtom)
     const macros = useAtomValue(macrosAtom)
     const goal =
         caloricVariance > 0
@@ -21,12 +29,18 @@ export default function MacrosDisplay() {
     ) {
         return (
             <div className="relative flex flex-col justify-center items-center gap-4 border rounded-2xl w-3/4 md:w-1/2 p-4 mt-8 animate-in slide-in-from-left duration-300">
-                <h1 className="text-xl md:text-4xl">
+                <h1 className="text-xl md:text-3xl text-center">
                     Looks like you are new here!
                 </h1>
-                <div className="flex items-center justify-center">
-                    <Button onClick={() => setEditMacrosDialog(true)}>
-                        Setup Macros
+                <div className="flex items-center justify-center gap-3">
+                    <Button onClick={() => setMacrosEstimateDialog(true)}>
+                        Estimate calories
+                    </Button>
+                    <Button
+                        variant={'secondary'}
+                        onClick={() => setMacrosYourselfDialog(true)}
+                    >
+                        Do it yourself
                     </Button>
                 </div>
             </div>

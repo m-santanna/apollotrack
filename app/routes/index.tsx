@@ -1,6 +1,8 @@
 // app/routes/index.tsx
 import MacrosDisplay from '@/components/macros-display'
-import MacrosDialog from '@/components/macros-dialog'
+import MacrosYourselfDialog from '@/components/macros-yourself-dialog'
+import MacrosEstimateDialog from '@/components/macros-estimate-dialog'
+import MacrosEditDialog from '@/components/macros-edit-dialog'
 import Navbar from '@/components/navbar'
 import Spinner from '@/components/ui/spinner'
 import { useLoadingHook } from '@/hooks/useLoadingEffect'
@@ -22,7 +24,9 @@ function Home() {
     return (
         <div className="h-screen w-screen">
             <Navbar />
-            <MacrosDialog />
+            <MacrosYourselfDialog />
+            <MacrosEstimateDialog />
+            <MacrosEditDialog />
             <div className="flex flex-col items-center">
                 <MacrosDisplay />
             </div>

@@ -31,4 +31,6 @@ export const caloricVarianceAtom = atomWithStorage<number>(
     0,
 )
 export const foodListAtom = atomWithStorage<Food[]>('foodList', [])
-export const macrosDialogAtom = atom(false)
+export const macrosDialogYourselfAtom = atom(false)
+export const macrosDialogEstimateAtom = atom(false)
+export const macrosEditDialogAtom = atom(false)
