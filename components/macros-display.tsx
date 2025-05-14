@@ -1,24 +1,22 @@
 import {
-    caloricVarianceAtom,
     macrosAtom,
     macrosDialogYourselfAtom,
     macrosDialogEstimateAtom,
     macrosEditDialogAtom,
 } from '@/lib/atoms'
-import { useAtomValue, useSetAtom } from 'jotai/react'
+import { useAtom, useAtomValue, useSetAtom } from 'jotai/react'
 import { Button } from './ui/button'
-import { Pencil } from 'lucide-react'
+import { Pencil, Trash } from 'lucide-react'
 
 export default function MacrosDisplay() {
-    const caloricVariance = useAtomValue(caloricVarianceAtom)
     const setMacrosYourselfDialog = useSetAtom(macrosDialogYourselfAtom)
     const setMacrosEstimateDialog = useSetAtom(macrosDialogEstimateAtom)
     const setEditMacrosDialog = useSetAtom(macrosEditDialogAtom)
-    const macros = useAtomValue(macrosAtom)
+    const [macros, setMacros] = useAtom(macrosAtom)
     const goal =
-        caloricVariance > 0
+        macros.caloricVariance > 0
             ? 'bulk'
-            : caloricVariance < 0
+            : macros.caloricVariance < 0
               ? 'cut'
               : 'maintanance'
     if (
@@ -55,9 +53,24 @@ export default function MacrosDisplay() {
             >
                 <Pencil className="size-6 md:size-7" />
             </Button>
+            <Button
+                onClick={() =>
+                    setMacros({
+                        calories: 0,
+                        protein: 0,
+                        fat: 0,
+                        carbs: 0,
+                        caloricVariance: 0,
+                    })
+                }
+                variant={'secondary'}
+                className="absolute top-6 right-3"
+            >
+                <Trash className="size-6 md:size-7" />
+            </Button>
             <h1 className="text-xl md:text-4xl flex justify-center w-full">
                 <span>Your {goal} plan </span>
-                <span> ({caloricVariance})</span>
+                <span> ({macros.caloricVariance})</span>
             </h1>
             <div className="flex items-center justify-around text-xl md:text-2xl mt-4">
                 <div className="flex flex-col gap-2 items-center">

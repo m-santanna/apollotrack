@@ -9,9 +9,11 @@
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.13",
+    "@radix-ui/react-label": "^2.1.6",
     "@radix-ui/react-select": "^2.2.4",
     "@radix-ui/react-slot": "^1.2.2",
     "@tailwindcss/postcss": "^4.1.5",
+    "@tanstack/react-form": "^1.11.1",
     "@tanstack/react-router": "^1.120.2",
     "@tanstack/react-start": "^1.120.2",
     "class-variance-authority": "^0.7.1",

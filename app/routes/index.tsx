@@ -4,9 +4,9 @@ import MacrosYourselfDialog from '@/components/macros-yourself-dialog'
 import MacrosEstimateDialog from '@/components/macros-estimate-dialog'
 import MacrosEditDialog from '@/components/macros-edit-dialog'
 import Navbar from '@/components/navbar'
-import Spinner from '@/components/ui/spinner'
 import { useLoadingHook } from '@/hooks/useLoadingEffect'
 import { createFileRoute } from '@tanstack/react-router'
+import Loading from '@/components/ui/loading'
 
 export const Route = createFileRoute('/')({
     component: Home,
@@ -15,11 +15,7 @@ export const Route = createFileRoute('/')({
 function Home() {
     const [loaded] = useLoadingHook()
     if (!loaded) {
-        return (
-            <div className="flex h-screen w-screen items-center justify-center">
-                <Spinner childSize="w-6 h-6" outerSize="h-10 w-10" />
-            </div>
-        )
+        return <Loading />
     }
     return (
         <div className="h-screen w-screen">

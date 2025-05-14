@@ -3,11 +3,11 @@ import { Provider } from 'jotai/react'
 import React from 'react'
 
 function Providers({ children }: { children: React.ReactNode }) {
-  return (
-    <Provider>
-      <ThemeProvider attribute={'class'}>{children}</ThemeProvider>
-    </Provider>
-  )
+    return (
+        <Provider>
+            <ThemeProvider attribute={'class'}>{children}</ThemeProvider>
+        </Provider>
+    )
 }
 
 export default Providers

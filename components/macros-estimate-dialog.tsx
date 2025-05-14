@@ -6,34 +6,49 @@ import {
     DialogHeader,
     DialogTitle,
 } from '@/components/ui/dialog'
-import { macrosAtom, macrosDialogEstimateAtom } from '@/lib/atoms'
+import {
+    estimateMacrosSchema,
+    macrosAtom,
+    macrosDialogEstimateAtom,
+} from '@/lib/atoms'
 import { useAtom, useSetAtom } from 'jotai/react'
-import { Input } from './ui/input'
 import { Button } from './ui/button'
 import { calculateCalories, calculateMacros } from '@/lib/utils'
-import { Select } from '@radix-ui/react-select'
-import { useState } from 'react'
+import { useAppForm } from '@/hooks/form-hook'
 
 export default function MacrosEstimateDialog() {
     const [dialogOpen, setDialogOpen] = useAtom(macrosDialogEstimateAtom)
-    const [formData, setFormData] = useState<{
-        gender: 'male' | 'female'
-        weight: number
-        height: number
-        age: number
-        activityLevel: number
-        dietGoal: string
-    }>({})
     const setMacros = useSetAtom(macrosAtom)
-    function handleSubmitForm() {
-        const calories = calculateCalories(...formData)
-        const { protein, carbs, fat } = calculateMacros(
-            formData.calories,
-            formData.weight,
-            formData.dietGoal,
-        )
-        setMacros({ calories, protein, fat, carbs })
-    }
+    const form = useAppForm({
+        defaultValues: {
+            gender: 'male',
+            weight: 60,
+            height: 170,
+            age: 20,
+            activityLevel: 'moderate',
+            caloricVariance: 0,
+        },
+        validators: {
+            onSubmit: estimateMacrosSchema,
+        },
+        onSubmit: ({ value }) => {
+            console.log('gotin')
+            const calories = calculateCalories(
+                value.gender,
+                value.weight,
+                value.height,
+                value.age,
+                value.activityLevel,
+                value.caloricVariance,
+            )
+            const { protein, carbs, fat } = calculateMacros(
+                calories,
+                value.weight,
+                value.caloricVariance,
+            )
+            console.log({ calories, protein, fat, carbs })
+        },
+    })
     return (
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
             <DialogContent className="sm:max-w-[425px]">
@@ -43,45 +58,47 @@ export default function MacrosEstimateDialog() {
                         We will do our best to calculate your needed macros
                     </DialogDescription>
                 </DialogHeader>
-                <div className="grid gap-4 py-4">
-                    <div className="grid grid-cols-4 items-center gap-4">
-                        <div className="text-right">Gender</div>
-                        <Select value={gender} onValueChange={setGender}>
-                            <SelectTrigger className="w-[180px]">
-                                <SelectValue placeholder="Select a fruit" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectGroup>
-                                    <SelectLabel>Fruits</SelectLabel>
-                                    <SelectItem value="apple">Apple</SelectItem>
-                                    <SelectItem value="banana">
-                                        Banana
-                                    </SelectItem>
-                                    <SelectItem value="blueberry">
-                                        Blueberry
-                                    </SelectItem>
-                                    <SelectItem value="grapes">
-                                        Grapes
-                                    </SelectItem>
-                                    <SelectItem value="pineapple">
-                                        Pineapple
-                                    </SelectItem>
-                                </SelectGroup>
-                            </SelectContent>
-                        </Select>
-                    </div>
-                    <div className="grid grid-cols-4 items-center gap-4">
-                        <div className="text-right">Username</div>
-                        <Input
-                            id="username"
-                            value="@peduarte"
-                            className="col-span-3"
-                        />
-                    </div>
-                </div>
-                <DialogFooter>
-                    <Button onClick={handleSubmitForm}>Calculate Macros</Button>
-                </DialogFooter>
+                <form
+                    onSubmit={(e) => {
+                        e.preventDefault()
+                        form.handleSubmit()
+                    }}
+                    className="grid gap-2"
+                >
+                    <form.AppField
+                        name="gender"
+                        children={(field) => <field.GenderField />}
+                    />
+                    <form.AppField
+                        name="height"
+                        children={(field) => (
+                            <field.NumberField label="Height" />
+                        )}
+                    />
+                    <form.AppField
+                        name="weight"
+                        children={(field) => (
+                            <field.NumberField label="Weight" />
+                        )}
+                    />
+                    <form.AppField
+                        name="age"
+                        children={(field) => <field.NumberField label="Age" />}
+                    />
+                    <form.AppField
+                        name="activityLevel"
+                        children={(field) => <field.ActivityLevelField />}
+                    />
+                    <form.AppField
+                        name="caloricVariance"
+                        children={(field) => (
+                            <field.NumberField label="Caloric Variance" />
+                        )}
+                    />
+                    <form.AppForm>
+                        <form.SubmitButton className="w-1/2 translate-x-1/2 mt-4" />
+                    </form.AppForm>
+                </form>
             </DialogContent>
         </Dialog>
     )
