@@ -9,7 +9,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select'
-import { activityLevels } from '@/lib/utils'
+import { activityLevels, dietGoals } from '@/lib/utils'
 
 export const { fieldContext, useFieldContext, formContext, useFormContext } =
     createFormHookContexts()
@@ -76,6 +76,33 @@ function ActivityLevelField() {
     )
 }
 
+function DietGoalField() {
+    const field = useFieldContext<string>()
+    return (
+        <Select
+            value={field.state.value}
+            onValueChange={(value) => field.handleChange(value)}
+        >
+            <div className="grid grid-cols-2 items-center gap-4">
+                <Label>Goal</Label>
+                <SelectTrigger className="w-full">
+                    <SelectValue
+                        placeholder="Select your caloric surplus/deficit"
+                        className="truncate"
+                    />
+                </SelectTrigger>
+            </div>
+            <SelectContent>
+                {dietGoals.map((dietGoal) => (
+                    <SelectItem key={dietGoal.value} value={dietGoal.value}>
+                        {dietGoal.label}
+                    </SelectItem>
+                ))}
+            </SelectContent>
+        </Select>
+    )
+}
+
 function SubmitButton({ className }: { className?: string }) {
     const form = useFormContext()
     return (
@@ -90,7 +117,12 @@ function SubmitButton({ className }: { className?: string }) {
 }
 
 export const { useAppForm } = createFormHook({
-    fieldComponents: { NumberField, GenderField, ActivityLevelField },
+    fieldComponents: {
+        NumberField,
+        GenderField,
+        ActivityLevelField,
+        DietGoalField,
+    },
     formComponents: { SubmitButton },
     fieldContext,
     formContext,

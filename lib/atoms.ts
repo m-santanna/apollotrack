@@ -7,7 +7,7 @@ export const macrosSchema = z.object({
     protein: z.number(),
     fat: z.number(),
     carbs: z.number(),
-    caloricVariance: z.number(),
+    dietGoal: z.string(),
 })
 
 export const foodSchema = z.object({
@@ -27,10 +27,26 @@ export const estimateMacrosSchema = z.object({
         'sedentary',
         'light',
         'moderate',
+        'active',
         'heavy',
         'athlete',
     ]),
-    caloricVariance: z.number(),
+    dietGoal: z.enum([
+        'Hard Cut',
+        'Cut',
+        'Slow Cut',
+        'Maintenance',
+        'Slow Bulk',
+        'Bulk',
+        'Hard Bulk',
+    ]),
+})
+
+export const yourselfMacrosSchema = z.object({
+    calories: z.number(),
+    protein: z.number(),
+    carbs: z.number(),
+    fat: z.number(),
 })
 
 export type Macros = z.infer<typeof macrosSchema>
@@ -41,7 +57,7 @@ export const macrosAtom = atomWithStorage<Macros>('macros', {
     protein: 0,
     fat: 0,
     carbs: 0,
-    caloricVariance: 0,
+    dietGoal: 'Maintenance',
 })
 export const foodListAtom = atomWithStorage<Food[]>('foodList', [])
 export const macrosDialogYourselfAtom = atom(false)

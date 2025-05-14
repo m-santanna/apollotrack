@@ -5,6 +5,16 @@ export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs))
 }
 
+export const dietGoals = [
+    { value: 'Hard Cut', label: 'Hard Cut (500 calories in deficit)' },
+    { value: 'Cut', label: 'Cut (300 calories in deficit)' },
+    { value: 'Slow Cut', label: 'Slow Cut (150 calories in deficit)' },
+    { value: 'Maintenance', label: 'Maintenance (No deficit nor surplus)' },
+    { value: 'Slow Bulk', label: 'Slow Bulk (150 calories in surplus)' },
+    { value: 'Bulk', label: 'Bulk (300 calories in surplus)' },
+    { value: 'Hard Bulk', label: 'Hard Bulk (500 calories in surplus)' },
+]
+
 export const activityLevels = [
     { value: 'sedentary', label: 'Sedentary (office job)' },
     { value: 'light', label: 'Light Exercise (1-2 days/week)' },
@@ -13,6 +23,15 @@ export const activityLevels = [
     { value: 'heavy', label: 'Heavy Exercise (7 days/week)' },
     { value: 'athlete', label: 'Athlete (2x daily)' },
 ]
+let dietGoalDict = {
+    'Hard Cut': -500,
+    Cut: -300,
+    'Slow Cut': -150,
+    Maintenance: 0,
+    'Slow Bulk': 150,
+    Bulk: 300,
+    'Hard Bulk': 500,
+}
 
 export function calculateCalories(
     gender: string,
@@ -20,7 +39,7 @@ export function calculateCalories(
     height: number,
     age: number,
     activityLevel: string,
-    caloricVariance: number,
+    dietGoal: string,
 ) {
     let multFactorDict = {
         sedentary: 1.2,
@@ -37,26 +56,26 @@ export function calculateCalories(
 
     // No need to check gender again since TDEE calculation is the same
     const TDEE = BMR * multFactorDict[activityLevel]
-    return TDEE + caloricVariance
+    return Math.round(TDEE + dietGoalDict[dietGoal])
 }
 
 export function calculateMacros(
     TDEE: number,
     weight: number,
-    caloricVariance: number,
+    dietGoal: string,
 ) {
     const weightInLbs = 2.2 * weight
-    let protein, carbs, fat
+    let protein: number, carbs: number, fat: number
     // Convert percentages to grams using macronutrient calorie content
     // Protein: 4 calories per gram
     // Carbs: 4 calories per gram
     // Fat: 9 calories per gram
 
-    if (caloricVariance > 0) {
+    if (dietGoalDict[dietGoal] > 0) {
         protein = weightInLbs // 1g protein per lb of body weight
         fat = (TDEE * 0.25) / 9 // 25% of calories from fat
         carbs = (TDEE - fat * 9 - protein * 4) / 4 // Remaining calories from carbs
-    } else if (caloricVariance < 0) {
+    } else if (dietGoalDict[dietGoal] < 0) {
         protein = weightInLbs * 1.6 // 1.6g protein per lb of body weight
         fat = (TDEE * 0.25) / 9 // 25% of calories from fat
         carbs = (TDEE - fat * 9 - protein * 4) / 4 // Remaining calories from carbs
@@ -65,5 +84,8 @@ export function calculateMacros(
         fat = (TDEE * 0.3) / 9 // 30% of calories from fat
         carbs = (TDEE - fat * 9 - protein * 4) / 4 // Remaining calories from carbs
     }
+    protein = Math.round(protein)
+    fat = Math.round(fat)
+    carbs = Math.round(carbs)
     return { protein, carbs, fat }
 }

@@ -2,7 +2,6 @@ import {
     Dialog,
     DialogContent,
     DialogDescription,
-    DialogFooter,
     DialogHeader,
     DialogTitle,
 } from '@/components/ui/dialog'
@@ -12,7 +11,6 @@ import {
     macrosDialogEstimateAtom,
 } from '@/lib/atoms'
 import { useAtom, useSetAtom } from 'jotai/react'
-import { Button } from './ui/button'
 import { calculateCalories, calculateMacros } from '@/lib/utils'
 import { useAppForm } from '@/hooks/form-hook'
 
@@ -26,27 +24,28 @@ export default function MacrosEstimateDialog() {
             height: 170,
             age: 20,
             activityLevel: 'moderate',
-            caloricVariance: 0,
+            dietGoal: 'Maintenance',
         },
         validators: {
             onSubmit: estimateMacrosSchema,
         },
         onSubmit: ({ value }) => {
-            console.log('gotin')
             const calories = calculateCalories(
                 value.gender,
                 value.weight,
                 value.height,
                 value.age,
                 value.activityLevel,
-                value.caloricVariance,
+                value.dietGoal,
             )
             const { protein, carbs, fat } = calculateMacros(
                 calories,
                 value.weight,
-                value.caloricVariance,
+                value.dietGoal,
             )
-            console.log({ calories, protein, fat, carbs })
+            const dietGoal = value.dietGoal
+            setDialogOpen(false)
+            setMacros({ calories, protein, fat, carbs, dietGoal })
         },
     })
     return (
@@ -72,13 +71,13 @@ export default function MacrosEstimateDialog() {
                     <form.AppField
                         name="height"
                         children={(field) => (
-                            <field.NumberField label="Height" />
+                            <field.NumberField label="Height (cm)" />
                         )}
                     />
                     <form.AppField
                         name="weight"
                         children={(field) => (
-                            <field.NumberField label="Weight" />
+                            <field.NumberField label="Weight (kg)" />
                         )}
                     />
                     <form.AppField
@@ -90,10 +89,8 @@ export default function MacrosEstimateDialog() {
                         children={(field) => <field.ActivityLevelField />}
                     />
                     <form.AppField
-                        name="caloricVariance"
-                        children={(field) => (
-                            <field.NumberField label="Caloric Variance" />
-                        )}
+                        name="dietGoal"
+                        children={(field) => <field.DietGoalField />}
                     />
                     <form.AppForm>
                         <form.SubmitButton className="w-1/2 translate-x-1/2 mt-4" />

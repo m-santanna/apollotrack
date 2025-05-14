@@ -2,18 +2,45 @@ import {
     Dialog,
     DialogContent,
     DialogDescription,
-    DialogFooter,
     DialogHeader,
     DialogTitle,
-    DialogTrigger,
 } from '@/components/ui/dialog'
-import { macrosDialogYourselfAtom } from '@/lib/atoms'
-import { useAtom } from 'jotai/react'
-import { Input } from './ui/input'
-import { Button } from './ui/button'
+import { useAppForm } from '@/hooks/form-hook'
+import {
+    macrosAtom,
+    macrosDialogYourselfAtom,
+    yourselfMacrosSchema,
+} from '@/lib/atoms'
+import { useAtom, useSetAtom } from 'jotai/react'
 
 export default function MacrosYourselfDialog() {
     const [dialogOpen, setDialogOpen] = useAtom(macrosDialogYourselfAtom)
+    const setMacros = useSetAtom(macrosAtom)
+    const form = useAppForm({
+        defaultValues: {
+            calories: 0,
+            protein: 0,
+            fat: 0,
+            carbs: 0,
+        },
+        validators: {
+            onSubmit: yourselfMacrosSchema,
+        },
+        onSubmit: ({ value }) => {
+            setDialogOpen(false)
+            const calories = value.calories,
+                protein = value.protein,
+                fat = value.fat,
+                carbs = value.carbs
+            setMacros({
+                calories: calories,
+                protein: protein,
+                fat: fat,
+                carbs: carbs,
+                dietGoal: 'own',
+            })
+        },
+    })
     return (
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
             <DialogContent className="sm:max-w-[425px]">
@@ -23,27 +50,41 @@ export default function MacrosYourselfDialog() {
                         Provide us the values you already know are appropriate
                     </DialogDescription>
                 </DialogHeader>
-                <div className="grid gap-4 py-4">
-                    <div className="grid grid-cols-4 items-center gap-4">
-                        <div className="text-right">Name</div>
-                        <Input
-                            id="name"
-                            value="Pedro Duarte"
-                            className="col-span-3"
-                        />
-                    </div>
-                    <div className="grid grid-cols-4 items-center gap-4">
-                        <div className="text-right">Username</div>
-                        <Input
-                            id="username"
-                            value="@peduarte"
-                            className="col-span-3"
-                        />
-                    </div>
-                </div>
-                <DialogFooter>
-                    <Button type="submit">Save changes</Button>
-                </DialogFooter>
+                <form
+                    onSubmit={(e) => {
+                        e.preventDefault()
+                        form.handleSubmit()
+                    }}
+                    className="grid gap-2"
+                >
+                    <form.AppField
+                        name="calories"
+                        children={(field) => (
+                            <field.NumberField label="Calories" />
+                        )}
+                    />
+                    <form.AppField
+                        name="protein"
+                        children={(field) => (
+                            <field.NumberField label="Protein (g)" />
+                        )}
+                    />
+                    <form.AppField
+                        name="carbs"
+                        children={(field) => (
+                            <field.NumberField label="Carbs (g)" />
+                        )}
+                    />
+                    <form.AppField
+                        name="fat"
+                        children={(field) => (
+                            <field.NumberField label="Fat (g)" />
+                        )}
+                    />
+                    <form.AppForm>
+                        <form.SubmitButton className="w-1/2 translate-x-1/2 mt-4" />
+                    </form.AppForm>
+                </form>
             </DialogContent>
         </Dialog>
     )
