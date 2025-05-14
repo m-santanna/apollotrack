@@ -67,7 +67,7 @@ function ActivityLevelField() {
             </div>
             <SelectContent>
                 {activityLevels.map((activity) => (
-                    <SelectItem value={activity.value}>
+                    <SelectItem key={activity.value} value={activity.value}>
                         {activity.label}
                     </SelectItem>
                 ))}
@@ -76,15 +76,12 @@ function ActivityLevelField() {
     )
 }
 
-function SubmitButton() {
+function SubmitButton({ className }: { className?: string }) {
     const form = useFormContext()
     return (
         <form.Subscribe selector={(state) => state.isSubmitting}>
             {(isSubmitting) => (
-                <Button
-                    className="w-1/2 translate-x-1/2 mt-4"
-                    disabled={isSubmitting}
-                >
+                <Button className={className} disabled={isSubmitting}>
                     Submit
                 </Button>
             )}

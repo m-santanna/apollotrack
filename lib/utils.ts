@@ -8,8 +8,9 @@ export function cn(...inputs: ClassValue[]) {
 export const activityLevels = [
     { value: 'sedentary', label: 'Sedentary (office job)' },
     { value: 'light', label: 'Light Exercise (1-2 days/week)' },
-    { value: 'moderate', label: 'Moderate Exercise (3-5 days/week)' },
-    { value: 'heavy', label: 'Heavy Exercise (6-7 days/week)' },
+    { value: 'moderate', label: 'Moderate Exercise (3-4 days/week)' },
+    { value: 'active', label: 'Active Exercise (5-6 days/week)' },
+    { value: 'heavy', label: 'Heavy Exercise (7 days/week)' },
     { value: 'athlete', label: 'Athlete (2x daily)' },
 ]
 
@@ -24,7 +25,8 @@ export function calculateCalories(
     let multFactorDict = {
         sedentary: 1.2,
         light: 1.375,
-        moderate: 1.55,
+        moderate: 1.465,
+        active: 1.55,
         heavy: 1.725,
         athlete: 1.9,
     }
