@@ -3,6 +3,7 @@ import {
     DialogContent,
     DialogHeader,
     DialogTitle,
+    DialogOverlay,
 } from '@/components/ui/dialog'
 import {
     macrosAtom,
@@ -21,6 +22,7 @@ export default function MacrosEditDialog() {
     const setMacros = useSetAtom(macrosAtom)
     return (
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+            <DialogOverlay className="fixed inset-0 bg-black/30 backdrop-blur-sm" />
             <DialogContent className="gap-2 sm:max-w-[425px]">
                 <DialogHeader className="my-2">
                     <DialogTitle>Macros Config</DialogTitle>

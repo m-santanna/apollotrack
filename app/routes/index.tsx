@@ -9,6 +9,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import Loading from '@/components/ui/loading'
 import AddFoodItemDialog from '@/components/add-food-item-dialog'
 import FoodListDisplay from '@/components/food-list-display'
+import EditFoodItemDialog from '@/components/edit-food-item-dialog'
 
 export const Route = createFileRoute('/')({
     component: Home,
@@ -26,7 +27,8 @@ function Home() {
             <MacrosEstimateDialog />
             <MacrosEditDialog />
             <AddFoodItemDialog />
-            <div className="flex flex-col items-center mt-8 gap-4">
+            <EditFoodItemDialog />
+            <div className="flex flex-col items-center mt-8 gap-8">
                 <MacrosDisplay />
                 <FoodListDisplay />
             </div>

@@ -66,3 +66,13 @@ export const macrosDialogYourselfAtom = atom(false)
 export const macrosDialogEstimateAtom = atom(false)
 export const macrosEditDialogAtom = atom(false)
 export const addFoodItemDialogAtom = atom(false)
+export const editFoodItemDialogAtom = atom(false)
+export const editFoodItemValuesAtom = atom<Food>({
+    name: '',
+    calories: 0,
+    protein: 0,
+    carbs: 0,
+    fat: 0,
+    price: 0,
+    totalAmount: 0,
+})

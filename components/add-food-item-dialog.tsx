@@ -4,6 +4,7 @@ import {
     Dialog,
     DialogContent,
     DialogDescription,
+    DialogOverlay,
     DialogHeader,
     DialogTitle,
 } from '@/components/ui/dialog'
@@ -32,11 +33,13 @@ export default function AddFoodItemDialog() {
     })
     return (
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+            <DialogOverlay className="fixed inset-0 bg-black/30 backdrop-blur-sm" />
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
                     <DialogTitle>Let&apos;s add some food!</DialogTitle>
                     <DialogDescription>
-                        Provide us the following information
+                        Provide us the following information in grams, per 100g
+                        of the product.
                     </DialogDescription>
                 </DialogHeader>
                 <form
@@ -61,20 +64,18 @@ export default function AddFoodItemDialog() {
                     <form.AppField
                         name="protein"
                         children={(field) => (
-                            <field.NumberField label="Protein (g)" />
+                            <field.NumberField label="Protein" />
                         )}
                     />
                     <form.AppField
                         name="carbs"
                         children={(field) => (
-                            <field.NumberField label="Carbs (g)" />
+                            <field.NumberField label="Carbs" />
                         )}
                     />
                     <form.AppField
                         name="fat"
-                        children={(field) => (
-                            <field.NumberField label="Fat (g)" />
-                        )}
+                        children={(field) => <field.NumberField label="Fat" />}
                     />
                     <form.AppField
                         name="price"

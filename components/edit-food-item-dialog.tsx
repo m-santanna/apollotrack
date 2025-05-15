@@ -1,4 +1,11 @@
 import {
+    editFoodItemDialogAtom,
+    editFoodItemValuesAtom,
+    foodListAtom,
+    foodSchema,
+} from '@/lib/atoms'
+import { useAtom, useAtomValue } from 'jotai/react'
+import {
     Dialog,
     DialogContent,
     DialogDescription,
@@ -7,59 +14,47 @@ import {
     DialogOverlay,
 } from '@/components/ui/dialog'
 import { useAppForm } from '@/hooks/form-hook'
-import {
-    macrosAtom,
-    macrosDialogYourselfAtom,
-    yourselfMacrosSchema,
-} from '@/lib/atoms'
-import { useAtom, useSetAtom } from 'jotai/react'
 
-export default function MacrosYourselfDialog() {
-    const [dialogOpen, setDialogOpen] = useAtom(macrosDialogYourselfAtom)
-    const setMacros = useSetAtom(macrosAtom)
+export default function EditFoodItemDialog() {
+    const [dialogOpen, setDialogOpen] = useAtom(editFoodItemDialogAtom)
+    const editFoodItemValues = useAtomValue(editFoodItemValuesAtom)
+    const [foodList, setFoodList] = useAtom(foodListAtom)
+
     const form = useAppForm({
-        defaultValues: {
-            calories: 0,
-            protein: 0,
-            fat: 0,
-            carbs: 0,
+        defaultValues: editFoodItemValues,
+        onSubmit: ({ value }) => {
+            const filteredList = foodList.filter(
+                (food) => food !== editFoodItemValues,
+            )
+            setFoodList([...filteredList, value])
+            setDialogOpen(false)
         },
         validators: {
-            onSubmit: yourselfMacrosSchema,
-        },
-        onSubmit: ({ value }) => {
-            setDialogOpen(false)
-            const calories = value.calories,
-                protein = value.protein,
-                fat = value.fat,
-                carbs = value.carbs
-            setMacros({
-                calories: calories,
-                protein: protein,
-                fat: fat,
-                carbs: carbs,
-                dietGoal: 'own',
-            })
+            onSubmit: foodSchema,
         },
     })
+
     return (
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
             <DialogOverlay className="fixed inset-0 bg-black/30 backdrop-blur-sm" />
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
-                    <DialogTitle>Your macros</DialogTitle>
-                    <DialogDescription>
-                        Provide us the daily values you already know are
-                        appropriate.
-                    </DialogDescription>
+                    <DialogTitle>Let&apos;s edit your food!</DialogTitle>
+                    <DialogDescription>Change what you must!</DialogDescription>
                 </DialogHeader>
                 <form
+                    className="grid gap-2"
                     onSubmit={(e) => {
                         e.preventDefault()
                         form.handleSubmit()
                     }}
-                    className="grid gap-2"
                 >
+                    <form.AppField
+                        name="name"
+                        children={(field) => (
+                            <field.TextField label="Food Name" />
+                        )}
+                    />
                     <form.AppField
                         name="calories"
                         children={(field) => (
@@ -82,6 +77,18 @@ export default function MacrosYourselfDialog() {
                         name="fat"
                         children={(field) => (
                             <field.NumberField label="Fat (g)" />
+                        )}
+                    />
+                    <form.AppField
+                        name="price"
+                        children={(field) => (
+                            <field.NumberField label="Price" />
+                        )}
+                    />
+                    <form.AppField
+                        name="totalAmount"
+                        children={(field) => (
+                            <field.NumberField label="Total Amount (g)" />
                         )}
                     />
                     <form.AppForm>

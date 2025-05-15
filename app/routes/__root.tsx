@@ -49,7 +49,7 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
             <head>
                 <HeadContent />
             </head>
-            <body className="bg-gradient-to-br from-background to-neutral-900">
+            <body>
                 <Providers>{children}</Providers>
                 <Scripts />
             </body>

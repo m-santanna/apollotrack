@@ -4,6 +4,7 @@ import {
     DialogDescription,
     DialogHeader,
     DialogTitle,
+    DialogOverlay,
 } from '@/components/ui/dialog'
 import {
     estimateMacrosSchema,
@@ -50,6 +51,7 @@ export default function MacrosEstimateDialog() {
     })
     return (
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+            <DialogOverlay className="fixed inset-0 bg-black/30 backdrop-blur-sm" />
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
                     <DialogTitle>Macros estimation</DialogTitle>
