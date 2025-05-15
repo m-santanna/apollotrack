@@ -12,7 +12,7 @@ import {
     macrosEditDialogAtom,
 } from '@/lib/atoms'
 import { useAtom, useSetAtom } from 'jotai/react'
-import { Button } from './ui/button'
+import { Button } from '@/components/ui/button'
 import { DialogDescription } from '@radix-ui/react-dialog'
 
 export default function MacrosEditDialog() {

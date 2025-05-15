@@ -1,11 +1,11 @@
 import { addFoodItemDialogAtom, foodListAtom } from '@/lib/atoms'
-import { useAtom, useSetAtom } from 'jotai/react'
-import { Button } from './ui/button'
-import { DataTable } from './food-table/data-table'
-import { columns } from './food-table/columns'
+import { useAtomValue, useSetAtom } from 'jotai/react'
+import { Button } from '@/components/ui/button'
+import { FoodDataTable } from '@/components/food-table/food-data-table'
+import { columns } from '@/components/food-table/food-columns'
 
-export default function FoodListDisplay() {
-    const [foodList, setFoodList] = useAtom(foodListAtom)
+export default function FoodListSection() {
+    const foodList = useAtomValue(foodListAtom)
     const setDialogOpen = useSetAtom(addFoodItemDialogAtom)
     if (foodList.length == 0)
         return (
@@ -23,7 +23,7 @@ export default function FoodListDisplay() {
             <h1 className="text-xl md:text-3xl text-center text-primary font-bold">
                 Your Food List
             </h1>
-            <DataTable data={foodList} columns={columns} />
+            <FoodDataTable data={foodList} columns={columns} />
         </div>
     )
 }

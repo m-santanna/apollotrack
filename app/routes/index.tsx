@@ -1,15 +1,15 @@
 // app/routes/index.tsx
-import MacrosDisplay from '@/components/macros-display'
-import MacrosYourselfDialog from '@/components/macros-yourself-dialog'
-import MacrosEstimateDialog from '@/components/macros-estimate-dialog'
-import MacrosEditDialog from '@/components/macros-edit-dialog'
+import MacrosSection from '@/components/macros-section'
+import MacrosYourselfDialog from '@/components/macros-dialog/macros-yourself-dialog'
+import MacrosEstimateDialog from '@/components/macros-dialog/macros-estimate-dialog'
+import MacrosEditDialog from '@/components/macros-dialog/macros-edit-dialog'
 import Navbar from '@/components/navbar'
 import { useLoadingHook } from '@/hooks/useLoadingEffect'
 import { createFileRoute } from '@tanstack/react-router'
 import Loading from '@/components/ui/loading'
-import AddFoodItemDialog from '@/components/add-food-item-dialog'
-import FoodListDisplay from '@/components/food-list-display'
-import EditFoodItemDialog from '@/components/edit-food-item-dialog'
+import AddFoodItemDialog from '@/components/food-dialog/add-food-item-dialog'
+import FoodListSection from '@/components/food-list-section'
+import EditFoodItemDialog from '@/components/food-dialog/edit-food-item-dialog'
 
 export const Route = createFileRoute('/')({
     component: Home,
@@ -29,8 +29,8 @@ function Home() {
             <AddFoodItemDialog />
             <EditFoodItemDialog />
             <div className="flex flex-col items-center mt-8 gap-8">
-                <MacrosDisplay />
-                <FoodListDisplay />
+                <MacrosSection />
+                <FoodListSection />
             </div>
         </div>
     )

@@ -1,5 +1,5 @@
 import { addFoodItemDialogAtom, foodListAtom, foodSchema } from '@/lib/atoms'
-import { useAtom, useSetAtom } from 'jotai/react'
+import { useAtom } from 'jotai/react'
 import {
     Dialog,
     DialogContent,
