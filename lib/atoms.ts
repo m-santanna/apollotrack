@@ -3,19 +3,21 @@ import { atom } from 'jotai/vanilla'
 import { z } from 'zod'
 
 export const macrosSchema = z.object({
-    calories: z.number(),
-    protein: z.number(),
-    fat: z.number(),
-    carbs: z.number(),
+    calories: z.number().gt(0, 'Dont forget this value!'),
+    protein: z.number().gt(0, 'Dont forget this value!'),
+    fat: z.number().gt(0, 'Dont forget this value!'),
+    carbs: z.number().gt(0, 'Dont forget this value!'),
     dietGoal: z.string(),
 })
 
 export const foodSchema = z.object({
-    name: z.string(),
-    calories: z.number(),
-    protein: z.number(),
-    fat: z.number(),
-    carbs: z.number(),
+    name: z.string().nonempty(),
+    calories: z.number().gt(0, 'Dont forget this value!'),
+    protein: z.number().gt(0, 'Dont forget this value!'),
+    fat: z.number().gt(0, 'Dont forget this value!'),
+    carbs: z.number().gt(0, 'Dont forget this value!'),
+    price: z.number().gt(0, 'Dont forget this value!'),
+    totalAmount: z.number().gt(0, 'Dont forget this value!'),
 })
 
 export const estimateMacrosSchema = z.object({
@@ -43,10 +45,10 @@ export const estimateMacrosSchema = z.object({
 })
 
 export const yourselfMacrosSchema = z.object({
-    calories: z.number(),
-    protein: z.number(),
-    carbs: z.number(),
-    fat: z.number(),
+    calories: z.number().gt(0, 'Dont forget this value!'),
+    protein: z.number().gt(0, 'Dont forget this value!'),
+    carbs: z.number().gt(0, 'Dont forget this value!'),
+    fat: z.number().gt(0, 'Dont forget this value!'),
 })
 
 export type Macros = z.infer<typeof macrosSchema>
@@ -63,3 +65,4 @@ export const foodListAtom = atomWithStorage<Food[]>('foodList', [])
 export const macrosDialogYourselfAtom = atom(false)
 export const macrosDialogEstimateAtom = atom(false)
 export const macrosEditDialogAtom = atom(false)
+export const addFoodItemDialogAtom = atom(false)

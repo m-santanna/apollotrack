@@ -28,6 +28,20 @@ function NumberField({ label }: { label: string }) {
     )
 }
 
+function TextField({ label }: { label: string }) {
+    const field = useFieldContext<string>()
+    return (
+        <div className="grid grid-cols-2 items-center gap-4">
+            <Label>{label}</Label>
+            <Input
+                type="text"
+                value={field.state.value}
+                onChange={(e) => field.handleChange(e.target.value)}
+            />
+        </div>
+    )
+}
+
 function GenderField() {
     const field = useFieldContext<string>()
     return (
@@ -106,13 +120,18 @@ function DietGoalField() {
 function SubmitButton({ className }: { className?: string }) {
     const form = useFormContext()
     return (
-        <form.Subscribe selector={(state) => state.isSubmitting}>
-            {(isSubmitting) => (
-                <Button className={className} disabled={isSubmitting}>
-                    Submit
+        <form.Subscribe
+            selector={(state) => [state.canSubmit, state.isSubmitting]}
+            children={([canSubmit, isSubmitting]) => (
+                <Button
+                    className={className}
+                    type="submit"
+                    disabled={!canSubmit}
+                >
+                    {isSubmitting ? '...' : 'Submit'}
                 </Button>
             )}
-        </form.Subscribe>
+        />
     )
 }
 
@@ -122,6 +141,7 @@ export const { useAppForm } = createFormHook({
         GenderField,
         ActivityLevelField,
         DietGoalField,
+        TextField,
     },
     formComponents: { SubmitButton },
     fieldContext,

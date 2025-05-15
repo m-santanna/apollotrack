@@ -18,9 +18,9 @@ export default function MacrosDisplay() {
         macros.protein == 0 &&
         macros.fat == 0 &&
         macros.carbs == 0
-    ) {
+    )
         return (
-            <div className="relative flex flex-col justify-center items-center gap-4 border rounded-2xl w-3/4 md:w-1/2 p-4 mt-8 animate-in slide-in-from-left duration-300">
+            <div className="relative flex flex-col justify-center items-center gap-4 border rounded-2xl w-6/7 md:w-1/2 p-4 animate-in slide-in-from-left duration-300">
                 <h1 className="text-xl md:text-3xl text-center">
                     Looks like you are new here!
                 </h1>
@@ -37,14 +37,13 @@ export default function MacrosDisplay() {
                 </div>
             </div>
         )
-    }
     return (
-        <div className="relative flex flex-col gap-4 border rounded-2xl w-6/7 md:w-1/2 p-4 mt-8 animate-in slide-in-from-left duration-300">
+        <div className="relative flex flex-col gap-4 border rounded-2xl w-6/7 md:w-1/2 p-4 animate-in slide-in-from-left duration-300">
             <Button
                 onClick={() => setEditMacrosDialog(true)}
-                variant={'secondary'}
-                size={'sm'}
-                className="absolute top-3 right-3"
+                size={'icon'}
+                variant={'link'}
+                className="absolute top-3 right-3 text-primary/50 hover:text-primary-foreground"
             >
                 <Cog className="size-6 md:size-7" />
             </Button>

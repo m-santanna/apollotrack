@@ -7,6 +7,8 @@ import Navbar from '@/components/navbar'
 import { useLoadingHook } from '@/hooks/useLoadingEffect'
 import { createFileRoute } from '@tanstack/react-router'
 import Loading from '@/components/ui/loading'
+import AddFoodItemDialog from '@/components/add-food-item-dialog'
+import FoodListDisplay from '@/components/food-list-display'
 
 export const Route = createFileRoute('/')({
     component: Home,
@@ -23,8 +25,10 @@ function Home() {
             <MacrosYourselfDialog />
             <MacrosEstimateDialog />
             <MacrosEditDialog />
-            <div className="flex flex-col items-center">
+            <AddFoodItemDialog />
+            <div className="flex flex-col items-center mt-8 gap-4">
                 <MacrosDisplay />
+                <FoodListDisplay />
             </div>
         </div>
     )
