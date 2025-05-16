@@ -78,15 +78,15 @@ export default function AddFoodItemDialog() {
                         children={(field) => <field.NumberField label="Fat" />}
                     />
                     <form.AppField
-                        name="price"
-                        children={(field) => (
-                            <field.NumberField label="Price" />
-                        )}
-                    />
-                    <form.AppField
                         name="totalAmount"
                         children={(field) => (
                             <field.NumberField label="Total Amount (g)" />
+                        )}
+                    />
+                    <form.AppField
+                        name="price"
+                        children={(field) => (
+                            <field.NumberField label="Price" />
                         )}
                     />
                     <form.AppForm>
