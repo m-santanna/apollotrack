@@ -42,12 +42,12 @@ export default function MacrosSection() {
             <h1 className="text-xl md:text-3xl font-bold text-primary">
                 <span>Your {macros.dietGoal} plan </span>
             </h1>
-            <div className="relative flex w-full flex-col gap-4 border rounded-2xl p-4 ">
+            <div className="relative flex w-full flex-col gap-4 border rounded-2xl py-8 px-4">
                 <Button
                     onClick={() => setEditMacrosDialog(true)}
                     size={'icon'}
                     variant={'link'}
-                    className="absolute top-3 right-3 text-primary/50 hover:text-primary-foreground"
+                    className="absolute top-1 right-1 text-primary/50 hover:text-primary-foreground"
                 >
                     <Cog className="size-6 md:size-7" />
                 </Button>

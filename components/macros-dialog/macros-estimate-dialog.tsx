@@ -12,7 +12,12 @@ import {
     macrosDialogEstimateAtom,
 } from '@/lib/atoms'
 import { useAtom, useSetAtom } from 'jotai/react'
-import { calculateCalories, calculateMacros } from '@/lib/utils'
+import {
+    activityLevels,
+    calculateCalories,
+    calculateMacros,
+    dietGoals,
+} from '@/lib/utils'
 import { useAppForm } from '@/hooks/form-hook'
 
 export default function MacrosEstimateDialog() {
@@ -68,7 +73,15 @@ export default function MacrosEstimateDialog() {
                 >
                     <form.AppField
                         name="gender"
-                        children={(field) => <field.GenderField />}
+                        children={(field) => (
+                            <field.SelectField
+                                label="Gender"
+                                array={[
+                                    { label: 'Male', value: 'male' },
+                                    { label: 'Female', value: 'female' },
+                                ]}
+                            />
+                        )}
                     />
                     <form.AppField
                         name="height"
@@ -88,11 +101,21 @@ export default function MacrosEstimateDialog() {
                     />
                     <form.AppField
                         name="activityLevel"
-                        children={(field) => <field.ActivityLevelField />}
+                        children={(field) => (
+                            <field.SelectField
+                                label="Activity Level"
+                                array={activityLevels}
+                            />
+                        )}
                     />
                     <form.AppField
                         name="dietGoal"
-                        children={(field) => <field.DietGoalField />}
+                        children={(field) => (
+                            <field.SelectField
+                                label="Diet Goal"
+                                array={dietGoals}
+                            />
+                        )}
                     />
                     <form.AppForm>
                         <form.SubmitButton className="w-1/2 translate-x-1/2 mt-4" />

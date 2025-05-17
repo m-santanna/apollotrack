@@ -10,6 +10,8 @@ import Loading from '@/components/ui/loading'
 import AddFoodItemDialog from '@/components/food-dialog/add-food-item-dialog'
 import FoodListSection from '@/components/food-list-section'
 import EditFoodItemDialog from '@/components/food-dialog/edit-food-item-dialog'
+import MealsSection from '@/components/meals-section'
+import CreateMealDialog from '@/components/meals-dialog/create-meal-dialog'
 
 export const Route = createFileRoute('/')({
     component: Home,
@@ -28,9 +30,11 @@ function Home() {
             <MacrosEditDialog />
             <AddFoodItemDialog />
             <EditFoodItemDialog />
+            <CreateMealDialog />
             <div className="flex flex-col items-center mt-8 gap-8">
                 <MacrosSection />
                 <FoodListSection />
+                <MealsSection />
             </div>
         </div>
     )

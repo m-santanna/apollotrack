@@ -9,7 +9,6 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select'
-import { activityLevels, dietGoals } from '@/lib/utils'
 
 export const { fieldContext, useFieldContext, formContext, useFormContext } =
     createFormHookContexts()
@@ -42,7 +41,13 @@ function TextField({ label }: { label: string }) {
     )
 }
 
-function GenderField() {
+function SelectField({
+    label,
+    array,
+}: {
+    label: string
+    array: { label: string; value: string }[]
+}) {
     const field = useFieldContext<string>()
     return (
         <Select
@@ -50,66 +55,15 @@ function GenderField() {
             onValueChange={(value) => field.handleChange(value)}
         >
             <div className="grid grid-cols-2 items-center gap-4">
-                <Label>Gender</Label>
+                <Label>{label}</Label>
                 <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Select your gender" />
+                    <SelectValue />
                 </SelectTrigger>
             </div>
             <SelectContent>
-                <SelectItem value="male">Male</SelectItem>
-                <SelectItem value="female">Female</SelectItem>
-            </SelectContent>
-        </Select>
-    )
-}
-
-function ActivityLevelField() {
-    const field = useFieldContext<string>()
-    return (
-        <Select
-            value={field.state.value}
-            onValueChange={(value) => field.handleChange(value)}
-        >
-            <div className="grid grid-cols-2 items-center gap-4">
-                <Label>Activity Level</Label>
-                <SelectTrigger className="w-full">
-                    <SelectValue
-                        className="truncate"
-                        placeholder="Select your level"
-                    />
-                </SelectTrigger>
-            </div>
-            <SelectContent>
-                {activityLevels.map((activity) => (
-                    <SelectItem key={activity.value} value={activity.value}>
-                        {activity.label}
-                    </SelectItem>
-                ))}
-            </SelectContent>
-        </Select>
-    )
-}
-
-function DietGoalField() {
-    const field = useFieldContext<string>()
-    return (
-        <Select
-            value={field.state.value}
-            onValueChange={(value) => field.handleChange(value)}
-        >
-            <div className="grid grid-cols-2 items-center gap-4">
-                <Label>Goal</Label>
-                <SelectTrigger className="w-full">
-                    <SelectValue
-                        placeholder="Select your caloric surplus/deficit"
-                        className="truncate"
-                    />
-                </SelectTrigger>
-            </div>
-            <SelectContent>
-                {dietGoals.map((dietGoal) => (
-                    <SelectItem key={dietGoal.value} value={dietGoal.value}>
-                        {dietGoal.label}
+                {array.map((elem) => (
+                    <SelectItem key={elem.value} value={elem.value}>
+                        {elem.label}
                     </SelectItem>
                 ))}
             </SelectContent>
@@ -138,10 +92,8 @@ function SubmitButton({ className }: { className?: string }) {
 export const { useAppForm } = createFormHook({
     fieldComponents: {
         NumberField,
-        GenderField,
-        ActivityLevelField,
-        DietGoalField,
         TextField,
+        SelectField,
     },
     formComponents: { SubmitButton },
     fieldContext,

@@ -1,21 +1,12 @@
-import { MoreHorizontal, Pencil, Trash } from 'lucide-react'
+import { Pencil } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
 import {
     editFoodItemDialogAtom,
     editFoodItemValuesAtom,
     Food,
-    foodListAtom,
 } from '@/lib/atoms'
 import { ColumnDef } from '@tanstack/react-table'
-import { useAtom, useSetAtom } from 'jotai/react'
+import { useSetAtom } from 'jotai/react'
 import { Checkbox } from '../ui/checkbox'
 
 export const columns: ColumnDef<Food>[] = [
@@ -68,25 +59,21 @@ export const columns: ColumnDef<Food>[] = [
     },
     {
         accessorKey: 'protein',
-        header: () => (
-            <div className="text-center font-semibold">Protein (g)</div>
-        ),
+        header: () => <div className="text-center font-semibold">Protein</div>,
         cell: ({ row }) => (
             <div className="text-center">{row.getValue('protein')}</div>
         ),
     },
     {
         accessorKey: 'carbs',
-        header: () => (
-            <div className="text-center font-semibold">Carbs (g)</div>
-        ),
+        header: () => <div className="text-center font-semibold">Carbs</div>,
         cell: ({ row }) => (
             <div className="text-center">{row.getValue('carbs')}</div>
         ),
     },
     {
         accessorKey: 'fat',
-        header: () => <div className="text-center font-semibold">Fat (g)</div>,
+        header: () => <div className="text-center font-semibold">Fat</div>,
         cell: ({ row }) => (
             <div className="text-center">{row.getValue('fat')}</div>
         ),
@@ -94,7 +81,7 @@ export const columns: ColumnDef<Food>[] = [
     {
         accessorKey: 'totalAmount',
         header: () => (
-            <div className="text-center font-semibold">Total Amount (g)</div>
+            <div className="text-center font-semibold">Total Amount</div>
         ),
         cell: ({ row }) => (
             <div className="text-center">{row.getValue('totalAmount')}</div>
@@ -111,7 +98,6 @@ export const columns: ColumnDef<Food>[] = [
         id: 'actions',
         cell: ({ row }) => {
             const food = row.original
-            const [foodList, setFoodList] = useAtom(foodListAtom)
             const setEditFoodItemDialog = useSetAtom(editFoodItemDialogAtom)
             const setEditFoodItemValues = useSetAtom(editFoodItemValuesAtom)
             return (

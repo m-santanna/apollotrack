@@ -37,13 +37,13 @@ export function FoodDataTable<TData, TValue>({
     columns,
     data,
 }: DataTableProps<TData, TValue>) {
+    const setDialogOpen = useSetAtom(addFoodItemDialogAtom)
+    const [foodList, setFoodList] = useAtom(foodListAtom)
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
     const [rowSelection, setRowSelection] = useState({})
     const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(
         {},
     )
-    const [foodList, setFoodList] = useAtom(foodListAtom)
-
     const table = useReactTable({
         data,
         columns,
@@ -58,7 +58,6 @@ export function FoodDataTable<TData, TValue>({
             rowSelection,
         },
     })
-    const setAddDialog = useSetAtom(addFoodItemDialogAtom)
 
     function deleteSelected() {
         console.log('in the function')
@@ -174,7 +173,9 @@ export function FoodDataTable<TData, TValue>({
                     {table.getFilteredSelectedRowModel().rows.length} of{' '}
                     {table.getFilteredRowModel().rows.length} row(s) selected.
                 </div>
-                <Button onClick={() => setAddDialog(true)}>Add new Item</Button>
+                <Button onClick={() => setDialogOpen(true)}>
+                    Add new Item
+                </Button>
                 <Button
                     variant={'destructive'}
                     onClick={deleteSelected}

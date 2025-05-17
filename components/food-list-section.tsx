@@ -21,7 +21,7 @@ export default function FoodListSection() {
     return (
         <div className="relative flex flex-col gap-4 w-6/7 md:w-1/2 animate-in slide-in-from-right duration-300">
             <h1 className="text-xl md:text-3xl text-center text-primary font-bold">
-                Your Food List
+                Your Foods
             </h1>
             <FoodDataTable data={foodList} columns={columns} />
         </div>
