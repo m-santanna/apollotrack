@@ -9,6 +9,7 @@ export const macrosSchema = z.object({
     carbs: z.number().gt(0, 'Dont forget this value!'),
     dietGoal: z.string(),
 })
+export type Macros = z.infer<typeof macrosSchema>
 
 export const foodSchema = z.object({
     name: z.string().nonempty(),
@@ -19,12 +20,24 @@ export const foodSchema = z.object({
     price: z.number().gt(0, 'Dont forget this value!'),
     totalAmount: z.number().gt(0, 'Dont forget this value!'),
 })
+export type Food = z.infer<typeof foodSchema>
 
 export const ingredientSchema = foodSchema.extend({
     usedAmount: z.number().gt(0, 'Dont forget this value!'),
 })
+export type Ingredient = z.infer<typeof ingredientSchema>
 
-export const mealSchema = ingredientSchema.array()
+export const mealSchema = z.object({
+    name: z.string().nonempty(),
+    calories: z.number().gt(0, 'Dont forget this value!'),
+    protein: z.number().gt(0, 'Dont forget this value!'),
+    fat: z.number().gt(0, 'Dont forget this value!'),
+    carbs: z.number().gt(0, 'Dont forget this value!'),
+    price: z.number().gt(0, 'Dont forget this value!'),
+    totalAmount: z.number().gt(0, 'Dont forget this value!'),
+    ingredients: ingredientSchema.array(),
+})
+export type Meal = z.infer<typeof mealSchema>
 
 export const estimateMacrosSchema = z.object({
     gender: z.enum(['male', 'female']),
@@ -56,11 +69,6 @@ export const yourselfMacrosSchema = z.object({
     carbs: z.number().gt(0, 'Dont forget this value!'),
     fat: z.number().gt(0, 'Dont forget this value!'),
 })
-
-export type Macros = z.infer<typeof macrosSchema>
-export type Food = z.infer<typeof foodSchema>
-export type Ingredient = z.infer<typeof ingredientSchema>
-export type Meal = z.infer<typeof mealSchema>
 
 export const macrosAtom = atomWithStorage<Macros>('macros', {
     calories: 0,

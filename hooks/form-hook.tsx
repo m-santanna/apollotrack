@@ -27,11 +27,17 @@ function NumberField({ label }: { label: string }) {
     )
 }
 
-function TextField({ label }: { label: string }) {
+function TextField({
+    label,
+    labelClassName,
+}: {
+    label: string
+    labelClassName?: string
+}) {
     const field = useFieldContext<string>()
     return (
         <div className="grid grid-cols-2 items-center gap-4">
-            <Label>{label}</Label>
+            <Label className={labelClassName}>{label}</Label>
             <Input
                 type="text"
                 value={field.state.value}

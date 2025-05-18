@@ -1,4 +1,4 @@
-import { useAtom, useAtomValue } from 'jotai/react'
+import { useAtom, useAtomValue, useSetAtom } from 'jotai/react'
 import {
     Dialog,
     DialogOverlay,
@@ -13,7 +13,6 @@ import {
     foodListAtom,
     Ingredient,
     mealsAtom,
-    mealSchema,
 } from '@/lib/atoms'
 import { useAppForm } from '@/hooks/form-hook'
 import { Button } from '../ui/button'
@@ -21,7 +20,7 @@ import { Trash } from 'lucide-react'
 
 export default function CreateMealDialog() {
     const [dialogOpen, setDialogOpen] = useAtom(createMealDialogAtom)
-    const [meals, setMeals] = useAtom(mealsAtom)
+    const setMeals = useSetAtom(mealsAtom)
     const foodList = useAtomValue(foodListAtom)
 
     const foodNamesArray: { label: string; value: string }[] = []
@@ -43,14 +42,40 @@ export default function CreateMealDialog() {
 
     const form = useAppForm({
         defaultValues: {
+            name: '',
             ingredients: [{ name: '', usedAmount: 0 }],
         },
         onSubmit: ({ value }) => {
-            const meal = value.ingredients.map((ingredient) => {
+            let calories = 0,
+                protein = 0,
+                carbs = 0,
+                fat = 0,
+                totalAmount = 0,
+                price = 0
+            const ingredients = value.ingredients.map((ingredient) => {
                 const food = getFoodByName(ingredient.name)
+                const multFactor = ingredient.usedAmount / 100
+                calories += food.calories * multFactor
+                protein += food.protein * multFactor
+                carbs += food.carbs * multFactor
+                fat += food.fat * multFactor
+                totalAmount += ingredient.usedAmount
+                price += food.price * (ingredient.usedAmount / food.totalAmount)
                 return createIngredient(food, ingredient.usedAmount)
             })
-            setMeals((prev) => [...prev, meal])
+            setMeals((prev) => [
+                ...prev,
+                {
+                    name: value.name,
+                    calories: Math.round(calories * 100) / 100,
+                    protein: Math.round(protein * 100) / 100,
+                    carbs: Math.round(carbs * 100) / 100,
+                    fat: Math.round(fat * 100) / 100,
+                    totalAmount: totalAmount,
+                    price: Math.round(price * 100) / 100,
+                    ingredients: ingredients,
+                },
+            ])
             setDialogOpen(false)
         },
     })
@@ -73,6 +98,21 @@ export default function CreateMealDialog() {
                     }}
                     className="grid gap-2"
                 >
+                    <form.AppField
+                        name="name"
+                        validators={{
+                            onChange: ({ value }) =>
+                                value.length < 3
+                                    ? 'Meal name should have at least 3 characters'
+                                    : undefined,
+                        }}
+                        children={(field) => (
+                            <field.TextField
+                                label="Meal Name"
+                                labelClassName="font-semibold text-md"
+                            />
+                        )}
+                    />
                     <form.AppField name="ingredients" mode="array">
                         {(field) => (
                             <div className="grid gap-4">
@@ -102,7 +142,7 @@ export default function CreateMealDialog() {
                                         <form.AppField
                                             name={`ingredients[${index}].name`}
                                             validators={{
-                                                onSubmit: ({ value }) =>
+                                                onChange: ({ value }) =>
                                                     value === ''
                                                         ? 'Select something!'
                                                         : undefined,
@@ -118,8 +158,8 @@ export default function CreateMealDialog() {
                                         <form.AppField
                                             name={`ingredients[${index}].usedAmount`}
                                             validators={{
-                                                onSubmit: ({ value }) =>
-                                                    value <= 0
+                                                onChange: ({ value }) =>
+                                                    value <= 0 || !value
                                                         ? 'You must introduce a value here!'
                                                         : undefined,
                                             }}
@@ -133,6 +173,7 @@ export default function CreateMealDialog() {
                                 <div className="flex items-center justify-center gap-2">
                                     <Button
                                         type="button"
+                                        variant={'outline'}
                                         onClick={() =>
                                             field.pushValue({
                                                 name: '',

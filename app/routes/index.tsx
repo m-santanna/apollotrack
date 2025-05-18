@@ -1,17 +1,11 @@
-// app/routes/index.tsx
 import MacrosSection from '@/components/macros-section'
-import MacrosYourselfDialog from '@/components/macros-dialog/macros-yourself-dialog'
-import MacrosEstimateDialog from '@/components/macros-dialog/macros-estimate-dialog'
-import MacrosEditDialog from '@/components/macros-dialog/macros-edit-dialog'
 import Navbar from '@/components/navbar'
 import { useLoadingHook } from '@/hooks/useLoadingEffect'
 import { createFileRoute } from '@tanstack/react-router'
 import Loading from '@/components/ui/loading'
-import AddFoodItemDialog from '@/components/food-dialog/add-food-item-dialog'
 import FoodListSection from '@/components/food-list-section'
-import EditFoodItemDialog from '@/components/food-dialog/edit-food-item-dialog'
 import MealsSection from '@/components/meals-section'
-import CreateMealDialog from '@/components/meals-dialog/create-meal-dialog'
+import DialogWrapper from '@/components/dialog-wrapper'
 
 export const Route = createFileRoute('/')({
     component: Home,
@@ -25,12 +19,7 @@ function Home() {
     return (
         <div className="h-screen w-screen">
             <Navbar />
-            <MacrosYourselfDialog />
-            <MacrosEstimateDialog />
-            <MacrosEditDialog />
-            <AddFoodItemDialog />
-            <EditFoodItemDialog />
-            <CreateMealDialog />
+            <DialogWrapper />
             <div className="flex flex-col items-center mt-8 gap-8">
                 <MacrosSection />
                 <FoodListSection />

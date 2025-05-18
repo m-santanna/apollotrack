@@ -60,11 +60,10 @@ export function FoodDataTable<TData, TValue>({
     })
 
     function deleteSelected() {
-        console.log('in the function')
         let filteredFoodList = foodList
         const rows = table
             .getFilteredSelectedRowModel()
-            .rows.map((entry) => entry.original)
+            .rows.map((row) => row.original)
         rows.map((row) => {
             filteredFoodList = filteredFoodList.filter(
                 (foodItem) => foodItem !== row,
