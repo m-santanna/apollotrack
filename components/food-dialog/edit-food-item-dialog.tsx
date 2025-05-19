@@ -28,6 +28,7 @@ export default function EditFoodItemDialog() {
             )
             setFoodList([...filteredList, value])
             setDialogOpen(false)
+            form.reset()
         },
         validators: {
             onSubmit: foodSchema,
@@ -39,8 +40,14 @@ export default function EditFoodItemDialog() {
             <DialogOverlay className="fixed inset-0 bg-black/30 backdrop-blur-sm" />
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
-                    <DialogTitle>Let&apos;s edit your food!</DialogTitle>
-                    <DialogDescription>Change what you must!</DialogDescription>
+                    <DialogTitle>
+                        Let&apos;s edit your {editFoodItemValues.name}!
+                    </DialogTitle>
+                    <DialogDescription>
+                        Change what you must! Remember: calories, protein,
+                        etc... should have their values based per 100g of the
+                        product.
+                    </DialogDescription>
                 </DialogHeader>
                 <form
                     className="grid gap-2"

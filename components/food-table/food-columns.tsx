@@ -97,14 +97,13 @@ export const columns: ColumnDef<Food>[] = [
     {
         id: 'actions',
         cell: ({ row }) => {
-            const food = row.original
             const setEditFoodItemDialog = useSetAtom(editFoodItemDialogAtom)
             const setEditFoodItemValues = useSetAtom(editFoodItemValuesAtom)
             return (
                 <div className="flex justify-end">
                     <Button
                         onClick={() => {
-                            setEditFoodItemValues(food)
+                            setEditFoodItemValues(row.original)
                             setEditFoodItemDialog(true)
                         }}
                         variant="ghost"

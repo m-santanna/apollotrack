@@ -94,3 +94,15 @@ export const editFoodItemValuesAtom = atom<Food>({
 })
 export const createMealDialogAtom = atom(false)
 export const mealsAtom = atomWithStorage<Meal[]>('meals', [])
+export const mealInfoDialogAtom = atom(false)
+export const mealInfoValuesAtom = atom({
+    name: '',
+    calories: 0,
+    protein: 0,
+    carbs: 0,
+    fat: 0,
+    price: 0,
+    totalAmount: 0,
+    ingredients: [] as Ingredient[],
+})
+export const editMealDialogAtom = atom(false)

@@ -1,6 +1,8 @@
 import { useAtomValue, useSetAtom } from 'jotai/react'
 import { Button } from '@/components/ui/button'
 import { createMealDialogAtom, mealsAtom } from '@/lib/atoms'
+import { MealsDataTable } from './meals-table/meals-data-table'
+import { columns } from './meals-table/meals-columns'
 
 export default function MealsSection() {
     const meals = useAtomValue(mealsAtom)
@@ -25,7 +27,7 @@ export default function MealsSection() {
             <h1 className="text-xl md:text-3xl text-center text-primary font-bold">
                 Your Meals
             </h1>
-            <div>There will be a table here!!!!</div>
+            <MealsDataTable columns={columns} data={meals} />
         </div>
     )
 }
