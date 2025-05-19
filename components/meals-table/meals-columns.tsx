@@ -41,12 +41,10 @@ export const columns: ColumnDef<Meal>[] = [
         ),
     },
     {
-        accessorKey: 'totalAmount',
-        header: () => (
-            <div className="text-center font-semibold">Total Amount</div>
-        ),
+        accessorKey: 'weight',
+        header: () => <div className="text-center font-semibold">Weight</div>,
         cell: ({ row }) => (
-            <div className="text-center">{row.getValue('totalAmount')}</div>
+            <div className="text-center">{row.getValue('weight')}</div>
         ),
     },
     {

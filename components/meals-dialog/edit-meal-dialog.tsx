@@ -61,7 +61,7 @@ export default function EditMealDialog() {
                 protein = 0,
                 carbs = 0,
                 fat = 0,
-                totalAmount = 0,
+                weight = 0,
                 price = 0
             const ingredients = value.ingredients.map((ingredient) => {
                 const food = getFoodByName(ingredient.name)
@@ -70,7 +70,7 @@ export default function EditMealDialog() {
                 protein += food.protein * multFactor
                 carbs += food.carbs * multFactor
                 fat += food.fat * multFactor
-                totalAmount += ingredient.usedAmount
+                weight += ingredient.usedAmount
                 price += food.price * (ingredient.usedAmount / food.totalAmount)
                 return createIngredient(food, ingredient.usedAmount)
             })
@@ -82,7 +82,7 @@ export default function EditMealDialog() {
                     protein: Math.round(protein * 100) / 100,
                     carbs: Math.round(carbs * 100) / 100,
                     fat: Math.round(fat * 100) / 100,
-                    totalAmount: totalAmount,
+                    weight: weight,
                     price: Math.round(price * 100) / 100,
                     ingredients: ingredients,
                 },

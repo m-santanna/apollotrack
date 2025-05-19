@@ -34,7 +34,7 @@ export const mealSchema = z.object({
     fat: z.number().gt(0, 'Dont forget this value!'),
     carbs: z.number().gt(0, 'Dont forget this value!'),
     price: z.number().gt(0, 'Dont forget this value!'),
-    totalAmount: z.number().gt(0, 'Dont forget this value!'),
+    weight: z.number().gt(0, 'Dont forget this value!'),
     ingredients: ingredientSchema.array(),
 })
 export type Meal = z.infer<typeof mealSchema>
@@ -102,7 +102,7 @@ export const mealInfoValuesAtom = atom({
     carbs: 0,
     fat: 0,
     price: 0,
-    totalAmount: 0,
+    weight: 0,
     ingredients: [] as Ingredient[],
 })
 export const editMealDialogAtom = atom(false)

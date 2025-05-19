@@ -39,7 +39,7 @@ export default function MealInfoDialog() {
                             calories, {mealInfoValues.protein}g of protein,{' '}
                             {mealInfoValues.carbs}g of carbs,{' '}
                             {mealInfoValues.fat}g of fat, and weights{' '}
-                            {mealInfoValues.totalAmount}g. It costs{' '}
+                            {mealInfoValues.weight}g. It costs{' '}
                             {mealInfoValues.price} per serving.
                         </DialogDescription>
                     </div>
