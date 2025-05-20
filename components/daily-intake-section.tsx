@@ -5,7 +5,7 @@ import {
     DropdownMenuRadioItem,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { useAtom, useAtomValue, useSetAtom } from 'jotai/react'
+import { useAtom, useSetAtom } from 'jotai/react'
 import { Button } from '@/components/ui/button'
 import {
     dailyIntakeAtom,
@@ -47,9 +47,8 @@ export default function DailyIntakeSection() {
                     <h1 className="text-xl md:text-3xl text-center">
                         Daily Intake not setup yet.
                     </h1>
-                    <p className="text-accent-muted font-light text-justify md:text-center">
-                        I will be honest. I am way to lazy to create a proper
-                        onboarding. Therefore, I suggest you to scroll down and
+                    <p className="text-accent-muted font-light text-justify">
+                        We suggest you to scroll all the way to the buttom and
                         add all your food items first. Then, create your meals.
                         After you have all your meals, you come back here, and
                         setup your daily intake! :)

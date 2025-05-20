@@ -8,7 +8,7 @@ export default function Navbar() {
                 to="/"
                 className="text-xl md:text-2xl font-bold text-primary hover:text-primary/70"
             >
-                KenkoFlow
+                ApolloTrack
             </Link>
             <div className="flex items-center gap-2">
                 <ThemeButton />

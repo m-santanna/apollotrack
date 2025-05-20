@@ -21,7 +21,7 @@ function Home() {
         <div className="h-screen w-screen">
             <Navbar />
             <DialogWrapper />
-            <div className="flex flex-col items-center mt-8 gap-8">
+            <div className="flex flex-col items-center mt-8 pb-8 gap-8">
                 <MacrosSection />
                 <DailyIntakeSection />
                 <MealsSection />
