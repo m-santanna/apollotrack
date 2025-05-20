@@ -39,6 +39,16 @@ export const mealSchema = z.object({
 })
 export type Meal = z.infer<typeof mealSchema>
 
+export const dailyIntakeSchema = z.object({
+    calories: z.number(),
+    protein: z.number(),
+    fat: z.number(),
+    carbs: z.number(),
+    price: z.number(),
+    meals: mealSchema.array(),
+})
+export type DailyIntake = z.infer<typeof dailyIntakeSchema>
+
 export const estimateMacrosSchema = z.object({
     gender: z.enum(['male', 'female']),
     weight: z.number(),
@@ -106,3 +116,13 @@ export const mealInfoValuesAtom = atom({
     ingredients: [] as Ingredient[],
 })
 export const editMealDialogAtom = atom(false)
+export const dailyIntakeAtom = atomWithStorage<DailyIntake>('dailyIntake', {
+    calories: 0,
+    protein: 0,
+    fat: 0,
+    carbs: 0,
+    price: 0,
+    meals: [],
+})
+export const setupDailyIntakeDialogAtom = atom(false)
+export const editDailyIntakeDialogAtom = atom(false)

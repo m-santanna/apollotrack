@@ -95,7 +95,7 @@ export function MealsDataTable<TData, TValue>({
                                             column.toggleVisibility(!!value)
                                         }
                                     >
-                                        column.id
+                                        {column.id}
                                     </DropdownMenuCheckboxItem>
                                 )
                             })}

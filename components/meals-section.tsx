@@ -9,7 +9,7 @@ export default function MealsSection() {
     const setDialogOpen = useSetAtom(createMealDialogAtom)
     if (meals.length == 0)
         return (
-            <div className="relative flex flex-col justify-center items-center gap-4 border rounded-2xl w-6/7 md:w-1/2 p-4 animate-in slide-in-from-right duration-300">
+            <div className="relative flex flex-col justify-center items-center gap-4 border rounded-2xl w-6/7 md:w-1/2 p-4 animate-in slide-in-from-left duration-300">
                 <div className="flex flex-col gap-2">
                     <h1 className="text-xl md:text-3xl text-center">
                         No meals found.

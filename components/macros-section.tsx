@@ -42,33 +42,47 @@ export default function MacrosSection() {
             <h1 className="text-xl md:text-3xl font-bold text-primary">
                 <span>Your {macros.dietGoal} plan </span>
             </h1>
-            <div className="relative flex w-full flex-col gap-4 border rounded-2xl py-8 px-4">
+            <div className="relative flex w-full flex-col gap-4 border rounded-2xl p-4">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center text-base md:text-lg">
+                    {[
+                        {
+                            label: 'Calories',
+                            value: macros.calories,
+                        },
+                        {
+                            label: 'Carbs',
+                            value: `${macros.carbs}g`,
+                        },
+                        {
+                            label: 'Fat',
+                            value: `${macros.fat}g`,
+                        },
+                        {
+                            label: 'Protein',
+                            value: `${macros.protein}g`,
+                        },
+                    ].map(({ label, value }) => (
+                        <div
+                            key={label}
+                            className="flex flex-col gap-1 items-center"
+                        >
+                            <span className="uppercase text-xs text-muted-foreground tracking-wide">
+                                {label}
+                            </span>
+                            <span className="font-semibold text-xl">
+                                {value}
+                            </span>
+                        </div>
+                    ))}
+                </div>
+            </div>
+            <div className="flex justify-end items-center gap-2 w-full">
                 <Button
                     onClick={() => setEditMacrosDialog(true)}
-                    size={'icon'}
-                    variant={'link'}
-                    className="absolute top-1 right-1 text-primary/50 hover:text-primary-foreground"
+                    variant="secondary"
                 >
-                    <Cog className="size-6 md:size-7" />
+                    Edit Macros
                 </Button>
-                <div className="flex items-center justify-around text-lg md:text-2xl">
-                    <div className="flex flex-col gap-1 items-center">
-                        <span>Calories</span>
-                        <span className="font-light">{macros.calories}</span>
-                    </div>
-                    <div className="flex flex-col gap-1 items-center">
-                        <span>Carbs</span>
-                        <span className="font-light">{macros.carbs}g</span>
-                    </div>
-                    <div className="flex flex-col gap-1 items-center">
-                        <span>Fat</span>
-                        <span className="font-light">{macros.fat}g</span>
-                    </div>
-                    <div className="flex flex-col gap-1 items-center">
-                        <span>Protein</span>
-                        <span className="font-light">{macros.protein}g</span>
-                    </div>
-                </div>
             </div>
         </div>
     )

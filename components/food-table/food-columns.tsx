@@ -58,13 +58,6 @@ export const columns: ColumnDef<Food>[] = [
         ),
     },
     {
-        accessorKey: 'protein',
-        header: () => <div className="text-center font-semibold">Protein</div>,
-        cell: ({ row }) => (
-            <div className="text-center">{row.getValue('protein')}</div>
-        ),
-    },
-    {
         accessorKey: 'carbs',
         header: () => <div className="text-center font-semibold">Carbs</div>,
         cell: ({ row }) => (
@@ -76,6 +69,13 @@ export const columns: ColumnDef<Food>[] = [
         header: () => <div className="text-center font-semibold">Fat</div>,
         cell: ({ row }) => (
             <div className="text-center">{row.getValue('fat')}</div>
+        ),
+    },
+    {
+        accessorKey: 'protein',
+        header: () => <div className="text-center font-semibold">Protein</div>,
+        cell: ({ row }) => (
+            <div className="text-center">{row.getValue('protein')}</div>
         ),
     },
     {
