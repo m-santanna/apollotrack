@@ -1,8 +1,10 @@
 import {
+    dailyIntakeAtom,
     editFoodItemDialogAtom,
     editFoodItemValuesAtom,
     foodListAtom,
     foodSchema,
+    mealsAtom,
 } from '@/lib/atoms'
 import { useAtom, useAtomValue } from 'jotai/react'
 import {
@@ -14,11 +16,14 @@ import {
     DialogOverlay,
 } from '@/components/ui/dialog'
 import { useAppForm } from '@/hooks/form-hook'
+import { updateSystemThroughFoodEdit } from '@/lib/utils'
 
 export default function EditFoodItemDialog() {
     const [dialogOpen, setDialogOpen] = useAtom(editFoodItemDialogAtom)
     const editFoodItemValues = useAtomValue(editFoodItemValuesAtom)
     const [foodList, setFoodList] = useAtom(foodListAtom)
+    const [meals, setMeals] = useAtom(mealsAtom)
+    const [daily, setDaily] = useAtom(dailyIntakeAtom)
 
     const form = useAppForm({
         defaultValues: editFoodItemValues,
@@ -27,6 +32,14 @@ export default function EditFoodItemDialog() {
                 (food) => food !== editFoodItemValues,
             )
             setFoodList([...filteredList, value])
+            updateSystemThroughFoodEdit(
+                editFoodItemValues,
+                value,
+                meals,
+                setMeals,
+                daily,
+                setDaily,
+            )
             setDialogOpen(false)
             form.reset()
         },

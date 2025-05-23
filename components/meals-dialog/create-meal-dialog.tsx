@@ -17,6 +17,7 @@ import {
 import { useAppForm } from '@/hooks/form-hook'
 import { Button } from '../ui/button'
 import { Trash } from 'lucide-react'
+import { roundNumber } from '@/lib/utils'
 
 export default function CreateMealDialog() {
     const [dialogOpen, setDialogOpen] = useAtom(createMealDialogAtom)
@@ -67,12 +68,12 @@ export default function CreateMealDialog() {
                 ...prev,
                 {
                     name: value.name,
-                    calories: Math.round(calories * 100) / 100,
-                    protein: Math.round(protein * 100) / 100,
-                    carbs: Math.round(carbs * 100) / 100,
-                    fat: Math.round(fat * 100) / 100,
+                    calories: roundNumber(calories),
+                    protein: roundNumber(protein),
+                    carbs: roundNumber(carbs),
+                    fat: roundNumber(fat),
                     weight: weight,
-                    price: Math.round(price * 100) / 100,
+                    price: roundNumber(price),
                     ingredients: ingredients,
                 },
             ])

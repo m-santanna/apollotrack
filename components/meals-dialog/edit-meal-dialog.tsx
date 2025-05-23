@@ -8,6 +8,7 @@ import {
     DialogTitle,
 } from '../ui/dialog'
 import {
+    dailyIntakeAtom,
     editMealDialogAtom,
     Food,
     foodListAtom,
@@ -18,10 +19,12 @@ import {
 import { useAppForm } from '@/hooks/form-hook'
 import { Button } from '../ui/button'
 import { Trash } from 'lucide-react'
+import { roundNumber, updateDailyThroughMealEdit } from '@/lib/utils'
 
 export default function EditMealDialog() {
     const [dialogOpen, setDialogOpen] = useAtom(editMealDialogAtom)
     const [meals, setMeals] = useAtom(mealsAtom)
+    const [daily, setDaily] = useAtom(dailyIntakeAtom)
     const foodList = useAtomValue(foodListAtom)
     const mealInitialValues = useAtomValue(mealInfoValuesAtom)
 
@@ -74,19 +77,23 @@ export default function EditMealDialog() {
                 price += food.price * (ingredient.usedAmount / food.totalAmount)
                 return createIngredient(food, ingredient.usedAmount)
             })
-            setMeals((prev) => [
-                ...prev,
-                {
-                    name: value.name,
-                    calories: Math.round(calories * 100) / 100,
-                    protein: Math.round(protein * 100) / 100,
-                    carbs: Math.round(carbs * 100) / 100,
-                    fat: Math.round(fat * 100) / 100,
-                    weight: weight,
-                    price: Math.round(price * 100) / 100,
-                    ingredients: ingredients,
-                },
-            ])
+            const newMeal = {
+                name: value.name,
+                calories: roundNumber(calories),
+                protein: roundNumber(protein),
+                carbs: roundNumber(carbs),
+                fat: roundNumber(fat),
+                weight: weight,
+                price: roundNumber(price),
+                ingredients: ingredients,
+            }
+            setMeals((prev) => [...prev, newMeal])
+            updateDailyThroughMealEdit(
+                mealInitialValues,
+                newMeal,
+                daily,
+                setDaily,
+            )
             setDialogOpen(false)
             form.reset()
         },

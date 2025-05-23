@@ -6,7 +6,6 @@ import {
 } from '@/lib/atoms'
 import { useAtomValue, useSetAtom } from 'jotai/react'
 import { Button } from './ui/button'
-import { Cog } from 'lucide-react'
 
 export default function MacrosSection() {
     const setMacrosYourselfDialog = useSetAtom(macrosDialogYourselfAtom)

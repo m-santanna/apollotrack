@@ -1,5 +1,14 @@
 import { clsx, type ClassValue } from 'clsx'
+import { useSetAtom } from 'jotai/react'
 import { twMerge } from 'tailwind-merge'
+import {
+    DailyIntake,
+    dailyIntakeAtom,
+    Food,
+    Ingredient,
+    Meal,
+    mealsAtom,
+} from './atoms'
 
 export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs))
@@ -88,4 +97,162 @@ export function calculateMacros(
     fat = Math.round(fat)
     carbs = Math.round(carbs)
     return { protein, carbs, fat }
+}
+
+export function roundNumber(value: number): number {
+    return Math.round(value * 100) / 100
+}
+
+export function updateSystemThroughFoodEdit(
+    foodPrev: Food,
+    foodAfter: Food,
+    meals: Meal[],
+    setMeals: ReturnType<typeof useSetAtom<typeof mealsAtom>>,
+    daily: DailyIntake,
+    setDaily: ReturnType<typeof useSetAtom<typeof dailyIntakeAtom>>,
+) {
+    for (let i = 0; i < meals.length; i++) {
+        const currMeal = meals[i]
+        for (let j = 0; j < currMeal.ingredients.length; j++) {
+            if (foodEqualsIngredient(currMeal.ingredients[j], foodPrev))
+                updateMealThroughFoodEdit(
+                    foodPrev,
+                    foodAfter,
+                    meals,
+                    setMeals,
+                    currMeal,
+                    j,
+                    daily,
+                    setDaily,
+                )
+        }
+    }
+}
+
+function foodEqualsIngredient(ingredient: Ingredient, food: Food) {
+    return (
+        ingredient.name === food.name &&
+        ingredient.calories === food.calories &&
+        ingredient.carbs === food.carbs &&
+        ingredient.protein === food.protein &&
+        ingredient.fat === food.fat &&
+        ingredient.price === food.price
+    )
+}
+
+function updateMealThroughFoodEdit(
+    foodPrev: Food,
+    foodAfter: Food,
+    meals: Meal[],
+    setMeals: ReturnType<typeof useSetAtom<typeof mealsAtom>>,
+    meal: Meal,
+    ingredientPos: number,
+    daily: DailyIntake,
+    setDaily: ReturnType<typeof useSetAtom<typeof dailyIntakeAtom>>,
+) {
+    const filteredMeals = meals.filter((currMeal) => currMeal !== meal)
+
+    // The following code updates the values of the meal
+    const ingredientUsedAmount = meal.ingredients[ingredientPos].usedAmount
+
+    const caloriesDiff =
+        (foodAfter.calories * ingredientUsedAmount) / 100 -
+        (foodPrev.calories * ingredientUsedAmount) / 100
+
+    const carbsDiff =
+        (foodAfter.carbs * ingredientUsedAmount) / 100 -
+        (foodPrev.carbs * ingredientUsedAmount) / 100
+
+    const proteinDiff =
+        (foodAfter.protein * ingredientUsedAmount) / 100 -
+        (foodPrev.protein * ingredientUsedAmount) / 100
+
+    const fatDiff =
+        (foodAfter.fat * ingredientUsedAmount) / 100 -
+        (foodPrev.fat * ingredientUsedAmount) / 100
+
+    const priceDiff =
+        (foodAfter.price * ingredientUsedAmount) / foodAfter.totalAmount -
+        (foodPrev.price * ingredientUsedAmount) / foodPrev.totalAmount
+
+    const newMeal = {
+        name: meal.name,
+        calories: roundNumber(meal.calories + caloriesDiff),
+        carbs: roundNumber(meal.carbs + carbsDiff),
+        protein: roundNumber(meal.protein + proteinDiff),
+        fat: roundNumber(meal.fat + fatDiff),
+        price: roundNumber(meal.price + priceDiff),
+        weight: meal.weight,
+        ingredients: meal.ingredients,
+    }
+    // The following code updates the ingredient
+    newMeal.ingredients[ingredientPos] = {
+        ...foodAfter,
+        usedAmount: ingredientUsedAmount,
+    }
+
+    setMeals([...filteredMeals, newMeal])
+    updateDailyThroughFoodEdit(newMeal, daily, setDaily)
+}
+
+export function updateDailyThroughFoodEdit(
+    newMeal: Meal,
+    daily: DailyIntake,
+    setDaily: ReturnType<typeof useSetAtom<typeof dailyIntakeAtom>>,
+) {
+    const dailyMeals = daily.meals
+    for (let i = 0; i < dailyMeals.length; i++) {
+        const dailyMeal = dailyMeals[i]
+        if (dailyMeal.name === newMeal.name) {
+            if (dailyMeal == newMeal) break
+            else {
+                const caloriesDiff = newMeal.calories - dailyMeal.calories
+                const carbsDiff = newMeal.carbs - dailyMeal.carbs
+                const proteinDiff = newMeal.protein - dailyMeal.protein
+                const fatDiff = newMeal.fat - dailyMeal.fat
+                const priceDiff = newMeal.price - dailyMeal.price
+                const newDailyMeals = [...dailyMeals]
+                newDailyMeals[i] = newMeal
+                setDaily({
+                    calories: roundNumber(daily.calories + caloriesDiff),
+                    carbs: roundNumber(daily.carbs + carbsDiff),
+                    protein: roundNumber(daily.protein + proteinDiff),
+                    fat: roundNumber(daily.fat + fatDiff),
+                    price: roundNumber(daily.price + priceDiff),
+                    meals: newDailyMeals,
+                })
+            }
+        }
+    }
+}
+
+export function updateDailyThroughMealEdit(
+    prevMeal: Meal,
+    newMeal: Meal,
+    daily: DailyIntake,
+    setDaily: ReturnType<typeof useSetAtom<typeof dailyIntakeAtom>>,
+) {
+    const dailyMeals = daily.meals
+    for (let i = 0; i < dailyMeals.length; i++) {
+        const dailyMeal = daily.meals[i]
+        if (dailyMeal.name === prevMeal.name)
+            if (dailyMeal != newMeal) {
+                const caloriesDiff = newMeal.calories - dailyMeal.calories
+                const carbsDiff = newMeal.carbs - dailyMeal.carbs
+                const proteinDiff = newMeal.protein - dailyMeal.protein
+                const fatDiff = newMeal.fat - dailyMeal.fat
+                const priceDiff = newMeal.price - dailyMeal.price
+                const newDailyMeals = [...dailyMeals]
+                newDailyMeals[i] = newMeal
+                setDaily({
+                    calories: roundNumber(daily.calories + caloriesDiff),
+                    carbs: roundNumber(daily.carbs + carbsDiff),
+                    protein: roundNumber(daily.protein + proteinDiff),
+                    fat: roundNumber(daily.fat + fatDiff),
+                    price: roundNumber(daily.price + priceDiff),
+                    meals: newDailyMeals,
+                })
+                break
+            }
+    }
 }

@@ -9,6 +9,7 @@ import {
     DialogTitle,
 } from '@/components/ui/dialog'
 import { useAppForm } from '@/hooks/form-hook'
+import { roundNumber } from '@/lib/utils'
 
 export default function AddFoodItemDialog() {
     const [dialogOpen, setDialogOpen] = useAtom(addFoodItemDialogAtom)
@@ -24,7 +25,16 @@ export default function AddFoodItemDialog() {
             totalAmount: 0,
         },
         onSubmit: ({ value }) => {
-            setFoodList([...foodList, value])
+            const newFood = {
+                name: value.name,
+                calories: roundNumber(value.calories),
+                carbs: roundNumber(value.carbs),
+                protein: roundNumber(value.protein),
+                fat: roundNumber(value.fat),
+                price: roundNumber(value.price),
+                totalAmount: roundNumber(value.totalAmount),
+            }
+            setFoodList([...foodList, newFood])
             setDialogOpen(false)
         },
         validators: {
