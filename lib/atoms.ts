@@ -93,7 +93,8 @@ export const macrosDialogEstimateAtom = atom(false)
 export const macrosEditDialogAtom = atom(false)
 export const addFoodItemDialogAtom = atom(false)
 export const editFoodItemDialogAtom = atom(false)
-export const editFoodItemValuesAtom = atom<Food>({
+export const foodItemInfoDialogAtom = atom(false)
+export const foodItemInfoValuesAtom = atom<Food>({
     name: '',
     calories: 0,
     protein: 0,

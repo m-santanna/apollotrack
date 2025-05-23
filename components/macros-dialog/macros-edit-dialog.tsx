@@ -29,7 +29,7 @@ export default function MacrosEditDialog() {
                     <DialogDescription>What do you wanna do?</DialogDescription>
                 </DialogHeader>
                 <Button
-                    className="w-full mt-2"
+                    className="w-2/3 translate-x-1/4 mt-2"
                     onClick={() => {
                         setDialogOpen(false)
                         setEstimateDialogOpen(true)
@@ -39,7 +39,7 @@ export default function MacrosEditDialog() {
                 </Button>
                 <Button
                     variant={'secondary'}
-                    className="w-full"
+                    className="w-2/3 translate-x-1/4"
                     onClick={() => {
                         setDialogOpen(false)
                         setYourselfDialogOpen(true)
@@ -49,7 +49,7 @@ export default function MacrosEditDialog() {
                 </Button>
                 <Button
                     variant={'destructive'}
-                    className="w-full"
+                    className="w-2/3 translate-x-1/4"
                     onClick={() => {
                         setDialogOpen(false)
                         setMacros({

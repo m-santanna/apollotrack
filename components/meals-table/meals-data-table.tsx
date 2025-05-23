@@ -102,9 +102,9 @@ export function MealsDataTable<TData, TValue>({
                     </DropdownMenuContent>
                 </DropdownMenu>
             </div>
-            <div className="rounded-md border">
+            <div className="rounded-md border overflow-hidden">
                 <Table>
-                    <TableHeader>
+                    <TableHeader className="bg-primary/20">
                         {table.getHeaderGroups().map((headerGroup) => (
                             <TableRow key={headerGroup.id}>
                                 {headerGroup.headers.map((header) => {

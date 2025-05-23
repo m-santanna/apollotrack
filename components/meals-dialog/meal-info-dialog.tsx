@@ -8,23 +8,27 @@ import {
     DialogTitle,
 } from '../ui/dialog'
 import {
+    dailyIntakeAtom,
     editMealDialogAtom,
     mealInfoDialogAtom,
     mealInfoValuesAtom,
     mealsAtom,
 } from '@/lib/atoms'
 import { Button } from '../ui/button'
+import { updateDailyThroughMeal } from '@/lib/utils'
 
 export default function MealInfoDialog() {
     const [dialogOpen, setDialogOpen] = useAtom(mealInfoDialogAtom)
     const setEditDialogOpen = useSetAtom(editMealDialogAtom)
     const mealInfoValues = useAtomValue(mealInfoValuesAtom)
     const [meals, setMeals] = useAtom(mealsAtom)
+    const [daily, setDaily] = useAtom(dailyIntakeAtom)
 
     function deleteMeal() {
         let filteredMeals = meals
         filteredMeals = filteredMeals.filter((curr) => curr !== mealInfoValues)
         setMeals(filteredMeals)
+        updateDailyThroughMeal(mealInfoValues, undefined, daily, setDaily)
         setDialogOpen(false)
     }
     return (

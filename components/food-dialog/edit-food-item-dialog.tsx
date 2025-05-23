@@ -1,7 +1,7 @@
 import {
     dailyIntakeAtom,
     editFoodItemDialogAtom,
-    editFoodItemValuesAtom,
+    foodItemInfoValuesAtom,
     foodListAtom,
     foodSchema,
     mealsAtom,
@@ -16,24 +16,24 @@ import {
     DialogOverlay,
 } from '@/components/ui/dialog'
 import { useAppForm } from '@/hooks/form-hook'
-import { updateSystemThroughFoodEdit } from '@/lib/utils'
+import { updateSystemThroughFood } from '@/lib/utils'
 
 export default function EditFoodItemDialog() {
     const [dialogOpen, setDialogOpen] = useAtom(editFoodItemDialogAtom)
-    const editFoodItemValues = useAtomValue(editFoodItemValuesAtom)
+    const foodItemInfo = useAtomValue(foodItemInfoValuesAtom)
     const [foodList, setFoodList] = useAtom(foodListAtom)
     const [meals, setMeals] = useAtom(mealsAtom)
     const [daily, setDaily] = useAtom(dailyIntakeAtom)
 
     const form = useAppForm({
-        defaultValues: editFoodItemValues,
+        defaultValues: foodItemInfo,
         onSubmit: ({ value }) => {
             const filteredList = foodList.filter(
-                (food) => food !== editFoodItemValues,
+                (food) => food !== foodItemInfo,
             )
             setFoodList([...filteredList, value])
-            updateSystemThroughFoodEdit(
-                editFoodItemValues,
+            updateSystemThroughFood(
+                foodItemInfo,
                 value,
                 meals,
                 setMeals,
@@ -54,7 +54,7 @@ export default function EditFoodItemDialog() {
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
                     <DialogTitle>
-                        Let&apos;s edit your {editFoodItemValues.name}!
+                        Let&apos;s edit your {foodItemInfo.name}!
                     </DialogTitle>
                     <DialogDescription>
                         Change what you must! Remember: calories, protein,

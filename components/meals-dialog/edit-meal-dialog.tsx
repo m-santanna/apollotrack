@@ -19,7 +19,7 @@ import {
 import { useAppForm } from '@/hooks/form-hook'
 import { Button } from '../ui/button'
 import { Trash } from 'lucide-react'
-import { roundNumber, updateDailyThroughMealEdit } from '@/lib/utils'
+import { roundNumber, updateDailyThroughMeal } from '@/lib/utils'
 
 export default function EditMealDialog() {
     const [dialogOpen, setDialogOpen] = useAtom(editMealDialogAtom)
@@ -88,12 +88,7 @@ export default function EditMealDialog() {
                 ingredients: ingredients,
             }
             setMeals((prev) => [...prev, newMeal])
-            updateDailyThroughMealEdit(
-                mealInitialValues,
-                newMeal,
-                daily,
-                setDaily,
-            )
+            updateDailyThroughMeal(mealInitialValues, newMeal, daily, setDaily)
             setDialogOpen(false)
             form.reset()
         },

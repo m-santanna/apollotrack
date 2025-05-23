@@ -1,45 +1,7 @@
-import { Pencil } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import {
-    editFoodItemDialogAtom,
-    editFoodItemValuesAtom,
-    Food,
-} from '@/lib/atoms'
+import { Food } from '@/lib/atoms'
 import { ColumnDef } from '@tanstack/react-table'
-import { useSetAtom } from 'jotai/react'
-import { Checkbox } from '../ui/checkbox'
 
 export const columns: ColumnDef<Food>[] = [
-    {
-        id: 'select',
-        header: ({ table }) => (
-            <div className="flex items-center h-full w-full">
-                <Checkbox
-                    checked={
-                        table.getIsAllPageRowsSelected() ||
-                        (table.getIsSomePageRowsSelected() && 'indeterminate')
-                    }
-                    onCheckedChange={(value) =>
-                        table.toggleAllPageRowsSelected(!!value)
-                    }
-                    aria-label="Select all"
-                    className="flex items-center"
-                />
-            </div>
-        ),
-        cell: ({ row }) => (
-            <div className="flex items-center h-full w-full">
-                <Checkbox
-                    className="flex items-center"
-                    checked={row.getIsSelected()}
-                    onCheckedChange={(value) => row.toggleSelected(!!value)}
-                    aria-label="Select row"
-                />
-            </div>
-        ),
-        enableSorting: false,
-        enableHiding: false,
-    },
     {
         accessorKey: 'name',
         header: () => (
@@ -93,28 +55,5 @@ export const columns: ColumnDef<Food>[] = [
         cell: ({ row }) => (
             <div className="text-center">{row.getValue('price')}</div>
         ),
-    },
-    {
-        id: 'actions',
-        cell: ({ row }) => {
-            const setEditFoodItemDialog = useSetAtom(editFoodItemDialogAtom)
-            const setEditFoodItemValues = useSetAtom(editFoodItemValuesAtom)
-            return (
-                <div className="flex justify-end">
-                    <Button
-                        onClick={() => {
-                            setEditFoodItemValues(row.original)
-                            setEditFoodItemDialog(true)
-                        }}
-                        variant="ghost"
-                        className="h-8 w-8 p-0 hover:text-foreground/50"
-                    >
-                        <span className="sr-only">Edit food</span>
-                        <Pencil className="h-4 w-4" />
-                    </Button>
-                </div>
-            )
-        },
-        enableHiding: false,
     },
 ]

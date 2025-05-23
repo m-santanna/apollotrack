@@ -103,9 +103,9 @@ export function roundNumber(value: number): number {
     return Math.round(value * 100) / 100
 }
 
-export function updateSystemThroughFoodEdit(
+export function updateSystemThroughFood(
     foodPrev: Food,
-    foodAfter: Food,
+    foodAfter: Food | undefined,
     meals: Meal[],
     setMeals: ReturnType<typeof useSetAtom<typeof mealsAtom>>,
     daily: DailyIntake,
@@ -115,7 +115,7 @@ export function updateSystemThroughFoodEdit(
         const currMeal = meals[i]
         for (let j = 0; j < currMeal.ingredients.length; j++) {
             if (foodEqualsIngredient(currMeal.ingredients[j], foodPrev))
-                updateMealThroughFoodEdit(
+                updateMealThroughFood(
                     foodPrev,
                     foodAfter,
                     meals,
@@ -140,9 +140,9 @@ function foodEqualsIngredient(ingredient: Ingredient, food: Food) {
     )
 }
 
-function updateMealThroughFoodEdit(
+function updateMealThroughFood(
     foodPrev: Food,
-    foodAfter: Food,
+    foodAfter: Food | undefined,
     meals: Meal[],
     setMeals: ReturnType<typeof useSetAtom<typeof mealsAtom>>,
     meal: Meal,
@@ -154,27 +154,42 @@ function updateMealThroughFoodEdit(
 
     // The following code updates the values of the meal
     const ingredientUsedAmount = meal.ingredients[ingredientPos].usedAmount
+    let caloriesDiff: number,
+        carbsDiff: number,
+        proteinDiff: number,
+        fatDiff: number,
+        priceDiff: number,
+        weightDiff = 0
+    if (foodAfter) {
+        caloriesDiff =
+            (foodAfter.calories * ingredientUsedAmount) / 100 -
+            (foodPrev.calories * ingredientUsedAmount) / 100
 
-    const caloriesDiff =
-        (foodAfter.calories * ingredientUsedAmount) / 100 -
-        (foodPrev.calories * ingredientUsedAmount) / 100
+        carbsDiff =
+            (foodAfter.carbs * ingredientUsedAmount) / 100 -
+            (foodPrev.carbs * ingredientUsedAmount) / 100
 
-    const carbsDiff =
-        (foodAfter.carbs * ingredientUsedAmount) / 100 -
-        (foodPrev.carbs * ingredientUsedAmount) / 100
+        proteinDiff =
+            (foodAfter.protein * ingredientUsedAmount) / 100 -
+            (foodPrev.protein * ingredientUsedAmount) / 100
 
-    const proteinDiff =
-        (foodAfter.protein * ingredientUsedAmount) / 100 -
-        (foodPrev.protein * ingredientUsedAmount) / 100
+        fatDiff =
+            (foodAfter.fat * ingredientUsedAmount) / 100 -
+            (foodPrev.fat * ingredientUsedAmount) / 100
 
-    const fatDiff =
-        (foodAfter.fat * ingredientUsedAmount) / 100 -
-        (foodPrev.fat * ingredientUsedAmount) / 100
-
-    const priceDiff =
-        (foodAfter.price * ingredientUsedAmount) / foodAfter.totalAmount -
-        (foodPrev.price * ingredientUsedAmount) / foodPrev.totalAmount
-
+        priceDiff =
+            (foodAfter.price * ingredientUsedAmount) / foodAfter.totalAmount -
+            (foodPrev.price * ingredientUsedAmount) / foodPrev.totalAmount
+    } else {
+        caloriesDiff = (-1 * (foodPrev.calories * ingredientUsedAmount)) / 100
+        carbsDiff = (-1 * (foodPrev.carbs * ingredientUsedAmount)) / 100
+        proteinDiff = (-1 * (foodPrev.protein * ingredientUsedAmount)) / 100
+        fatDiff = (-1 * (foodPrev.fat * ingredientUsedAmount)) / 100
+        priceDiff =
+            (-1 * (foodPrev.price * ingredientUsedAmount)) /
+            foodPrev.totalAmount
+        weightDiff = -ingredientUsedAmount
+    }
     const newMeal = {
         name: meal.name,
         calories: roundNumber(meal.calories + caloriesDiff),
@@ -182,20 +197,25 @@ function updateMealThroughFoodEdit(
         protein: roundNumber(meal.protein + proteinDiff),
         fat: roundNumber(meal.fat + fatDiff),
         price: roundNumber(meal.price + priceDiff),
-        weight: meal.weight,
+        weight: roundNumber(meal.weight - ingredientUsedAmount),
         ingredients: meal.ingredients,
     }
     // The following code updates the ingredient
-    newMeal.ingredients[ingredientPos] = {
-        ...foodAfter,
-        usedAmount: ingredientUsedAmount,
-    }
-
-    setMeals([...filteredMeals, newMeal])
-    updateDailyThroughFoodEdit(newMeal, daily, setDaily)
+    if (foodAfter) {
+        newMeal.ingredients[ingredientPos] = {
+            ...foodAfter,
+            usedAmount: ingredientUsedAmount,
+        }
+    } else
+        newMeal.ingredients = newMeal.ingredients.filter(
+            (_, index) => index != ingredientPos,
+        )
+    if (newMeal.ingredients.length == 0) setMeals(filteredMeals)
+    else setMeals([...filteredMeals, newMeal])
+    updateDailyThroughFood(newMeal, daily, setDaily)
 }
 
-export function updateDailyThroughFoodEdit(
+function updateDailyThroughFood(
     newMeal: Meal,
     daily: DailyIntake,
     setDaily: ReturnType<typeof useSetAtom<typeof dailyIntakeAtom>>,
@@ -226,9 +246,9 @@ export function updateDailyThroughFoodEdit(
     }
 }
 
-export function updateDailyThroughMealEdit(
+export function updateDailyThroughMeal(
     prevMeal: Meal,
-    newMeal: Meal,
+    newMeal: Meal | undefined,
     daily: DailyIntake,
     setDaily: ReturnType<typeof useSetAtom<typeof dailyIntakeAtom>>,
 ) {
@@ -236,7 +256,20 @@ export function updateDailyThroughMealEdit(
     for (let i = 0; i < dailyMeals.length; i++) {
         const dailyMeal = daily.meals[i]
         if (dailyMeal.name === prevMeal.name)
-            if (dailyMeal != newMeal) {
+            if (!newMeal) {
+                const newDailyMeals = dailyMeals.filter(
+                    (_, index) => index != i,
+                )
+                setDaily({
+                    calories: roundNumber(daily.calories - dailyMeal.calories),
+                    carbs: roundNumber(daily.carbs - dailyMeal.carbs),
+                    protein: roundNumber(daily.protein - dailyMeal.protein),
+                    fat: roundNumber(daily.fat - dailyMeal.fat),
+                    price: roundNumber(daily.price - dailyMeal.price),
+                    meals: newDailyMeals,
+                })
+                break
+            } else if (dailyMeal != newMeal) {
                 const caloriesDiff = newMeal.calories - dailyMeal.calories
                 const carbsDiff = newMeal.carbs - dailyMeal.carbs
                 const proteinDiff = newMeal.protein - dailyMeal.protein

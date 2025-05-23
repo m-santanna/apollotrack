@@ -25,8 +25,13 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table'
-import { useAtom, useSetAtom } from 'jotai/react'
-import { addFoodItemDialogAtom, foodListAtom } from '@/lib/atoms'
+import { useSetAtom } from 'jotai/react'
+import {
+    addFoodItemDialogAtom,
+    Food,
+    foodItemInfoDialogAtom,
+    foodItemInfoValuesAtom,
+} from '@/lib/atoms'
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
@@ -37,10 +42,10 @@ export function FoodDataTable<TData, TValue>({
     columns,
     data,
 }: DataTableProps<TData, TValue>) {
-    const setDialogOpen = useSetAtom(addFoodItemDialogAtom)
-    const [foodList, setFoodList] = useAtom(foodListAtom)
+    const setAddDialogOpen = useSetAtom(addFoodItemDialogAtom)
+    const setFoodInfoDialog = useSetAtom(foodItemInfoDialogAtom)
+    const setInfoValues = useSetAtom(foodItemInfoValuesAtom)
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
-    const [rowSelection, setRowSelection] = useState({})
     const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(
         {},
     )
@@ -51,27 +56,12 @@ export function FoodDataTable<TData, TValue>({
         getFilteredRowModel: getFilteredRowModel(),
         onColumnFiltersChange: setColumnFilters,
         onColumnVisibilityChange: setColumnVisibility,
-        onRowSelectionChange: setRowSelection,
         state: {
             columnFilters,
             columnVisibility,
-            rowSelection,
         },
     })
 
-    function deleteSelected() {
-        let filteredFoodList = foodList
-        const rows = table
-            .getFilteredSelectedRowModel()
-            .rows.map((row) => row.original)
-        rows.map((row) => {
-            filteredFoodList = filteredFoodList.filter(
-                (foodItem) => foodItem !== row,
-            )
-        })
-        setFoodList(filteredFoodList)
-        setRowSelection({})
-    }
     return (
         <div className="flex flex-col gap-4">
             <div className="flex justify-between items-center gap-4">
@@ -114,9 +104,9 @@ export function FoodDataTable<TData, TValue>({
                     </DropdownMenuContent>
                 </DropdownMenu>
             </div>
-            <div className="rounded-md border">
+            <div className="rounded-md border overflow-hidden">
                 <Table>
-                    <TableHeader>
+                    <TableHeader className="bg-primary/20">
                         {table.getHeaderGroups().map((headerGroup) => (
                             <TableRow key={headerGroup.id}>
                                 {headerGroup.headers.map((header) => {
@@ -143,6 +133,11 @@ export function FoodDataTable<TData, TValue>({
                                     data-state={
                                         row.getIsSelected() && 'selected'
                                     }
+                                    className="hover:cursor-pointer"
+                                    onClick={() => {
+                                        setInfoValues(row.original as Food)
+                                        setFoodInfoDialog(true)
+                                    }}
                                 >
                                     {row.getVisibleCells().map((cell) => (
                                         <TableCell key={cell.id}>
@@ -167,22 +162,9 @@ export function FoodDataTable<TData, TValue>({
                     </TableBody>
                 </Table>
             </div>
-            <div className="flex justify-between items-center gap-2">
-                <div className="flex-1 text-sm text-center sm:text-justify text-muted-foreground">
-                    {table.getFilteredSelectedRowModel().rows.length} of{' '}
-                    {table.getFilteredRowModel().rows.length} row(s) selected.
-                </div>
-                <Button onClick={() => setDialogOpen(true)}>
+            <div className="flex justify-end items-center gap-2">
+                <Button onClick={() => setAddDialogOpen(true)}>
                     Add new Item
-                </Button>
-                <Button
-                    variant={'destructive'}
-                    onClick={deleteSelected}
-                    disabled={
-                        table.getFilteredSelectedRowModel().rows.length == 0
-                    }
-                >
-                    Delete
                 </Button>
             </div>
         </div>
