@@ -13,6 +13,7 @@ import {
     setupDailyIntakeDialogAtom,
 } from '@/lib/atoms'
 import { useState } from 'react'
+import { roundNumber } from '@/lib/utils'
 
 const pricePeriod = ['Daily', 'Weekly', 'Monthly', 'Yearly']
 
@@ -85,7 +86,9 @@ export default function DailyIntakeSection() {
                         },
                         {
                             label: 'Price',
-                            value: dailyIntake.price * priceFactor[priceView],
+                            value: roundNumber(
+                                dailyIntake.price * priceFactor[priceView],
+                            ),
                         },
                     ].map(({ label, value }) => (
                         <div
