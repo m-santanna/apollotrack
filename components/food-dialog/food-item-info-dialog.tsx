@@ -65,14 +65,14 @@ export default function FoodItemInfoDialog() {
                             setEditDialogOpen(true)
                         }}
                     >
-                        Edit Meal
+                        Edit Food
                     </Button>
                     <Button
                         className="w-1/2"
                         variant={'destructive'}
                         onClick={deleteMeal}
                     >
-                        Delete Meal
+                        Delele Food
                     </Button>
                 </div>
             </DialogContent>
