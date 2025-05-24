@@ -77,6 +77,7 @@ export default function CreateMealDialog() {
                     ingredients: ingredients,
                 },
             ])
+            form.reset()
             setDialogOpen(false)
         },
     })

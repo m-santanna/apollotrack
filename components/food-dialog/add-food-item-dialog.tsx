@@ -35,6 +35,7 @@ export default function AddFoodItemDialog() {
                 totalAmount: roundNumber(value.totalAmount),
             }
             setFoodList([...foodList, newFood])
+            form.reset()
             setDialogOpen(false)
         },
         validators: {
