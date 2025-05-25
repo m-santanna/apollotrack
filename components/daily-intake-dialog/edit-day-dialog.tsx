@@ -15,6 +15,7 @@ import {
 import { useAtom, useAtomValue, useSetAtom } from 'jotai/react'
 import { Button } from '../ui/button'
 import { Trash } from 'lucide-react'
+import { roundNumber } from '@/lib/utils'
 
 export default function EditDailyIntakeDialog() {
     const [dialogOpen, setDialogOpen] = useAtom(editDailyIntakeDialogAtom)
@@ -53,11 +54,11 @@ export default function EditDailyIntakeDialog() {
                 return currMeal
             })
             setDailyIntake({
-                calories: calories,
-                protein: protein,
-                fat: fat,
-                carbs: carbs,
-                price: price,
+                calories: roundNumber(calories),
+                protein: roundNumber(protein),
+                fat: roundNumber(fat),
+                carbs: roundNumber(carbs),
+                price: roundNumber(price),
                 meals: meals,
             })
             setDialogOpen(false)

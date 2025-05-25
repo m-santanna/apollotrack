@@ -72,7 +72,7 @@ export default function CreateMealDialog() {
                     protein: roundNumber(protein),
                     carbs: roundNumber(carbs),
                     fat: roundNumber(fat),
-                    weight: weight,
+                    weight: roundNumber(weight),
                     price: roundNumber(price),
                     ingredients: ingredients,
                 },
