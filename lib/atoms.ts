@@ -125,5 +125,7 @@ export const dailyIntakeAtom = atomWithStorage<DailyIntake>('dailyIntake', {
     price: 0,
     meals: [],
 })
+export const priceViewAtom = atom('Daily')
+export const infoDailyIntakeDialogAtom = atom(false)
 export const setupDailyIntakeDialogAtom = atom(false)
 export const editDailyIntakeDialogAtom = atom(false)

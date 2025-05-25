@@ -9,6 +9,7 @@ import EditMealDialog from '@/components/meals-dialog/edit-meal-dialog'
 import CreateDailyIntakeDialog from './daily-intake-dialog/create-day-dialog'
 import EditDailyIntakeDialog from './daily-intake-dialog/edit-day-dialog'
 import FoodItemInfoDialog from './food-dialog/food-item-info-dialog'
+import InfoDailyIntakeDialog from './daily-intake-dialog/daily-info-dialog'
 
 export default function DialogWrapper() {
     return (
@@ -24,6 +25,7 @@ export default function DialogWrapper() {
             <EditMealDialog />
             <CreateDailyIntakeDialog />
             <EditDailyIntakeDialog />
+            <InfoDailyIntakeDialog />
         </>
     )
 }

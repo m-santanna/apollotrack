@@ -13,7 +13,6 @@ import {
 } from '@/lib/atoms'
 import { useAtom, useSetAtom } from 'jotai/react'
 import { Button } from '@/components/ui/button'
-import { DialogDescription } from '@radix-ui/react-dialog'
 
 export default function MacrosEditDialog() {
     const [dialogOpen, setDialogOpen] = useAtom(macrosEditDialogAtom)
@@ -25,8 +24,7 @@ export default function MacrosEditDialog() {
             <DialogOverlay className="fixed inset-0 bg-black/30 backdrop-blur-sm" />
             <DialogContent className="gap-2 sm:max-w-[425px]">
                 <DialogHeader className="my-2">
-                    <DialogTitle>Macros Config</DialogTitle>
-                    <DialogDescription>What do you wanna do?</DialogDescription>
+                    <DialogTitle>Settings</DialogTitle>
                 </DialogHeader>
                 <Button
                     className="w-2/3 translate-x-1/4 mt-2"

@@ -12,7 +12,7 @@ import {
     editDailyIntakeDialogAtom,
     mealsAtom,
 } from '@/lib/atoms'
-import { useAtom, useAtomValue, useSetAtom } from 'jotai/react'
+import { useAtom, useAtomValue } from 'jotai/react'
 import { Button } from '../ui/button'
 import { Trash } from 'lucide-react'
 import { roundNumber } from '@/lib/utils'

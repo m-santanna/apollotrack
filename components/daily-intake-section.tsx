@@ -1,21 +1,12 @@
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuRadioGroup,
-    DropdownMenuRadioItem,
-    DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
-import { useAtom, useSetAtom } from 'jotai/react'
+import { useAtomValue, useSetAtom } from 'jotai/react'
 import { Button } from '@/components/ui/button'
 import {
     dailyIntakeAtom,
-    editDailyIntakeDialogAtom,
+    infoDailyIntakeDialogAtom,
+    priceViewAtom,
     setupDailyIntakeDialogAtom,
 } from '@/lib/atoms'
-import { useState } from 'react'
 import { roundNumber } from '@/lib/utils'
-
-const pricePeriod = ['Daily', 'Weekly', 'Monthly', 'Yearly']
 
 const priceFactor = {
     Daily: 1,
@@ -25,21 +16,10 @@ const priceFactor = {
 }
 
 export default function DailyIntakeSection() {
-    const [dailyIntake, setDailyIntake] = useAtom(dailyIntakeAtom)
+    const dailyIntake = useAtomValue(dailyIntakeAtom)
     const setSetupDialogOpen = useSetAtom(setupDailyIntakeDialogAtom)
-    const setEditDialogOpen = useSetAtom(editDailyIntakeDialogAtom)
-    const [priceView, setPriceView] = useState('Daily')
-
-    function deleteDailyIntake() {
-        setDailyIntake({
-            calories: 0,
-            protein: 0,
-            carbs: 0,
-            fat: 0,
-            price: 0,
-            meals: [],
-        })
-    }
+    const setInfoDialogOpen = useSetAtom(infoDailyIntakeDialogAtom)
+    const priceView = useAtomValue(priceViewAtom)
 
     if (dailyIntake.meals.length == 0)
         return (
@@ -106,31 +86,11 @@ export default function DailyIntakeSection() {
                 </div>
             </div>
             <div className="flex justify-end items-center gap-2 w-full">
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="outline">Price View</Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent className="w-24">
-                        <DropdownMenuRadioGroup
-                            value={priceView}
-                            onValueChange={setPriceView}
-                        >
-                            {pricePeriod.map((factor) => (
-                                <DropdownMenuRadioItem value={factor}>
-                                    {factor}
-                                </DropdownMenuRadioItem>
-                            ))}
-                        </DropdownMenuRadioGroup>
-                    </DropdownMenuContent>
-                </DropdownMenu>
                 <Button
-                    onClick={() => setEditDialogOpen(true)}
+                    onClick={() => setInfoDialogOpen(true)}
                     variant="secondary"
                 >
-                    Edit Daily Meals
-                </Button>
-                <Button onClick={deleteDailyIntake} variant="destructive">
-                    Delete
+                    Adjust Daily Intake
                 </Button>
             </div>
         </div>
