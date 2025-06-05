@@ -24,10 +24,10 @@ export default function MacrosEditDialog() {
             <DialogOverlay className="fixed inset-0 bg-black/30 backdrop-blur-sm" />
             <DialogContent className="gap-2 sm:max-w-[425px]">
                 <DialogHeader className="my-2">
-                    <DialogTitle>Settings</DialogTitle>
+                    <DialogTitle className="text-center">Settings</DialogTitle>
                 </DialogHeader>
                 <Button
-                    className="w-2/3 translate-x-1/4 mt-2"
+                    className="mt-2 w-full"
                     onClick={() => {
                         setDialogOpen(false)
                         setEstimateDialogOpen(true)
@@ -37,7 +37,7 @@ export default function MacrosEditDialog() {
                 </Button>
                 <Button
                     variant={'secondary'}
-                    className="w-2/3 translate-x-1/4"
+                    className="w-full"
                     onClick={() => {
                         setDialogOpen(false)
                         setYourselfDialogOpen(true)
@@ -47,7 +47,7 @@ export default function MacrosEditDialog() {
                 </Button>
                 <Button
                     variant={'destructive'}
-                    className="w-2/3 translate-x-1/4"
+                    className="w-full"
                     onClick={() => {
                         setDialogOpen(false)
                         setMacros({

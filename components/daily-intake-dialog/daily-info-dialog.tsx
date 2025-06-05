@@ -45,15 +45,12 @@ export default function InfoDailyIntakeDialog() {
             <DialogOverlay className="fixed inset-0 bg-black/30 backdrop-blur-sm" />
             <DialogContent className="sm:max-w-[425px] gap-2">
                 <DialogHeader className="my-2">
-                    <DialogTitle>Settings</DialogTitle>
+                    <DialogTitle className="text-center">Settings</DialogTitle>
                 </DialogHeader>
 
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                        <Button
-                            className="mt-2 w-2/3 translate-x-1/4"
-                            variant="outline"
-                        >
+                        <Button className="mt-2 w-full" variant="ghost">
                             Price View
                         </Button>
                     </DropdownMenuTrigger>
@@ -74,7 +71,7 @@ export default function InfoDailyIntakeDialog() {
                     </DropdownMenuContent>
                 </DropdownMenu>
                 <Button
-                    className="w-2/3 translate-x-1/4"
+                    className="w-full"
                     onClick={() => {
                         setEditDialogOpen(true)
                         setDialogOpen(false)
@@ -84,7 +81,7 @@ export default function InfoDailyIntakeDialog() {
                     Edit Daily Meals
                 </Button>
                 <Button
-                    className="w-2/3 translate-x-1/4"
+                    className="w-full"
                     onClick={() => {
                         deleteDailyIntake()
                         setDialogOpen(false)
