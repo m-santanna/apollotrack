@@ -1,12 +1,12 @@
 {
-    "version": 2,
+    "version": 3,
 
     "buildCommand": "bun run build",
     "outputDirectory": ".output",
 
     "functions": {
         ".output/server/index.mjs": {
-            "runtime": "nodejs20.x"
+            "runtime": "@vercel/node@18"
         }
     },
 
