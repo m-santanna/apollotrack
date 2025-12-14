@@ -16,7 +16,7 @@ export default defineConfig({
         tanstackStart({
             srcDirectory: 'src',
         }),
-        nitro({ preset: 'bun' }),
+        nitro({ preset: 'vercel' }),
         // react's vite plugin must come after start's vite plugin
         viteReact(),
         tailwindcss(),
