@@ -1,5 +1,19 @@
 {
+    "version": 2,
+
     "buildCommand": "bun run build",
     "outputDirectory": ".output",
-    "framework": null
+
+    "functions": {
+        ".output/server/index.mjs": {
+            "runtime": "nodejs20.x"
+        }
+    },
+
+    "routes": [
+        {
+            "src": "/(.*)",
+            "dest": ".output/server/index.mjs"
+        }
+    ]
 }
