@@ -1,4 +1,5 @@
 // app/routes/__root.tsx
+/// <reference types="vite/client" />
 import type { ReactNode } from 'react'
 import {
     Outlet,
@@ -6,7 +7,7 @@ import {
     HeadContent,
     Scripts,
 } from '@tanstack/react-router'
-import appCss from '@/app/globals.css?url'
+import appCss from '@/styles/app.css?url'
 import Providers from '@/components/providers'
 import { NotFound } from '@/components/not-found'
 
