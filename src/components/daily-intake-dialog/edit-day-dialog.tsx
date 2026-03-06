@@ -1,7 +1,6 @@
 import { useAppForm } from '@/hooks/form-hook'
 import {
     Dialog,
-    DialogOverlay,
     DialogContent,
     DialogDescription,
     DialogHeader,
@@ -14,7 +13,7 @@ import {
 } from '@/lib/atoms'
 import { useAtom, useAtomValue } from 'jotai/react'
 import { Button } from '../ui/button'
-import { Trash } from 'lucide-react'
+import { Plus, Trash2 } from 'lucide-react'
 import { roundNumber } from '@/lib/utils'
 
 export default function EditDailyIntakeDialog() {
@@ -67,12 +66,11 @@ export default function EditDailyIntakeDialog() {
     })
     return (
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-            <DialogOverlay className="fixed inset-0 bg-black/30 backdrop-blur-sm" />
-            <DialogContent className="sm:max-w-[425px] max-h-[600px] overflow-scroll">
+            <DialogContent className="sm:max-w-[425px] max-h-[80vh] overflow-y-auto">
                 <DialogHeader>
                     <DialogTitle>Edit Daily Meals</DialogTitle>
-                    <DialogDescription className="text-center">
-                        Feel free to rearrange your daily meals.
+                    <DialogDescription>
+                        Rearrange your daily meal plan as needed.
                     </DialogDescription>
                 </DialogHeader>
                 <form
@@ -81,32 +79,33 @@ export default function EditDailyIntakeDialog() {
                         e.preventDefault()
                         form.handleSubmit()
                     }}
-                    className="grid gap-2"
+                    className="flex flex-col gap-3"
                 >
                     <form.AppField name="mealsName" mode="array">
                         {(field) => (
-                            <div className="grid gap-4">
+                            <div className="flex flex-col gap-3">
                                 {field.state.value.map((_, index) => (
                                     <div
                                         key={index}
-                                        className="grid items-center gap-1"
+                                        className="rounded-xl border border-border/60 bg-secondary/30 p-3 space-y-2"
                                     >
-                                        <div className="flex justify-between items-center gap-2">
-                                            <h1 className="font-semibold">
+                                        <div className="flex justify-between items-center">
+                                            <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
                                                 Meal {index + 1}
-                                            </h1>
+                                            </span>
                                             <Button
                                                 variant="ghost"
+                                                size="icon"
                                                 type="button"
                                                 disabled={
-                                                    field.state.value.length ==
-                                                    1
+                                                    field.state.value.length === 1
                                                 }
                                                 onClick={() =>
                                                     field.removeValue(index)
                                                 }
+                                                className="size-7 rounded-lg"
                                             >
-                                                <Trash className="size-4" />
+                                                <Trash2 className="size-3.5 text-destructive" />
                                             </Button>
                                         </div>
                                         <form.AppField
@@ -121,25 +120,24 @@ export default function EditDailyIntakeDialog() {
                                             {(subField) => (
                                                 <subField.SelectField
                                                     array={mealsNameArray}
-                                                    label="Meal Name"
+                                                    label="Meal"
                                                 />
                                             )}
                                         </form.AppField>
                                     </div>
                                 ))}
-                                <div className="flex items-center justify-center gap-2">
-                                    <Button
-                                        type="button"
-                                        variant={'outline'}
-                                        onClick={() => field.pushValue('')}
-                                        className="w-1/2"
-                                    >
-                                        Add Meal
-                                    </Button>
-                                    <form.AppForm>
-                                        <form.SubmitButton className="w-1/2" />
-                                    </form.AppForm>
-                                </div>
+                                <Button
+                                    type="button"
+                                    variant="outline"
+                                    onClick={() => field.pushValue('')}
+                                    className="w-full gap-2"
+                                >
+                                    <Plus className="size-4" />
+                                    Add Meal
+                                </Button>
+                                <form.AppForm>
+                                    <form.SubmitButton />
+                                </form.AppForm>
                             </div>
                         )}
                     </form.AppField>

@@ -1,17 +1,23 @@
 import { Link } from '@tanstack/react-router'
 import ThemeButton from './theme-button'
+import { Zap } from 'lucide-react'
 
 export default function Navbar() {
     return (
-        <nav className="sticky bg-primary-foreground z-10 h-16 w-3/4 translate-x-1/6 md:w-1/2 md:translate-x-1/2 flex items-center justify-between p-8 rounded-full mt-4 animate-in slide-in-from-top duration-300">
-            <Link
-                to="/"
-                className="text-xl md:text-2xl font-bold text-primary hover:text-primary/70"
-            >
-                ApolloTrack
-            </Link>
-            <div className="flex items-center gap-2">
-                <ThemeButton />
+        <nav className="sticky top-0 z-50 w-full border-b border-border/50 bg-background/80 backdrop-blur-md">
+            <div className="mx-auto flex h-16 max-w-5xl items-center justify-between px-4 sm:px-6">
+                <Link
+                    to="/"
+                    className="flex items-center gap-2 text-xl font-bold tracking-tight text-foreground transition-colors hover:text-primary"
+                >
+                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
+                        <Zap className="h-4 w-4 text-primary-foreground" />
+                    </div>
+                    ApolloTrack
+                </Link>
+                <div className="flex items-center gap-2">
+                    <ThemeButton />
+                </div>
             </div>
         </nav>
     )

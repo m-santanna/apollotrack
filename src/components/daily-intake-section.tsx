@@ -7,8 +7,17 @@ import {
     setupDailyIntakeDialogAtom,
 } from '@/lib/atoms'
 import { roundNumber } from '@/lib/utils'
+import {
+    CalendarDays,
+    Settings,
+    Flame,
+    Beef,
+    Wheat,
+    Droplets,
+    DollarSign,
+} from 'lucide-react'
 
-const priceFactor = {
+const priceFactor: Record<string, number> = {
     Daily: 1,
     Weekly: 7,
     Monthly: 30,
@@ -21,77 +30,117 @@ export default function DailyIntakeSection() {
     const setInfoDialogOpen = useSetAtom(infoDailyIntakeDialogAtom)
     const priceView = useAtomValue(priceViewAtom)
 
-    if (dailyIntake.meals.length == 0)
+    if (dailyIntake.meals.length === 0)
         return (
-            <div className="relative flex flex-col justify-center items-center gap-4 border rounded-2xl w-6/7 md:w-1/2 p-4 animate-in slide-in-from-right duration-300">
-                <div className="flex flex-col gap-2">
-                    <h1 className="text-xl md:text-3xl text-center">
-                        Daily Intake not setup yet.
-                    </h1>
-                    <p className="text-accent-muted font-light text-justify">
-                        We suggest you to scroll all the way to the buttom and
-                        add all your food items first. Then, create your meals.
-                        After you have all your meals, you come back here, and
-                        setup your daily intake! :)
-                    </p>
+            <div className="rounded-2xl border border-dashed border-border bg-card p-6 card-shadow">
+                <div className="flex flex-col items-center gap-4 text-center">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10">
+                        <CalendarDays className="h-6 w-6 text-primary" />
+                    </div>
+                    <div>
+                        <h3 className="text-lg font-semibold">
+                            Daily Intake Not Set
+                        </h3>
+                        <p className="mt-1 max-w-sm text-sm text-muted-foreground">
+                            Add your food items first, create meals, then come
+                            back to set up your daily plan.
+                        </p>
+                    </div>
+                    <Button
+                        size="sm"
+                        onClick={() => setSetupDialogOpen(true)}
+                    >
+                        Setup Daily Intake
+                    </Button>
                 </div>
-                <Button onClick={() => setSetupDialogOpen(true)}>
-                    Setup Daily Intake
-                </Button>
             </div>
         )
+
+    const items = [
+        {
+            label: 'Calories',
+            value: dailyIntake.calories,
+            unit: 'kcal',
+            icon: Flame,
+            color: 'text-orange-500',
+            bgColor: 'bg-orange-50 dark:bg-orange-950/30',
+        },
+        {
+            label: 'Protein',
+            value: dailyIntake.protein,
+            unit: 'g',
+            icon: Beef,
+            color: 'text-red-500',
+            bgColor: 'bg-red-50 dark:bg-red-950/30',
+        },
+        {
+            label: 'Carbs',
+            value: dailyIntake.carbs,
+            unit: 'g',
+            icon: Wheat,
+            color: 'text-amber-500',
+            bgColor: 'bg-amber-50 dark:bg-amber-950/30',
+        },
+        {
+            label: 'Fat',
+            value: dailyIntake.fat,
+            unit: 'g',
+            icon: Droplets,
+            color: 'text-blue-500',
+            bgColor: 'bg-blue-50 dark:bg-blue-950/30',
+        },
+        {
+            label: 'Price',
+            value: roundNumber(
+                dailyIntake.price * (priceFactor[priceView] ?? 1),
+            ),
+            unit: ` / ${priceView.toLowerCase()}`,
+            icon: DollarSign,
+            color: 'text-emerald-500',
+            bgColor: 'bg-emerald-50 dark:bg-emerald-950/30',
+        },
+    ]
+
     return (
-        <div className="flex flex-col items-center gap-4 w-6/7 md:w-1/2 animate-in slide-in-from-left duration-300">
-            <h1 className="text-xl md:text-3xl font-bold text-primary">
-                Your Daily Intake
-            </h1>
-            <div className="flex w-full flex-col gap-4 border rounded-2xl p-4">
-                <div className="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-5 gap-4 text-center text-base md:text-lg">
-                    {[
-                        {
-                            label: 'Calories',
-                            value: dailyIntake.calories,
-                        },
-                        {
-                            label: 'Carbs',
-                            value: `${dailyIntake.carbs}g`,
-                        },
-                        {
-                            label: 'Fat',
-                            value: `${dailyIntake.fat}g`,
-                        },
-                        {
-                            label: 'Protein',
-                            value: `${dailyIntake.protein}g`,
-                        },
-                        {
-                            label: 'Price',
-                            value: roundNumber(
-                                dailyIntake.price * priceFactor[priceView],
-                            ),
-                        },
-                    ].map(({ label, value }) => (
+        <div className="rounded-2xl border border-border bg-card p-6 card-shadow">
+            <div className="mb-4 flex items-center justify-between">
+                <div>
+                    <h2 className="text-lg font-semibold">Daily Intake</h2>
+                    <p className="text-sm text-muted-foreground">
+                        {dailyIntake.meals.length} meal
+                        {dailyIntake.meals.length !== 1 ? 's' : ''} in your plan
+                    </p>
+                </div>
+                <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => setInfoDialogOpen(true)}
+                >
+                    <Settings className="h-4 w-4" />
+                </Button>
+            </div>
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-5">
+                {items.map(
+                    ({ label, value, unit, icon: Icon, color, bgColor }) => (
                         <div
                             key={label}
-                            className="flex flex-col gap-1 items-center"
+                            className={`flex items-center gap-3 rounded-xl p-3 ${bgColor}`}
                         >
-                            <span className="uppercase text-xs text-muted-foreground tracking-wide">
-                                {label}
-                            </span>
-                            <span className="font-semibold text-xl">
-                                {value}
-                            </span>
+                            <Icon className={`h-5 w-5 shrink-0 ${color}`} />
+                            <div className="min-w-0">
+                                <p className="truncate text-xs text-muted-foreground">
+                                    {label}
+                                </p>
+                                <p className="text-sm font-semibold">
+                                    {value}
+                                    <span className="text-xs font-normal text-muted-foreground">
+                                        {unit}
+                                    </span>
+                                </p>
+                            </div>
                         </div>
-                    ))}
-                </div>
-            </div>
-            <div className="flex justify-end items-center gap-2 w-full">
-                <Button
-                    onClick={() => setInfoDialogOpen(true)}
-                    variant="secondary"
-                >
-                    Adjust Daily Intake
-                </Button>
+                    ),
+                )}
             </div>
         </div>
     )

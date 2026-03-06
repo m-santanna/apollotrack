@@ -1,7 +1,6 @@
 import { useAtom, useAtomValue } from 'jotai/react'
 import {
     Dialog,
-    DialogOverlay,
     DialogContent,
     DialogDescription,
     DialogHeader,
@@ -18,7 +17,7 @@ import {
 } from '@/lib/atoms'
 import { useAppForm } from '@/hooks/form-hook'
 import { Button } from '../ui/button'
-import { Trash } from 'lucide-react'
+import { Plus, Trash2 } from 'lucide-react'
 import { roundNumber, updateDailyThroughMeal } from '@/lib/utils'
 
 export default function EditMealDialog() {
@@ -95,13 +94,11 @@ export default function EditMealDialog() {
     })
     return (
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-            <DialogOverlay className="fixed inset-0 bg-black/30 backdrop-blur-sm" />
-            <DialogContent className="sm:max-w-[425px] max-h-[600px] overflow-scroll">
+            <DialogContent className="sm:max-w-[425px] max-h-[80vh] overflow-y-auto">
                 <DialogHeader>
-                    <DialogTitle>Editing {mealInitialValues.name}</DialogTitle>
+                    <DialogTitle>Edit {mealInitialValues.name}</DialogTitle>
                     <DialogDescription>
-                        How about reshaping this meal? Do not forget we use
-                        grams!
+                        Adjust your ingredients and amounts. Values are in grams.
                     </DialogDescription>
                 </DialogHeader>
                 <form
@@ -110,7 +107,7 @@ export default function EditMealDialog() {
                         e.preventDefault()
                         form.handleSubmit()
                     }}
-                    className="grid gap-2"
+                    className="flex flex-col gap-3"
                 >
                     <form.AppField
                         name="name"
@@ -121,36 +118,34 @@ export default function EditMealDialog() {
                                     : undefined,
                         }}
                         children={(field) => (
-                            <field.TextField
-                                label="Meal Name"
-                                labelClassName="font-semibold text-md"
-                            />
+                            <field.TextField label="Meal Name" />
                         )}
                     />
                     <form.AppField name="ingredients" mode="array">
                         {(field) => (
-                            <div className="grid gap-4">
+                            <div className="flex flex-col gap-3">
                                 {field.state.value.map((_, index) => (
                                     <div
                                         key={index}
-                                        className="grid items-center gap-1"
+                                        className="rounded-xl border border-border/60 bg-secondary/30 p-3 space-y-2"
                                     >
-                                        <div className="flex justify-between items-center gap-2">
-                                            <h1 className="font-semibold">
+                                        <div className="flex justify-between items-center">
+                                            <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
                                                 Ingredient {index + 1}
-                                            </h1>
+                                            </span>
                                             <Button
                                                 variant="ghost"
+                                                size="icon"
                                                 type="button"
                                                 disabled={
-                                                    field.state.value.length ==
-                                                    1
+                                                    field.state.value.length === 1
                                                 }
                                                 onClick={() =>
                                                     field.removeValue(index)
                                                 }
+                                                className="size-7 rounded-lg"
                                             >
-                                                <Trash className="size-4" />
+                                                <Trash2 className="size-3.5 text-destructive" />
                                             </Button>
                                         </div>
                                         <form.AppField
@@ -165,7 +160,7 @@ export default function EditMealDialog() {
                                             {(subField) => (
                                                 <subField.SelectField
                                                     array={foodNamesArray}
-                                                    label="Name"
+                                                    label="Food"
                                                 />
                                             )}
                                         </form.AppField>
@@ -174,34 +169,33 @@ export default function EditMealDialog() {
                                             validators={{
                                                 onChange: ({ value }) =>
                                                     value <= 0 || !value
-                                                        ? 'You must introduce a value here!'
+                                                        ? 'Amount is required'
                                                         : undefined,
                                             }}
                                         >
                                             {(subField) => (
-                                                <subField.NumberField label="Used Amount" />
+                                                <subField.NumberField label="Amount (g)" />
                                             )}
                                         </form.AppField>
                                     </div>
                                 ))}
-                                <div className="flex items-center justify-center gap-2">
-                                    <Button
-                                        type="button"
-                                        variant={'outline'}
-                                        onClick={() =>
-                                            field.pushValue({
-                                                name: '',
-                                                usedAmount: 0,
-                                            })
-                                        }
-                                        className="w-1/2"
-                                    >
-                                        Add Ingredient
-                                    </Button>
-                                    <form.AppForm>
-                                        <form.SubmitButton className="w-1/2" />
-                                    </form.AppForm>
-                                </div>
+                                <Button
+                                    type="button"
+                                    variant="outline"
+                                    onClick={() =>
+                                        field.pushValue({
+                                            name: '',
+                                            usedAmount: 0,
+                                        })
+                                    }
+                                    className="w-full gap-2"
+                                >
+                                    <Plus className="size-4" />
+                                    Add Ingredient
+                                </Button>
+                                <form.AppForm>
+                                    <form.SubmitButton />
+                                </form.AppForm>
                             </div>
                         )}
                     </form.AppField>

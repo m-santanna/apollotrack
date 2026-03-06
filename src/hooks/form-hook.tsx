@@ -2,6 +2,7 @@ import { createFormHook, createFormHookContexts } from '@tanstack/react-form'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
+import { cn } from '@/lib/utils'
 import {
     Select,
     SelectContent,
@@ -16,8 +17,8 @@ export const { fieldContext, useFieldContext, formContext, useFormContext } =
 function NumberField({ label }: { label: string }) {
     const field = useFieldContext<number>()
     return (
-        <div className="grid grid-cols-2 items-center gap-4">
-            <Label>{label}</Label>
+        <div className="flex flex-col gap-1.5">
+            <Label className="text-muted-foreground text-xs font-medium uppercase tracking-wider">{label}</Label>
             <Input
                 type="number"
                 value={field.state.value}
@@ -36,8 +37,8 @@ function TextField({
 }) {
     const field = useFieldContext<string>()
     return (
-        <div className="grid grid-cols-2 items-center gap-4">
-            <Label className={labelClassName}>{label}</Label>
+        <div className="flex flex-col gap-1.5">
+            <Label className={labelClassName ?? "text-muted-foreground text-xs font-medium uppercase tracking-wider"}>{label}</Label>
             <Input
                 type="text"
                 value={field.state.value}
@@ -56,24 +57,24 @@ function SelectField({
 }) {
     const field = useFieldContext<string>()
     return (
-        <Select
-            value={field.state.value}
-            onValueChange={(value) => field.handleChange(value)}
-        >
-            <div className="grid grid-cols-2 items-center gap-4">
-                <Label>{label}</Label>
-                <SelectTrigger className="w-full">
+        <div className="flex flex-col gap-1.5">
+            <Label className="text-muted-foreground text-xs font-medium uppercase tracking-wider">{label}</Label>
+            <Select
+                value={field.state.value}
+                onValueChange={(value) => field.handleChange(value)}
+            >
+                <SelectTrigger className="w-full rounded-xl h-10">
                     <SelectValue />
                 </SelectTrigger>
-            </div>
-            <SelectContent>
-                {array.map((elem) => (
-                    <SelectItem key={elem.value} value={elem.value}>
-                        {elem.label}
-                    </SelectItem>
-                ))}
-            </SelectContent>
-        </Select>
+                <SelectContent>
+                    {array.map((elem) => (
+                        <SelectItem key={elem.value} value={elem.value}>
+                            {elem.label}
+                        </SelectItem>
+                    ))}
+                </SelectContent>
+            </Select>
+        </div>
     )
 }
 
@@ -84,7 +85,7 @@ function SubmitButton({ className }: { className?: string }) {
             selector={(state) => [state.canSubmit, state.isSubmitting]}
             children={([canSubmit, isSubmitting]) => (
                 <Button
-                    className={className}
+                    className={cn("w-full mt-2", className)}
                     type="submit"
                     disabled={!canSubmit}
                 >

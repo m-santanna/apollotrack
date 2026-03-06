@@ -1,6 +1,7 @@
 import { atomWithStorage } from 'jotai/utils'
 import { atom } from 'jotai/vanilla'
 import { z } from 'zod'
+import type { ScanResult } from './server/analyze-food'
 
 export const macrosSchema = z.object({
     calories: z.number().gt(0, 'Dont forget this value!'),
@@ -129,3 +130,9 @@ export const priceViewAtom = atom('Daily')
 export const infoDailyIntakeDialogAtom = atom(false)
 export const setupDailyIntakeDialogAtom = atom(false)
 export const editDailyIntakeDialogAtom = atom(false)
+
+// Food scanner atoms
+export const scanResultAtom = atom<ScanResult | null>(null)
+export const scanLoadingAtom = atom(false)
+export const scanErrorAtom = atom<string | null>(null)
+export const scanResultDialogAtom = atom(false)

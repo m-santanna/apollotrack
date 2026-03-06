@@ -13,7 +13,6 @@ import {
     DialogDescription,
     DialogHeader,
     DialogTitle,
-    DialogOverlay,
 } from '@/components/ui/dialog'
 import { useAppForm } from '@/hooks/form-hook'
 import { updateSystemThroughFood } from '@/lib/utils'
@@ -50,20 +49,15 @@ export default function EditFoodItemDialog() {
 
     return (
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-            <DialogOverlay className="fixed inset-0 bg-black/30 backdrop-blur-sm" />
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
-                    <DialogTitle>
-                        Let&apos;s edit your {foodItemInfo.name}!
-                    </DialogTitle>
+                    <DialogTitle>Edit {foodItemInfo.name}</DialogTitle>
                     <DialogDescription>
-                        Change what you must! Remember: calories, protein,
-                        etc... should have their values based per 100g of the
-                        product.
+                        Update the nutritional values per 100g of the product.
                     </DialogDescription>
                 </DialogHeader>
                 <form
-                    className="grid gap-2"
+                    className="flex flex-col gap-3"
                     onSubmit={(e) => {
                         e.preventDefault()
                         form.handleSubmit()
@@ -81,38 +75,42 @@ export default function EditFoodItemDialog() {
                             <field.NumberField label="Calories" />
                         )}
                     />
-                    <form.AppField
-                        name="protein"
-                        children={(field) => (
-                            <field.NumberField label="Protein (g)" />
-                        )}
-                    />
-                    <form.AppField
-                        name="carbs"
-                        children={(field) => (
-                            <field.NumberField label="Carbs (g)" />
-                        )}
-                    />
-                    <form.AppField
-                        name="fat"
-                        children={(field) => (
-                            <field.NumberField label="Fat (g)" />
-                        )}
-                    />
-                    <form.AppField
-                        name="totalAmount"
-                        children={(field) => (
-                            <field.NumberField label="Total Amount (g)" />
-                        )}
-                    />
-                    <form.AppField
-                        name="price"
-                        children={(field) => (
-                            <field.NumberField label="Price" />
-                        )}
-                    />
+                    <div className="grid grid-cols-3 gap-3">
+                        <form.AppField
+                            name="protein"
+                            children={(field) => (
+                                <field.NumberField label="Protein (g)" />
+                            )}
+                        />
+                        <form.AppField
+                            name="carbs"
+                            children={(field) => (
+                                <field.NumberField label="Carbs (g)" />
+                            )}
+                        />
+                        <form.AppField
+                            name="fat"
+                            children={(field) => (
+                                <field.NumberField label="Fat (g)" />
+                            )}
+                        />
+                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                        <form.AppField
+                            name="totalAmount"
+                            children={(field) => (
+                                <field.NumberField label="Total Amount (g)" />
+                            )}
+                        />
+                        <form.AppField
+                            name="price"
+                            children={(field) => (
+                                <field.NumberField label="Price" />
+                            )}
+                        />
+                    </div>
                     <form.AppForm>
-                        <form.SubmitButton className="w-1/2 translate-x-1/2 mt-4" />
+                        <form.SubmitButton className="mt-2" />
                     </form.AppForm>
                 </form>
             </DialogContent>

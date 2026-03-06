@@ -10,6 +10,7 @@ import CreateDailyIntakeDialog from './daily-intake-dialog/create-day-dialog'
 import EditDailyIntakeDialog from './daily-intake-dialog/edit-day-dialog'
 import FoodItemInfoDialog from './food-dialog/food-item-info-dialog'
 import InfoDailyIntakeDialog from './daily-intake-dialog/daily-info-dialog'
+import ScanResultDialog from './food-scanner/scan-result'
 
 export default function DialogWrapper() {
     return (
@@ -26,6 +27,7 @@ export default function DialogWrapper() {
             <CreateDailyIntakeDialog />
             <EditDailyIntakeDialog />
             <InfoDailyIntakeDialog />
+            <ScanResultDialog />
         </>
     )
 }

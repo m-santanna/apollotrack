@@ -4,7 +4,6 @@ import {
     Dialog,
     DialogContent,
     DialogDescription,
-    DialogOverlay,
     DialogHeader,
     DialogTitle,
 } from '@/components/ui/dialog'
@@ -44,17 +43,15 @@ export default function AddFoodItemDialog() {
     })
     return (
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-            <DialogOverlay className="fixed inset-0 bg-black/30 backdrop-blur-sm" />
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
-                    <DialogTitle>Let&apos;s add some food!</DialogTitle>
+                    <DialogTitle>Add New Food</DialogTitle>
                     <DialogDescription>
-                        Provide us the following information in grams, per 100g
-                        of the product.
+                        Enter the nutritional info per 100g of the product.
                     </DialogDescription>
                 </DialogHeader>
                 <form
-                    className="grid gap-2"
+                    className="flex flex-col gap-3"
                     onSubmit={(e) => {
                         e.preventDefault()
                         form.handleSubmit()
@@ -72,36 +69,40 @@ export default function AddFoodItemDialog() {
                             <field.NumberField label="Calories" />
                         )}
                     />
-                    <form.AppField
-                        name="protein"
-                        children={(field) => (
-                            <field.NumberField label="Protein" />
-                        )}
-                    />
-                    <form.AppField
-                        name="carbs"
-                        children={(field) => (
-                            <field.NumberField label="Carbs" />
-                        )}
-                    />
-                    <form.AppField
-                        name="fat"
-                        children={(field) => <field.NumberField label="Fat" />}
-                    />
-                    <form.AppField
-                        name="totalAmount"
-                        children={(field) => (
-                            <field.NumberField label="Total Amount (g)" />
-                        )}
-                    />
-                    <form.AppField
-                        name="price"
-                        children={(field) => (
-                            <field.NumberField label="Price" />
-                        )}
-                    />
+                    <div className="grid grid-cols-3 gap-3">
+                        <form.AppField
+                            name="protein"
+                            children={(field) => (
+                                <field.NumberField label="Protein (g)" />
+                            )}
+                        />
+                        <form.AppField
+                            name="carbs"
+                            children={(field) => (
+                                <field.NumberField label="Carbs (g)" />
+                            )}
+                        />
+                        <form.AppField
+                            name="fat"
+                            children={(field) => <field.NumberField label="Fat (g)" />}
+                        />
+                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                        <form.AppField
+                            name="totalAmount"
+                            children={(field) => (
+                                <field.NumberField label="Total Amount (g)" />
+                            )}
+                        />
+                        <form.AppField
+                            name="price"
+                            children={(field) => (
+                                <field.NumberField label="Price" />
+                            )}
+                        />
+                    </div>
                     <form.AppForm>
-                        <form.SubmitButton className="w-1/2 translate-x-1/2 mt-4" />
+                        <form.SubmitButton className="mt-2" />
                     </form.AppForm>
                 </form>
             </DialogContent>

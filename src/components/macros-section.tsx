@@ -6,82 +6,131 @@ import {
 } from '@/lib/atoms'
 import { useAtomValue, useSetAtom } from 'jotai/react'
 import { Button } from './ui/button'
+import { Settings, Target, Flame, Beef, Wheat, Droplets } from 'lucide-react'
 
 export default function MacrosSection() {
     const setMacrosYourselfDialog = useSetAtom(macrosDialogYourselfAtom)
     const setMacrosEstimateDialog = useSetAtom(macrosDialogEstimateAtom)
     const setEditMacrosDialog = useSetAtom(macrosEditDialogAtom)
     const macros = useAtomValue(macrosAtom)
-    if (
-        macros.calories == 0 &&
-        macros.protein == 0 &&
-        macros.fat == 0 &&
-        macros.carbs == 0
-    )
+
+    const isEmpty =
+        macros.calories === 0 &&
+        macros.protein === 0 &&
+        macros.fat === 0 &&
+        macros.carbs === 0
+
+    if (isEmpty)
         return (
-            <div className="relative flex flex-col justify-center items-center gap-4 border rounded-2xl w-6/7 md:w-1/2 p-4 animate-in slide-in-from-left duration-300">
-                <h1 className="text-xl md:text-3xl text-center">
-                    Looks like you are new here!
-                </h1>
-                <div className="flex items-center justify-center gap-2">
-                    <Button onClick={() => setMacrosEstimateDialog(true)}>
-                        Estimate calories
-                    </Button>
-                    <Button
-                        variant={'secondary'}
-                        onClick={() => setMacrosYourselfDialog(true)}
-                    >
-                        Do it yourself
-                    </Button>
+            <div className="rounded-2xl border border-dashed border-border bg-card p-6 card-shadow">
+                <div className="flex flex-col items-center gap-4 text-center">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10">
+                        <Target className="h-6 w-6 text-primary" />
+                    </div>
+                    <div>
+                        <h3 className="text-lg font-semibold">
+                            Set Your Macro Targets
+                        </h3>
+                        <p className="mt-1 text-sm text-muted-foreground">
+                            Get started by setting your daily calorie and macro
+                            goals.
+                        </p>
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <Button
+                            onClick={() => setMacrosEstimateDialog(true)}
+                            size="sm"
+                        >
+                            Estimate for Me
+                        </Button>
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => setMacrosYourselfDialog(true)}
+                        >
+                            Set Manually
+                        </Button>
+                    </div>
                 </div>
             </div>
         )
+
+    const macroItems = [
+        {
+            label: 'Calories',
+            value: macros.calories,
+            unit: 'kcal',
+            icon: Flame,
+            color: 'text-orange-500',
+            bgColor: 'bg-orange-50 dark:bg-orange-950/30',
+        },
+        {
+            label: 'Protein',
+            value: macros.protein,
+            unit: 'g',
+            icon: Beef,
+            color: 'text-red-500',
+            bgColor: 'bg-red-50 dark:bg-red-950/30',
+        },
+        {
+            label: 'Carbs',
+            value: macros.carbs,
+            unit: 'g',
+            icon: Wheat,
+            color: 'text-amber-500',
+            bgColor: 'bg-amber-50 dark:bg-amber-950/30',
+        },
+        {
+            label: 'Fat',
+            value: macros.fat,
+            unit: 'g',
+            icon: Droplets,
+            color: 'text-blue-500',
+            bgColor: 'bg-blue-50 dark:bg-blue-950/30',
+        },
+    ]
+
     return (
-        <div className="flex flex-col items-center gap-4 w-6/7 md:w-1/2 animate-in slide-in-from-left duration-300">
-            <h1 className="text-xl md:text-3xl font-bold text-primary">
-                <span>Your {macros.dietGoal} plan </span>
-            </h1>
-            <div className="relative flex w-full flex-col gap-4 border rounded-2xl p-4">
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center text-base md:text-lg">
-                    {[
-                        {
-                            label: 'Calories',
-                            value: macros.calories,
-                        },
-                        {
-                            label: 'Carbs',
-                            value: `${macros.carbs}g`,
-                        },
-                        {
-                            label: 'Fat',
-                            value: `${macros.fat}g`,
-                        },
-                        {
-                            label: 'Protein',
-                            value: `${macros.protein}g`,
-                        },
-                    ].map(({ label, value }) => (
+        <div className="rounded-2xl border border-border bg-card p-6 card-shadow">
+            <div className="mb-4 flex items-center justify-between">
+                <div>
+                    <h2 className="text-lg font-semibold">Macro Targets</h2>
+                    <p className="text-sm text-muted-foreground">
+                        {macros.dietGoal === 'own'
+                            ? 'Your custom plan'
+                            : `${macros.dietGoal} plan`}
+                    </p>
+                </div>
+                <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => setEditMacrosDialog(true)}
+                >
+                    <Settings className="h-4 w-4" />
+                </Button>
+            </div>
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                {macroItems.map(
+                    ({ label, value, unit, icon: Icon, color, bgColor }) => (
                         <div
                             key={label}
-                            className="flex flex-col gap-1 items-center"
+                            className={`flex items-center gap-3 rounded-xl p-3 ${bgColor}`}
                         >
-                            <span className="uppercase text-xs text-muted-foreground tracking-wide">
-                                {label}
-                            </span>
-                            <span className="font-semibold text-xl">
-                                {value}
-                            </span>
+                            <Icon className={`h-5 w-5 shrink-0 ${color}`} />
+                            <div className="min-w-0">
+                                <p className="truncate text-xs text-muted-foreground">
+                                    {label}
+                                </p>
+                                <p className="text-sm font-semibold">
+                                    {value}
+                                    <span className="text-xs font-normal text-muted-foreground">
+                                        {unit}
+                                    </span>
+                                </p>
+                            </div>
                         </div>
-                    ))}
-                </div>
-            </div>
-            <div className="flex justify-end items-center gap-2 w-full">
-                <Button
-                    onClick={() => setEditMacrosDialog(true)}
-                    variant="secondary"
-                >
-                    Edit Macros
-                </Button>
+                    ),
+                )}
             </div>
         </div>
     )

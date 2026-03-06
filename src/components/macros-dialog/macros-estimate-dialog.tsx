@@ -4,7 +4,6 @@ import {
     DialogDescription,
     DialogHeader,
     DialogTitle,
-    DialogOverlay,
 } from '@/components/ui/dialog'
 import {
     estimateMacrosSchema,
@@ -56,12 +55,11 @@ export default function MacrosEstimateDialog() {
     })
     return (
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-            <DialogOverlay className="fixed inset-0 bg-black/30 backdrop-blur-sm" />
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
-                    <DialogTitle>Macros estimation</DialogTitle>
+                    <DialogTitle>Estimate Your Macros</DialogTitle>
                     <DialogDescription>
-                        We will do our best to calculate your needed macros
+                        We'll calculate your ideal daily macros based on your body metrics and goals.
                     </DialogDescription>
                 </DialogHeader>
                 <form
@@ -69,36 +67,40 @@ export default function MacrosEstimateDialog() {
                         e.preventDefault()
                         form.handleSubmit()
                     }}
-                    className="grid gap-2"
+                    className="flex flex-col gap-3"
                 >
-                    <form.AppField
-                        name="gender"
-                        children={(field) => (
-                            <field.SelectField
-                                label="Gender"
-                                array={[
-                                    { label: 'Male', value: 'male' },
-                                    { label: 'Female', value: 'female' },
-                                ]}
-                            />
-                        )}
-                    />
-                    <form.AppField
-                        name="height"
-                        children={(field) => (
-                            <field.NumberField label="Height (cm)" />
-                        )}
-                    />
-                    <form.AppField
-                        name="weight"
-                        children={(field) => (
-                            <field.NumberField label="Weight (kg)" />
-                        )}
-                    />
-                    <form.AppField
-                        name="age"
-                        children={(field) => <field.NumberField label="Age" />}
-                    />
+                    <div className="grid grid-cols-2 gap-3">
+                        <form.AppField
+                            name="gender"
+                            children={(field) => (
+                                <field.SelectField
+                                    label="Gender"
+                                    array={[
+                                        { label: 'Male', value: 'male' },
+                                        { label: 'Female', value: 'female' },
+                                    ]}
+                                />
+                            )}
+                        />
+                        <form.AppField
+                            name="age"
+                            children={(field) => <field.NumberField label="Age" />}
+                        />
+                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                        <form.AppField
+                            name="height"
+                            children={(field) => (
+                                <field.NumberField label="Height (cm)" />
+                            )}
+                        />
+                        <form.AppField
+                            name="weight"
+                            children={(field) => (
+                                <field.NumberField label="Weight (kg)" />
+                            )}
+                        />
+                    </div>
                     <form.AppField
                         name="activityLevel"
                         children={(field) => (
@@ -118,7 +120,7 @@ export default function MacrosEstimateDialog() {
                         )}
                     />
                     <form.AppForm>
-                        <form.SubmitButton className="w-1/2 translate-x-1/2 mt-4" />
+                        <form.SubmitButton className="mt-2" />
                     </form.AppForm>
                 </form>
             </DialogContent>

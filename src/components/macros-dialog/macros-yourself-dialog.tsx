@@ -4,7 +4,6 @@ import {
     DialogDescription,
     DialogHeader,
     DialogTitle,
-    DialogOverlay,
 } from '@/components/ui/dialog'
 import { useAppForm } from '@/hooks/form-hook'
 import {
@@ -29,28 +28,22 @@ export default function MacrosYourselfDialog() {
         },
         onSubmit: ({ value }) => {
             setDialogOpen(false)
-            const calories = value.calories,
-                protein = value.protein,
-                fat = value.fat,
-                carbs = value.carbs
             setMacros({
-                calories: calories,
-                protein: protein,
-                fat: fat,
-                carbs: carbs,
+                calories: value.calories,
+                protein: value.protein,
+                fat: value.fat,
+                carbs: value.carbs,
                 dietGoal: 'own',
             })
         },
     })
     return (
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-            <DialogOverlay className="fixed inset-0 bg-black/30 backdrop-blur-sm" />
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
-                    <DialogTitle>Your macros</DialogTitle>
+                    <DialogTitle>Set Your Macros</DialogTitle>
                     <DialogDescription>
-                        Provide us the daily values you already know are
-                        appropriate.
+                        Enter the daily macro values you already know work for you.
                     </DialogDescription>
                 </DialogHeader>
                 <form
@@ -58,7 +51,7 @@ export default function MacrosYourselfDialog() {
                         e.preventDefault()
                         form.handleSubmit()
                     }}
-                    className="grid gap-2"
+                    className="flex flex-col gap-3"
                 >
                     <form.AppField
                         name="calories"
@@ -66,26 +59,28 @@ export default function MacrosYourselfDialog() {
                             <field.NumberField label="Calories" />
                         )}
                     />
-                    <form.AppField
-                        name="protein"
-                        children={(field) => (
-                            <field.NumberField label="Protein (g)" />
-                        )}
-                    />
-                    <form.AppField
-                        name="carbs"
-                        children={(field) => (
-                            <field.NumberField label="Carbs (g)" />
-                        )}
-                    />
-                    <form.AppField
-                        name="fat"
-                        children={(field) => (
-                            <field.NumberField label="Fat (g)" />
-                        )}
-                    />
+                    <div className="grid grid-cols-3 gap-3">
+                        <form.AppField
+                            name="protein"
+                            children={(field) => (
+                                <field.NumberField label="Protein (g)" />
+                            )}
+                        />
+                        <form.AppField
+                            name="carbs"
+                            children={(field) => (
+                                <field.NumberField label="Carbs (g)" />
+                            )}
+                        />
+                        <form.AppField
+                            name="fat"
+                            children={(field) => (
+                                <field.NumberField label="Fat (g)" />
+                            )}
+                        />
+                    </div>
                     <form.AppForm>
-                        <form.SubmitButton className="w-1/2 translate-x-1/2 mt-4" />
+                        <form.SubmitButton className="mt-2" />
                     </form.AppForm>
                 </form>
             </DialogContent>
