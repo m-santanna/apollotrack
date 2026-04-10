@@ -25,6 +25,7 @@ import {
   Bookmark,
   Loader2,
   RefreshCw,
+  Trash2,
 } from "lucide-react";
 
 interface ReviewProps {
@@ -42,6 +43,9 @@ export function Review({ result, onConfirm, onSaveAsPack, onRefine, isRefining }
   const [mealDialogOpen, setMealDialogOpen] = useState(false);
   const [mealName, setMealName] = useState("");
   const [savedMealName, setSavedMealName] = useState<string | null>(null);
+  const [notesExpanded, setNotesExpanded] = useState(false);
+  const [addDialogOpen, setAddDialogOpen] = useState(false);
+  const [addGroupName, setAddGroupName] = useState("");
 
   // Keep items in sync when result changes (after refinement)
   // We reset edits when a new result comes in
@@ -51,6 +55,7 @@ export function Review({ result, onConfirm, onSaveAsPack, onRefine, isRefining }
     setEditedItems(result.foods);
     setEditingIndex(null);
     setSavedMealName(null);
+    setNotesExpanded(false);
   }
 
   const confidenceColor = {
@@ -81,9 +86,13 @@ export function Review({ result, onConfirm, onSaveAsPack, onRefine, isRefining }
     });
   };
 
+  const handleDelete = (index: number) => {
+    setEditedItems((prev) => prev.filter((_, i) => i !== index));
+    if (editingIndex === index) setEditingIndex(null);
+  };
+
   const handleConfirm = () => {
     if (savedMealName) {
-      // Add as a single combined entry using the meal name
       onConfirm([{
         name: savedMealName,
         calories: totals.calories,
@@ -93,18 +102,38 @@ export function Review({ result, onConfirm, onSaveAsPack, onRefine, isRefining }
         source: "ai" as const,
       }]);
     } else {
-      onConfirm(
-        editedItems.map((item) => ({
-          name: item.name,
-          calories: item.calories,
-          protein: item.protein,
-          carbs: item.carbs,
-          fat: item.fat,
-          servingSize: item.servingSize,
-          source: "ai" as const,
-        })),
-      );
+      // Ask the user if they want to group before committing
+      setAddGroupName("");
+      setAddDialogOpen(true);
     }
+  };
+
+  const handleAddIndividually = () => {
+    setAddDialogOpen(false);
+    onConfirm(
+      editedItems.map((item) => ({
+        name: item.name,
+        calories: item.calories,
+        protein: item.protein,
+        carbs: item.carbs,
+        fat: item.fat,
+        servingSize: item.servingSize,
+        source: "ai" as const,
+      })),
+    );
+  };
+
+  const handleAddAsGroup = () => {
+    if (!addGroupName.trim()) return;
+    setAddDialogOpen(false);
+    onConfirm([{
+      name: addGroupName.trim(),
+      calories: totals.calories,
+      protein: totals.protein,
+      carbs: totals.carbs,
+      fat: totals.fat,
+      source: "ai" as const,
+    }]);
   };
 
   const openMealDialog = () => {
@@ -137,9 +166,22 @@ export function Review({ result, onConfirm, onSaveAsPack, onRefine, isRefining }
       </div>
 
       {result.notes && (
-        <div className="flex items-start gap-2 p-3 rounded-lg bg-muted/50 text-sm text-muted-foreground">
-          <AlertTriangle className="w-4 h-4 mt-0.5 shrink-0" />
-          {result.notes}
+        <div className="p-3 rounded-lg bg-muted/50 text-xs text-muted-foreground space-y-1">
+          <div className="flex items-center gap-1.5">
+            <AlertTriangle className="w-3.5 h-3.5 shrink-0" />
+            <span className="font-medium text-foreground/70">Notes</span>
+          </div>
+          <p className={notesExpanded ? undefined : "line-clamp-2"}>
+            {result.notes}
+          </p>
+          {result.notes.length > 120 && (
+            <button
+              className="text-xs text-primary underline-offset-2 hover:underline"
+              onClick={() => setNotesExpanded((v) => !v)}
+            >
+              {notesExpanded ? "Show less" : "Show more"}
+            </button>
+          )}
         </div>
       )}
 
@@ -194,14 +236,24 @@ export function Review({ result, onConfirm, onSaveAsPack, onRefine, isRefining }
                         <span className="text-purple-600 dark:text-purple-400">F {item.fat}g</span>
                       </div>
                     </div>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-8 w-8 shrink-0"
-                      onClick={() => setEditingIndex(index)}
-                    >
-                      <Edit2 className="w-3.5 h-3.5" />
-                    </Button>
+                    <div className="flex gap-1 shrink-0">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8"
+                        onClick={() => setEditingIndex(index)}
+                      >
+                        <Edit2 className="w-3.5 h-3.5" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8 text-destructive hover:text-destructive"
+                        onClick={() => handleDelete(index)}
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </Button>
+                    </div>
                   </div>
                 )}
               </CardContent>
@@ -270,6 +322,39 @@ export function Review({ result, onConfirm, onSaveAsPack, onRefine, isRefining }
           )}
         </Button>
       </div>
+
+      {/* Add to Log Dialog */}
+      <Dialog open={addDialogOpen} onOpenChange={setAddDialogOpen}>
+        <DialogContent className="max-w-sm">
+          <DialogHeader>
+            <DialogTitle>Add to Log</DialogTitle>
+            <DialogDescription>
+              Add {editedItems.length} item{editedItems.length !== 1 ? "s" : ""} individually, or group them under a single name.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="py-2 space-y-3">
+            <Input
+              value={addGroupName}
+              onChange={(e) => setAddGroupName(e.target.value)}
+              placeholder="Group name (optional)"
+              onKeyDown={(e) => { if (e.key === "Enter" && addGroupName.trim()) handleAddAsGroup(); }}
+              autoFocus
+            />
+            <div className="flex items-center justify-between text-xs text-muted-foreground px-0.5">
+              <span>{editedItems.length} item{editedItems.length !== 1 ? "s" : ""}</span>
+              <span className="font-medium text-orange-600 dark:text-orange-400">{totals.calories} kcal total</span>
+            </div>
+          </div>
+          <DialogFooter className="flex-col sm:flex-row gap-2">
+            <Button variant="outline" className="flex-1" onClick={handleAddIndividually}>
+              Add Individually
+            </Button>
+            <Button className="flex-1" onClick={handleAddAsGroup} disabled={!addGroupName.trim()}>
+              Add as Group
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       {/* Save Meal Dialog */}
       <Dialog open={mealDialogOpen} onOpenChange={setMealDialogOpen}>

@@ -18,6 +18,7 @@ import type {
 } from '@/lib/types'
 import { PhotoCapture } from '@/components/food-log/photo-capture'
 import { Review } from '@/components/food-log/review'
+import { ManualEntry } from '@/components/food-log/manual-entry'
 import {
     Card,
     CardContent,
@@ -47,11 +48,10 @@ import {
     Check,
     Edit2,
     Plus,
+    PenLine,
 } from 'lucide-react'
 import { toast } from 'sonner'
 import Link from 'next/link'
-
-const DEFAULT_MODEL = 'gpt-4o-mini'
 
 function LogPageContent() {
     const router = useRouter()
@@ -96,7 +96,6 @@ function LogPageContent() {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    model: DEFAULT_MODEL,
                     images: hasImages ? images : undefined,
                     text: hasText ? textPrompt.trim() : undefined,
                 }),
@@ -124,7 +123,6 @@ function LogPageContent() {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        model: DEFAULT_MODEL,
                         text: refinementText,
                         previousResult: reviewResult,
                     }),
@@ -265,6 +263,10 @@ function LogPageContent() {
                                     {savedMeals.length}
                                 </span>
                             )}
+                        </TabsTrigger>
+                        <TabsTrigger value="create" className="flex-1">
+                            <PenLine className="w-3.5 h-3.5 mr-1.5" />
+                            Create
                         </TabsTrigger>
                     </TabsList>
 
@@ -453,6 +455,14 @@ function LogPageContent() {
                                 })}
                             </div>
                         )}
+                    </TabsContent>
+
+                    {/* Create Tab */}
+                    <TabsContent value="create" className="mt-4">
+                        <ManualEntry
+                            onConfirm={handleConfirm}
+                            onSaveAsMeal={handleSaveAsPack}
+                        />
                     </TabsContent>
                 </Tabs>
 
