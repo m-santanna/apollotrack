@@ -1,12 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useProfile } from "@/hooks/use-profile";
 import { useDailyLog } from "@/hooks/use-daily-log";
-import { formatDate } from "@/lib/storage";
+import { formatDate, saveNewMeal } from "@/lib/storage";
 import { CalorieRing, MacroBars } from "@/components/dashboard/daily-summary";
 import { MealList } from "@/components/dashboard/meal-list";
+import type { FoodEntry } from "@/lib/types";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -19,6 +20,7 @@ import {
   History,
 } from "lucide-react";
 import Link from "next/link";
+import { toast } from "sonner";
 
 export default function HomePage() {
   const router = useRouter();
@@ -31,6 +33,18 @@ export default function HomePage() {
       router.push("/onboarding");
     }
   }, [isLoading, profile, router]);
+
+  const handleSaveFavorite = useCallback((entry: FoodEntry) => {
+    saveNewMeal(entry.name, [{
+      name: entry.name,
+      calories: entry.calories,
+      protein: entry.protein,
+      carbs: entry.carbs,
+      fat: entry.fat,
+      servingSize: entry.servingSize ?? "",
+    }]);
+    toast.success(`"${entry.name}" saved to favorites`);
+  }, []);
 
   if (isLoading || !profile || !macroTargets) {
     return (
@@ -133,6 +147,7 @@ export default function HomePage() {
             entries={log.entries}
             onRemove={removeEntry}
             onEdit={updateEntry}
+            onSaveFavorite={handleSaveFavorite}
           />
         </div>
       </main>

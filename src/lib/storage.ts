@@ -1,6 +1,6 @@
 "use client";
 
-import { STORAGE_KEYS, type DailyLog, type FoodEntry, type UserProfile } from "./types";
+import { STORAGE_KEYS, type DailyLog, type FoodEntry, type UserProfile, type SavedMeal, type AIFoodItem } from "./types";
 
 // ==================== Generic Storage ====================
 
@@ -45,7 +45,10 @@ function getLogKey(date: string): string {
 }
 
 export function formatDate(date: Date): string {
-  return date.toISOString().split("T")[0];
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, "0");
+  const d = String(date.getDate()).padStart(2, "0");
+  return `${y}-${m}-${d}`;
 }
 
 export function getDailyLog(date: string): DailyLog {
@@ -67,12 +70,6 @@ export function saveDailyLog(log: DailyLog): void {
   setItem(getLogKey(log.date), { ...log, totals });
 }
 
-export function addFoodEntry(date: string, entry: FoodEntry): DailyLog {
-  const log = getDailyLog(date);
-  log.entries.push(entry);
-  saveDailyLog(log);
-  return getDailyLog(date); // Return fresh copy with recalculated totals
-}
 
 export function removeFoodEntry(date: string, entryId: string): DailyLog {
   const log = getDailyLog(date);
@@ -101,6 +98,35 @@ export function getLoggedDates(): string[] {
     }
   }
   return dates.sort().reverse();
+}
+
+// ==================== Saved Meals ====================
+
+export function getSavedMeals(): SavedMeal[] {
+  return getItem<SavedMeal[]>(STORAGE_KEYS.SAVED_MEALS) ?? [];
+}
+
+export function saveNewMeal(name: string, foods: AIFoodItem[]): SavedMeal {
+  const meal: SavedMeal = {
+    id: crypto.randomUUID(),
+    name,
+    foods,
+    createdAt: new Date().toISOString(),
+  };
+  const meals = getSavedMeals();
+  meals.unshift(meal);
+  setItem(STORAGE_KEYS.SAVED_MEALS, meals);
+  return meal;
+}
+
+export function updateSavedMeal(id: string, updates: Partial<Pick<SavedMeal, "name" | "foods">>): void {
+  const meals = getSavedMeals().map((m) => (m.id === id ? { ...m, ...updates } : m));
+  setItem(STORAGE_KEYS.SAVED_MEALS, meals);
+}
+
+export function deleteSavedMeal(id: string): void {
+  const meals = getSavedMeals().filter((m) => m.id !== id);
+  setItem(STORAGE_KEYS.SAVED_MEALS, meals);
 }
 
 // ==================== Export / Import ====================

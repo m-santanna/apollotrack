@@ -5,7 +5,7 @@ import type { AIProvider } from "@/lib/types";
 
 const SEVEN_DAYS_SECONDS = 7 * 24 * 60 * 60; // 604800
 
-/** Per-provider cookie name: session-openai or session-gemini */
+/** Cookie name for the provider session */
 function cookieName(provider: AIProvider): string {
   return `session-${provider}`;
 }

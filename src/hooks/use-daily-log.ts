@@ -8,7 +8,7 @@ import {
   removeFoodEntry as removeEntry,
   updateFoodEntry as updateEntry,
 } from "@/lib/storage";
-import type { DailyLog, FoodEntry, MealType } from "@/lib/types";
+import type { DailyLog, FoodEntry } from "@/lib/types";
 
 export function useDailyLog(date?: Date) {
   const dateStr = formatDate(date ?? new Date());
@@ -58,19 +58,11 @@ export function useDailyLog(date?: Date) {
     [dateStr, refresh],
   );
 
-  const getMealEntries = useCallback(
-    (mealType: MealType) => {
-      return log.entries.filter((e) => e.mealType === mealType);
-    },
-    [log.entries],
-  );
-
   return {
     log,
     addEntry,
     removeEntry: removeEntry_,
     updateEntry: updateEntry_,
-    getMealEntries,
     refresh,
   };
 }

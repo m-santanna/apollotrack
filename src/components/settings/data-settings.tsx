@@ -52,13 +52,11 @@ export function DataSettings() {
       return;
     }
 
-    // Clear all diet tracker data
+    // Clear all app data from localStorage
     const keysToRemove: string[] = [];
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i);
-      if (key?.startsWith("diet-tracker:")) {
-        keysToRemove.push(key);
-      }
+      if (key) keysToRemove.push(key);
     }
     keysToRemove.forEach((key) => localStorage.removeItem(key));
 

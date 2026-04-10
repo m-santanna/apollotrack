@@ -15,24 +15,9 @@ import { APIKeySettings } from "@/components/settings/api-key-settings";
 import { DataSettings } from "@/components/settings/data-settings";
 import { ArrowLeft, User, Key, Database } from "lucide-react";
 import { useProfile } from "@/hooks/use-profile";
-import type { AIProvider } from "@/lib/types";
-import { useCallback } from "react";
 
 export default function SettingsPage() {
   const { profile, updateProfile } = useProfile();
-
-  const handleProviderChange = useCallback(
-    (provider: AIProvider, action: "add" | "remove") => {
-      if (!profile) return;
-      const current = profile.providers ?? [];
-      const updated =
-        action === "add"
-          ? current.includes(provider) ? current : [...current, provider]
-          : current.filter((p) => p !== provider);
-      updateProfile({ providers: updated });
-    },
-    [profile, updateProfile],
-  );
 
   if (!profile) return null;
   return (
@@ -89,7 +74,7 @@ export default function SettingsPage() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <APIKeySettings onProviderChange={handleProviderChange} />
+                <APIKeySettings />
               </CardContent>
             </Card>
           </TabsContent>

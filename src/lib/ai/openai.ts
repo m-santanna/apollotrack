@@ -1,5 +1,5 @@
 import type { AIAnalysisResult } from "../types";
-import { getAnalysisPrompt, getTextAnalysisPrompt } from "./prompts";
+import { getAnalysisPrompt, getTextAnalysisPrompt, getRefinementPrompt } from "./prompts";
 
 type ContentPart =
   | { type: "text"; text: string }
@@ -10,18 +10,21 @@ export async function analyzeWithOpenAI(
   model: string,
   images: string[],
   textPrompt?: string,
+  previousResult?: AIAnalysisResult,
 ): Promise<AIAnalysisResult> {
   const parts: ContentPart[] = [];
 
-  // Build the text prompt
-  if (textPrompt && images.length === 0) {
+  // Refinement mode: pass previous result + user correction
+  if (previousResult && textPrompt) {
+    parts.push({ type: "text", text: getRefinementPrompt(previousResult, textPrompt) });
+  } else if (textPrompt && images.length === 0) {
     // Text-only analysis
     parts.push({ type: "text", text: getTextAnalysisPrompt(textPrompt) });
   } else {
     parts.push({ type: "text", text: getAnalysisPrompt(textPrompt) });
   }
 
-  // Attach images
+  // Attach images (not needed for refinement)
   for (const img of images) {
     const url = img.startsWith("data:") ? img : `data:image/jpeg;base64,${img}`;
     parts.push({

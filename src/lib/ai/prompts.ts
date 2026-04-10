@@ -46,3 +46,21 @@ export function getTextAnalysisPrompt(description: string): string {
   let prompt = `${BASE_PROMPT}\n\nThe user describes what they ate:\n"${description}"`;
   return prompt;
 }
+
+/**
+ * Prompt for refining a previous analysis based on user feedback.
+ */
+export function getRefinementPrompt(
+  previousResult: { foods: unknown[]; confidence: string; notes?: string },
+  refinementText: string,
+): string {
+  return `${BASE_PROMPT}
+
+You previously analyzed a meal and returned this result:
+${JSON.stringify(previousResult, null, 2)}
+
+The user has a correction or additional context:
+"${refinementText}"
+
+Please provide a corrected analysis based on this feedback. Return ONLY valid JSON in the exact same format.`;
+}

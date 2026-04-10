@@ -14,61 +14,36 @@ import {
 } from "@/lib/session";
 import type { AIProvider } from "@/lib/types";
 
-const PROVIDERS: AIProvider[] = ["openai", "gemini"];
+const PROVIDERS: AIProvider[] = ["openai"];
 
 // GET /api/keys
-// Returns key status for each provider using per-provider sessions.
-// Auto-refreshes the Redis TTL and cookie for any active keys found.
+// Returns key status for the openai provider.
+// Auto-refreshes the Redis TTL and cookie for any active key found.
 export async function GET() {
-  // Read both provider sessions independently
-  const [openaiSessionId, geminiSessionId] = await Promise.all([
-    getSessionFromRequest("openai"),
-    getSessionFromRequest("gemini"),
-  ]);
+  const openaiSessionId = await getSessionFromRequest("openai");
+  const openaiExists = openaiSessionId
+    ? await hasAPIKey(openaiSessionId, "openai")
+    : false;
 
-  // Check existence for each provider that has a session
-  const [openaiExists, geminiExists] = await Promise.all([
-    openaiSessionId ? hasAPIKey(openaiSessionId, "openai") : false,
-    geminiSessionId ? hasAPIKey(geminiSessionId, "gemini") : false,
-  ]);
-
-  // Fetch key previews + refresh TTL for active keys in parallel
-  const [openaiKey, geminiKey] = await Promise.all([
-    openaiExists
-      ? Promise.all([
-          getAPIKey(openaiSessionId!, "openai"),
-          refreshAPIKeyTTL(openaiSessionId!, "openai"),
-        ]).then(([key]) => key)
-      : null,
-    geminiExists
-      ? Promise.all([
-          getAPIKey(geminiSessionId!, "gemini"),
-          refreshAPIKeyTTL(geminiSessionId!, "gemini"),
-        ]).then(([key]) => key)
-      : null,
-  ]);
+  const openaiKey = openaiExists
+    ? await Promise.all([
+        getAPIKey(openaiSessionId!, "openai"),
+        refreshAPIKeyTTL(openaiSessionId!, "openai"),
+      ]).then(([key]) => key)
+    : null;
 
   const responseBody = {
     openai: {
       exists: openaiExists,
       keyPreview: openaiKey ? `...${openaiKey.slice(-4)}` : null,
     },
-    gemini: {
-      exists: geminiExists,
-      keyPreview: geminiKey ? `...${geminiKey.slice(-4)}` : null,
-    },
   };
 
   let response: NextResponse = NextResponse.json(responseBody);
 
-  // Refresh cookies for active sessions (re-sign JWTs with fresh expiration)
   if (openaiExists && openaiSessionId) {
     const token = await createSessionToken(openaiSessionId, "openai");
     response = setSessionCookie(response, token, "openai");
-  }
-  if (geminiExists && geminiSessionId) {
-    const token = await createSessionToken(geminiSessionId, "gemini");
-    response = setSessionCookie(response, token, "gemini");
   }
 
   return response;
@@ -90,7 +65,7 @@ export async function POST(req: NextRequest) {
 
     if (!PROVIDERS.includes(provider)) {
       return NextResponse.json(
-        { error: "Provider must be 'openai' or 'gemini'" },
+        { error: "Provider must be 'openai'" },
         { status: 400 },
       );
     }

@@ -15,13 +15,13 @@ const IV_LENGTH = 12; // 96-bit IV recommended for GCM
 const AUTH_TAG_LENGTH = 16;
 const ENCRYPTION_SALT = "apollotrack-key-encryption";
 
-/** Derive a 32-byte AES key from SESSION_SECRET using scrypt (cached). */
+/** Derive a 32-byte AES key from ENCRYPTION_SECRET using scrypt (cached). */
 let derivedKey: Buffer | null = null;
 function getEncryptionKey(): Buffer {
   if (!derivedKey) {
-    const secret = process.env.SESSION_SECRET;
+    const secret = process.env.ENCRYPTION_SECRET;
     if (!secret) {
-      throw new Error("Missing SESSION_SECRET environment variable");
+      throw new Error("Missing ENCRYPTION_SECRET environment variable");
     }
     derivedKey = scryptSync(secret, ENCRYPTION_SALT, 32);
   }

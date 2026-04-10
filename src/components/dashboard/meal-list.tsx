@@ -1,10 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import type { FoodEntry, MealType } from "@/lib/types";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import type { FoodEntry } from "@/lib/types";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -15,29 +13,24 @@ import {
   SheetDescription,
   SheetFooter,
 } from "@/components/ui/sheet";
-import { Trash2, Pencil, Coffee, Sun, Moon, Cookie, Save } from "lucide-react";
+import { Trash2, Pencil, Save, Bookmark } from "lucide-react";
 
-const MEAL_CONFIG: Record<MealType, { label: string; icon: React.ReactNode }> =
-  {
-    breakfast: { label: "Breakfast", icon: <Coffee className="w-4 h-4" /> },
-    lunch: { label: "Lunch", icon: <Sun className="w-4 h-4" /> },
-    dinner: { label: "Dinner", icon: <Moon className="w-4 h-4" /> },
-    snack: { label: "Snack", icon: <Cookie className="w-4 h-4" /> },
-  };
-
-const SOURCE_LABELS: Record<string, string> = {
-  manual: "Manual",
-  ai: "AI",
-};
+function formatTime(timestamp: string): string {
+  return new Date(timestamp).toLocaleTimeString("en-US", {
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+  });
+}
 
 interface MealListProps {
   entries: FoodEntry[];
   onRemove: (id: string) => void;
   onEdit?: (id: string, updates: Partial<FoodEntry>) => void;
+  onSaveFavorite?: (entry: FoodEntry) => void;
 }
 
-export function MealList({ entries, onRemove, onEdit }: MealListProps) {
-  const mealTypes: MealType[] = ["breakfast", "lunch", "dinner", "snack"];
+export function MealList({ entries, onRemove, onEdit, onSaveFavorite }: MealListProps) {
   const [editingEntry, setEditingEntry] = useState<FoodEntry | null>(null);
   const [editForm, setEditForm] = useState({
     name: "",
@@ -48,13 +41,9 @@ export function MealList({ entries, onRemove, onEdit }: MealListProps) {
     servingSize: "",
   });
 
-  const groupedEntries = mealTypes.map((type) => ({
-    type,
-    ...MEAL_CONFIG[type],
-    entries: entries.filter((e) => e.mealType === type),
-  }));
-
-  const nonEmptyMeals = groupedEntries.filter((m) => m.entries.length > 0);
+  const sorted = [...entries].sort(
+    (a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime(),
+  );
 
   const openEdit = (entry: FoodEntry) => {
     setEditingEntry(entry);
@@ -92,71 +81,62 @@ export function MealList({ entries, onRemove, onEdit }: MealListProps) {
 
   return (
     <>
-      <div className="space-y-4">
-        {nonEmptyMeals.map((meal) => (
-          <Card key={meal.type} className="border-border/50">
-            <CardHeader className="py-3 px-4">
-              <CardTitle className="text-sm font-medium flex items-center gap-2">
-                {meal.icon}
-                {meal.label}
-                <Badge variant="secondary" className="ml-auto text-xs">
-                  {meal.entries.reduce((sum, e) => sum + e.calories, 0)} kcal
-                </Badge>
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="px-4 pb-3 pt-0">
-              <div className="space-y-2">
-                {meal.entries.map((entry) => (
-                  <div
-                    key={entry.id}
-                    className="flex items-center justify-between py-2 px-3 rounded-md bg-muted/30"
-                  >
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2">
-                        <span className="font-medium text-sm truncate">
-                          {entry.name}
-                        </span>
-                      </div>
-                      <div className="text-xs text-muted-foreground mt-0.5">
-                        {entry.calories} kcal &middot; Carbs {entry.carbs}g
-                        &middot; Protein {entry.protein}g &middot; Fat{" "}
-                        {entry.fat}g
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-0.5">
-                      {onEdit && (
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="h-8 w-8 text-muted-foreground hover:text-foreground"
-                          onClick={() => openEdit(entry)}
-                        >
-                          <Pencil className="w-3.5 h-3.5" />
-                        </Button>
-                      )}
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-8 w-8 text-muted-foreground hover:text-destructive"
-                        onClick={() => onRemove(entry.id)}
-                      >
-                        <Trash2 className="w-3.5 h-3.5" />
-                      </Button>
-                    </div>
-                  </div>
-                ))}
+      <div className="space-y-2">
+        {sorted.map((entry) => (
+          <div
+            key={entry.id}
+            className="flex items-center justify-between py-2 px-2 rounded-md bg-muted/30"
+          >
+            <span className="text-xs text-muted-foreground shrink-0 w-14 text-right">
+              {formatTime(entry.timestamp)}
+            </span>
+            <div className="flex-1 min-w-0 ml-4">
+              <span className="font-medium text-sm truncate block">{entry.name}</span>
+              <div className="text-xs text-muted-foreground mt-0.5">
+                <span className="text-orange-600 dark:text-orange-400 font-medium">
+                  {entry.calories} kcal
+                </span>
+                {" · "}C {entry.carbs}g · P {entry.protein}g · F {entry.fat}g
               </div>
-            </CardContent>
-          </Card>
+            </div>
+            <div className="flex items-center gap-0.5 ml-2 shrink-0">
+              {onSaveFavorite && (
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-8 w-8 text-muted-foreground hover:text-primary"
+                  onClick={() => onSaveFavorite(entry)}
+                >
+                  <Bookmark className="w-3.5 h-3.5" />
+                </Button>
+              )}
+              {onEdit && (
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-8 w-8 text-muted-foreground hover:text-foreground"
+                  onClick={() => openEdit(entry)}
+                >
+                  <Pencil className="w-3.5 h-3.5" />
+                </Button>
+              )}
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8 text-muted-foreground hover:text-destructive"
+                onClick={() => onRemove(entry.id)}
+              >
+                <Trash2 className="w-3.5 h-3.5" />
+              </Button>
+            </div>
+          </div>
         ))}
       </div>
 
       {/* Edit Sheet */}
       <Sheet
         open={editingEntry !== null}
-        onOpenChange={(open) => {
-          if (!open) setEditingEntry(null);
-        }}
+        onOpenChange={(open) => { if (!open) setEditingEntry(null); }}
       >
         <SheetContent side="bottom" className="max-h-[85vh] overflow-y-auto">
           <SheetHeader>
@@ -171,9 +151,7 @@ export function MealList({ entries, onRemove, onEdit }: MealListProps) {
               <Label>Name</Label>
               <Input
                 value={editForm.name}
-                onChange={(e) =>
-                  setEditForm((f) => ({ ...f, name: e.target.value }))
-                }
+                onChange={(e) => setEditForm((f) => ({ ...f, name: e.target.value }))}
               />
             </div>
 
@@ -183,12 +161,7 @@ export function MealList({ entries, onRemove, onEdit }: MealListProps) {
                 <Input
                   type="number"
                   value={editForm.calories}
-                  onChange={(e) =>
-                    setEditForm((f) => ({
-                      ...f,
-                      calories: Number(e.target.value) || 0,
-                    }))
-                  }
+                  onChange={(e) => setEditForm((f) => ({ ...f, calories: Number(e.target.value) || 0 }))}
                 />
               </div>
               <div className="space-y-1.5">
@@ -196,12 +169,7 @@ export function MealList({ entries, onRemove, onEdit }: MealListProps) {
                 <Input
                   type="number"
                   value={editForm.protein}
-                  onChange={(e) =>
-                    setEditForm((f) => ({
-                      ...f,
-                      protein: Number(e.target.value) || 0,
-                    }))
-                  }
+                  onChange={(e) => setEditForm((f) => ({ ...f, protein: Number(e.target.value) || 0 }))}
                 />
               </div>
               <div className="space-y-1.5">
@@ -209,12 +177,7 @@ export function MealList({ entries, onRemove, onEdit }: MealListProps) {
                 <Input
                   type="number"
                   value={editForm.carbs}
-                  onChange={(e) =>
-                    setEditForm((f) => ({
-                      ...f,
-                      carbs: Number(e.target.value) || 0,
-                    }))
-                  }
+                  onChange={(e) => setEditForm((f) => ({ ...f, carbs: Number(e.target.value) || 0 }))}
                 />
               </div>
               <div className="space-y-1.5">
@@ -222,12 +185,7 @@ export function MealList({ entries, onRemove, onEdit }: MealListProps) {
                 <Input
                   type="number"
                   value={editForm.fat}
-                  onChange={(e) =>
-                    setEditForm((f) => ({
-                      ...f,
-                      fat: Number(e.target.value) || 0,
-                    }))
-                  }
+                  onChange={(e) => setEditForm((f) => ({ ...f, fat: Number(e.target.value) || 0 }))}
                 />
               </div>
             </div>
@@ -236,9 +194,7 @@ export function MealList({ entries, onRemove, onEdit }: MealListProps) {
               <Label className="text-xs">Serving Size</Label>
               <Input
                 value={editForm.servingSize}
-                onChange={(e) =>
-                  setEditForm((f) => ({ ...f, servingSize: e.target.value }))
-                }
+                onChange={(e) => setEditForm((f) => ({ ...f, servingSize: e.target.value }))}
                 placeholder="e.g. 1 cup, 200g"
               />
             </div>

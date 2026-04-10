@@ -6,13 +6,12 @@ import {
   setSessionCookie,
 } from "@/lib/session";
 import { analyzeWithOpenAI } from "@/lib/ai/openai";
-import { analyzeWithGemini } from "@/lib/ai/gemini";
 import { MODEL_REGISTRY } from "@/lib/types";
 
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { model: modelId, images, text } = body;
+    const { model: modelId, images, text, previousResult } = body;
 
     // Validate: need a model and at least one input
     if (!modelId) {
@@ -22,7 +21,8 @@ export async function POST(req: NextRequest) {
     const hasImages = Array.isArray(images) && images.length > 0;
     const hasText = typeof text === "string" && text.trim().length > 0;
 
-    if (!hasImages && !hasText) {
+    const isRefinement = !!previousResult && hasText;
+    if (!isRefinement && !hasImages && !hasText) {
       return NextResponse.json(
         { error: "At least one of images or text is required" },
         { status: 400 },
@@ -45,9 +45,7 @@ export async function POST(req: NextRequest) {
 
     if (!sessionId) {
       return NextResponse.json(
-        {
-          error: `Unauthorized. Please add your ${provider === "openai" ? "OpenAI" : "Gemini"} API key in Settings first.`,
-        },
+        { error: "Unauthorized. Please add your OpenAI API key in Settings first." },
         { status: 401 },
       );
     }
@@ -56,23 +54,16 @@ export async function POST(req: NextRequest) {
     const apiKey = await getAPIKey(sessionId, provider);
     if (!apiKey) {
       return NextResponse.json(
-        {
-          error: `No API key found for ${provider}. Please add your ${provider === "openai" ? "OpenAI" : "Gemini"} API key in Settings.`,
-        },
+        { error: "No API key found. Please add your OpenAI API key in Settings." },
         { status: 404 },
       );
     }
 
-    // Call the appropriate AI provider
+    // Call OpenAI
     const textStr = hasText ? text.trim() : undefined;
     const imageArr = hasImages ? images : [];
 
-    let result;
-    if (provider === "openai") {
-      result = await analyzeWithOpenAI(apiKey, modelId, imageArr, textStr);
-    } else {
-      result = await analyzeWithGemini(apiKey, modelId, imageArr, textStr);
-    }
+    const result = await analyzeWithOpenAI(apiKey, modelId, imageArr, textStr, previousResult);
 
     // Refresh TTL on successful analysis (Redis key + cookie)
     await refreshAPIKeyTTL(sessionId, provider);
